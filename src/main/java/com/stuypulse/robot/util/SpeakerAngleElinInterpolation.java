@@ -145,7 +145,7 @@ public class SpeakerAngleElinInterpolation {
     static {
         interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
         for (double[] data: distanceAndAngle) {
-            interpolatingDoubleTreeMap.put(data[0], data[1]);
+            interpolatingDoubleTreeMap.put(data[0] - 1.4375, data[1]);
         }
     }
 

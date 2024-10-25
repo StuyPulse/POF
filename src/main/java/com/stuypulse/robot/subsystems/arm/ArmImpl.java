@@ -119,24 +119,33 @@ public class ArmImpl extends Arm {
 
     private double getSpeakerAngleElin() {
         try {
-            Pose2d speakerPose = Field.getAllianceSpeakerPose().transformBy(new Transform2d(Field.SPEAKER_OPENING_X, 0, new Rotation2d()));
+            Pose2d speakerPose = Field.getAllianceSpeakerPose().transformBy(new Transform2d(Field.SPEAKER_OPENING_X - Units.inchesToMeters(1.5), 0, new Rotation2d()));
             Pose2d robotPose = SwerveDrive.getInstance().getPose();
 
-            double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.WIDTH / 2);
-            double angleFromSpeakerBaseToRobot = Math.abs(Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX()))));
+            double angleFromSpeakerToRobot = Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX())));
+
+            // aim at the side of the speaker if youre on the side
+            // if (angleFromSpeakerToRobot > 30) {
+            //     speakerPose = speakerPose.transformBy(new Transform2d(0, Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+            // }
+            // if (angleFromSpeakerToRobot < 30) {
+            //     speakerPose = speakerPose.transformBy(new Transform2d(0, -Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+            // }
+
+            double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.LENGTH / 2);
 
             double targetAngle = SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
 
             if (distanceToSpeaker > 120) {
-                targetAngle += 2;
+                targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.05);
             }
 
-            SmartDashboard.putNumber("distance to speaker", distanceToSpeaker);
-            SmartDashboard.putNumber("Angle to speaker base", angleFromSpeakerBaseToRobot);
+            SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
+            SmartDashboard.putNumber("Angle to speaker", angleFromSpeakerToRobot);
 
             // if the robot is more than 30 degrees off to the side from the perspective of the speaker
             // this is intended to help with shooting from the sides
-            if (angleFromSpeakerBaseToRobot > 30) {
+            if (Math.abs(angleFromSpeakerToRobot) > 30) {
                 targetAngle += 2;
             }
             return targetAngle;

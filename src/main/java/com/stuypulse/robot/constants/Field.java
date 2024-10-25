@@ -30,6 +30,8 @@ public interface Field {
     double SPEAKER_MAX_HEIGHT = 2.11; // represents the top of the speaker opening
     double SPEAKER_MIN_HEIGHT = 1.98; // represents the bottom of the speaker opening
 
+    double SPEAKER_OPENING_WIDTH = Units.inchesToMeters(41);
+
     public static Pose3d transformToOppositeAlliance(Pose3d pose) {
         Pose3d rotated = pose.rotateBy(new Rotation3d(0, 0, Math.PI));
 

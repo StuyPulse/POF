@@ -238,7 +238,6 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         Translation2d speakerPose = Field.getAllianceSpeakerPose().getTranslation();
         // Rotate by 180 because the shooter is on the back of the robot
         Rotation2d targetAngle = speakerPose.minus(currentPose).getAngle().rotateBy(Rotation2d.fromDegrees(180));
-        SmartDashboard.putNumber("harry and jphy", getPose().getRotation().minus(targetAngle).getDegrees());
         return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.ANGLE_TOLERANCE.get();
     }
 

@@ -17,10 +17,12 @@ import com.stuypulse.robot.util.FilteredRelativeEncoder;
 import com.stuypulse.robot.util.ShooterLobFerryInterpolation;
 import com.stuypulse.robot.util.ShooterLowFerryInterpolation;
 import com.stuypulse.robot.util.ShooterSpeeds;
+import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -83,8 +85,8 @@ public class ShooterImpl extends Shooter {
         Motors.Shooter.RIGHT_SHOOTER.configure(rightMotor);
         Motors.Shooter.FEEDER_MOTOR.configure(feederMotor); 
 
-        leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", Settings.Shooter.SPEAKER.getLeftRPM());
-        rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", Settings.Shooter.SPEAKER.getRightRPM());
+        leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
+        rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());
     }
 
     private double getLeftShooterRPM() {
@@ -138,7 +140,7 @@ public class ShooterImpl extends Shooter {
         double manualFerryDistance = Units.metersToInches(Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose()));
         switch (getFlywheelState()) {
             case SPEAKER:
-                setTargetSpeeds(Settings.Shooter.SPEAKER);
+                setTargetSpeeds(getSpeakerShotSpeeds());
                 break;
             case LOW_FERRY:
                 setTargetSpeeds(getLowFerrySpeeds());
@@ -173,6 +175,16 @@ public class ShooterImpl extends Shooter {
         else {
             setRightShooterRPM(rightTargetRPM.get());
         }
+    }
+
+    private ShooterSpeeds getSpeakerShotSpeeds() {
+        Pose2d speakerPose = Field.getAllianceSpeakerPose();
+        Pose2d robotPose = SwerveDrive.getInstance().getPose();
+        double distanceToSpeaker = robotPose.minus(speakerPose).getTranslation().getNorm() - Settings.LENGTH / 2;
+        return new ShooterSpeeds(
+            4000 + SLMath.clamp(distanceToSpeaker - 1.5, 0, Double.MAX_VALUE) * 430,
+            500
+        );
     }
 
     @Override

@@ -104,13 +104,13 @@ public interface Settings {
         double FEEDER_DEAQUIRE_SPEED = 0.5;
         double FEEDER_SHOOT_SPEED = 1.0;
 
-        double TARGET_RPM_THRESHOLD = 1000;
+        double TARGET_RPM_THRESHOLD = 250;
         double MAX_WAIT_TO_REACH_TARGET = 2.0;
         
-        ShooterSpeeds SPEAKER = new ShooterSpeeds(
-            new SmartNumber("Shooter/Speaker RPM", 5500), 
-            new SmartNumber("Shooter/Speaker RPM differential", 500)
-        );
+        // ShooterSpeeds SPEAKER = new ShooterSpeeds(
+        //     new SmartNumber("Shooter/Speaker RPM", 5500), 
+        //     new SmartNumber("Shooter/Speaker RPM differential", 500)
+        // );
 
         double HAS_NOTE_FALLING_DEBOUNCE = 0.0;
         double HAS_NOTE_RISING_DEBOUNCE = 0.0;

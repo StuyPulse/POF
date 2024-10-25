@@ -4,6 +4,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.shooter.Shooter.FeederState;
+import com.stuypulse.stuylib.util.StopWatch;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,12 +31,17 @@ public abstract class Intake extends SubsystemBase {
     }
 
     private State state;
+    protected final StopWatch feedingTimer;
 
     protected Intake() {
         this.state = State.STOP;
+        feedingTimer = new StopWatch();
     }
 
     public void setState(State state) {
+        if (state == State.FEEDING && this.state != State.FEEDING) {
+            feedingTimer.reset();
+        }
         this.state = state;
     }
 
