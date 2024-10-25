@@ -137,7 +137,7 @@ public class ArmImpl extends Arm {
             double targetAngle = SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
 
             if (distanceToSpeaker > 120) {
-                targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.05);
+                targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.2);
             }
 
             SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);

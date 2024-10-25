@@ -181,10 +181,16 @@ public class ShooterImpl extends Shooter {
         Pose2d speakerPose = Field.getAllianceSpeakerPose();
         Pose2d robotPose = SwerveDrive.getInstance().getPose();
         double distanceToSpeaker = robotPose.minus(speakerPose).getTranslation().getNorm() - Settings.LENGTH / 2;
-        return new ShooterSpeeds(
-            4000 + SLMath.clamp(distanceToSpeaker - 1.5, 0, Double.MAX_VALUE) * 430,
-            500
-        );
+        // return new ShooterSpeeds(
+        //     4000 + SLMath.clamp(distanceToSpeaker - 1.5, 0, Double.MAX_VALUE) * 600,
+        //     500
+        // );
+        if (distanceToSpeaker <= 1.5) {
+            return new ShooterSpeeds(4000, 500);
+        }
+        else {
+            return new ShooterSpeeds(5500, 500);
+        }
     }
 
     @Override
