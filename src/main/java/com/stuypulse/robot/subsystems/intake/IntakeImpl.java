@@ -65,11 +65,11 @@ public class IntakeImpl extends Intake {
 
     private void feed() {
         if (feedingTimer.getTime() < 0.75) {
-            intakeMotor.set(Settings.Intake.INTAKE_FEED_SPEED);
+            intakeMotor.set(Settings.Intake.INTAKE_DEACQUIRE_SPEED);
             funnelMotorLeft.stopMotor();
             funnelMotorRight.stopMotor();
         }
-        else if (feedingTimer.getTime() > 1.25) {
+        else if (feedingTimer.getTime() > 1.5) {
             feedingTimer.reset();
         }
         else {
