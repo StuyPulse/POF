@@ -207,9 +207,9 @@ public interface Settings {
             SmartNumber kI = new SmartNumber("Swerve/Turn/PID/kI", Robot.isReal() ? 0.0 : 0.0);
             SmartNumber kD = new SmartNumber("Swerve/Turn/PID/kD", Robot.isReal() ? 0.0 : 0.1);
 
-            SmartNumber kS = new SmartNumber("Swerve/Drive/FF/kS", Robot.isReal() ? 0.31007 : Simulation.DRIVE_FRICTION_VOLTAGE);
-            SmartNumber kV = new SmartNumber("Swerve/Drive/FF/kV", Robot.isReal() ? 1.62153 : 0.25);
-            SmartNumber kA = new SmartNumber("Swerve/Drive/FF/kA", Robot.isReal() ? 0.0048373 : 0.01);
+            SmartNumber kS = new SmartNumber("Swerve/Drive/FF/kS", Robot.isReal() ? 0.099001 : Simulation.DRIVE_FRICTION_VOLTAGE);
+            SmartNumber kV = new SmartNumber("Swerve/Drive/FF/kV", Robot.isReal() ? 0.11964 : 0.25); 
+            SmartNumber kA = new SmartNumber("Swerve/Drive/FF/kA", Robot.isReal() ? 0.030009 : 0.01); 
 
             double L2 = ((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)); // 6.74607175
             double L3 = ((50.0 / 14.0) * (16.0 / 28.0) * (45.0 / 15.0)); // 6.12244898
