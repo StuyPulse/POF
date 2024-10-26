@@ -12,7 +12,7 @@ import com.stuypulse.robot.commands.shooter.ShooterFeederStop;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
-
+import com.stuypulse.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -23,6 +23,7 @@ public class FourPieceBCA extends SequentialCommandGroup {
             // Preload Shot
             ShootRoutine.fromSubwoofer(),
             new ArmToFeed(),
+            new RobotContainer().delayWaitCommand(),
 
             // Drive to B + Shoot B
             new IntakeSetAcquire(),

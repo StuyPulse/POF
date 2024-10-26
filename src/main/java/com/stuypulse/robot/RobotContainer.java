@@ -99,6 +99,7 @@ public class RobotContainer {
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+    public static SendableChooser<Double> delayChooser = new SendableChooser<>();
 
     // Robot container
 
@@ -294,6 +295,11 @@ public class RobotContainer {
     public void configureAutons() {
         autonChooser.addOption("Do Nothing", new DoNothingAuton());
         
+        for (double i = 0.0; i < 16.0; i++){
+            delayChooser.addOption(i + " Seconds", i);
+        }
+        
+        
         // Mobility
         AutonConfig MOBILITY_BLUE = new AutonConfig("Mobility", Mobility::new, "Mobility");
         AutonConfig MOBILITY_RED = new AutonConfig("Mobility", Mobility::new, "Mobility");
@@ -433,5 +439,16 @@ public class RobotContainer {
         }
 
         return autonChooser.getSelected().getName();
+    }
+
+    public void getDefaultDelay() {
+        delayChooser.setDefaultOption("Zero Second", 0.0);
+    }
+    public double getDelaySeconds() {
+        return delayChooser.getSelected();
+    }
+
+    public Command delayWaitCommand() {
+        return new WaitCommand(delayChooser.getSelected());
     }
 }
