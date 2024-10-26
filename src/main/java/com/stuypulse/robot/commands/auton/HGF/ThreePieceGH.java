@@ -21,7 +21,7 @@ public class ThreePieceGH extends SequentialCommandGroup {
             ShootRoutine.fromSubwoofer(),
             new ArmToFeed(),
 
-            new WaitCommand(2.5),
+            // new WaitCommand(2.5),
 
             // Drive to G + Shoot G
             new IntakeSetAcquire(),

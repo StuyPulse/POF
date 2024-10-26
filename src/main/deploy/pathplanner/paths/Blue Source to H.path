@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.819433018516335,
-        "y": 0.6982728390679989
+        "x": 3.2534642847063466,
+        "y": 1.3331336064381538
       },
       "isLocked": false,
       "linkedName": "Blue HGF Starting Pose"
@@ -20,8 +20,8 @@
         "y": 0.7599036338325648
       },
       "prevControl": {
-        "x": 6.78116615998857,
-        "y": 0.6646210790561456
+        "x": 6.153614586431451,
+        "y": 0.8185908109707958
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,11 +31,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.35,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 0.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -45,13 +45,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.5944180626014446
+    "rotation": -1.5944180626014446,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue To Note",
-  "idealStartingState": {
-    "velocity": 0,
-    "rotation": -58.81698780732068
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
   },
   "useDefaultConstraints": true
 }
