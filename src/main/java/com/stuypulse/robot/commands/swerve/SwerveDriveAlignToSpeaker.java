@@ -37,7 +37,7 @@ public class SwerveDriveAlignToSpeaker extends Command {
             .withRotationalDeadband(Settings.Swerve.MAX_ANGULAR_VELOCITY * Settings.Driver.Turn.DEADBAND.get())
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
 
-        controller = new AnglePIDController(Settings.Swerve.Assist.kP, Settings.Swerve.Assist.kI, Settings.Swerve.Assist.kD)
+        controller = new AnglePIDController(Settings.Swerve.Motion.THETA.kP, Settings.Swerve.Motion.THETA.kI, Settings.Swerve.Motion.THETA.kD)
             .setOutputFilter(x -> -x);
 
         AngleVelocity derivative = new AngleVelocity();

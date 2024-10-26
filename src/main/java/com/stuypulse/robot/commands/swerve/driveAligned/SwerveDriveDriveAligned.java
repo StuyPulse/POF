@@ -2,6 +2,7 @@ package com.stuypulse.robot.commands.swerve.driveAligned;
 
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Swerve.Assist;
+import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
@@ -38,7 +39,7 @@ public abstract class SwerveDriveDriveAligned extends Command {
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL.get()),
                 new VLowPassFilter(Drive.RC.get()));
 
-        controller = new AnglePIDController(Assist.kP, Assist.kI, Assist.kD)
+        controller = new AnglePIDController(Motion.THETA.kP, Motion.THETA.kI, Motion.THETA.kD)
             .setOutputFilter(x -> -x);
 
         AngleVelocity derivative = new AngleVelocity();

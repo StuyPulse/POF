@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings.Swerve.Assist;
+import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.Angle;
@@ -84,7 +85,7 @@ public class FollowPathPointSpeakerCommand extends Command {
     this.shouldFlipPath = shouldFlipPath;
 
 
-    headingController = new AnglePIDController(Assist.kP, Assist.kI, Assist.kD)
+    headingController = new AnglePIDController(Motion.THETA.kP, Motion.THETA.kI, Motion.THETA.kD)
       .setOutputFilter(x -> -x);
 
     AngleVelocity derivative = new AngleVelocity();

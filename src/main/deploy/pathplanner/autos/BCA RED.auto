@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Center to C"
+            "pathName": "Red 90 Deg B Shoot to C"
           }
         },
         {
@@ -32,12 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "Red Center to A"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red A to Center"
           }
         }
       ]

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6938714628917357,
-        "y": 5.631284339205584
+        "x": 3.090096900059872,
+        "y": 5.657628859900576
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0322297871158246,
-        "y": 5.373357077845108
+        "x": 1.7912352437800116,
+        "y": 5.494793717191601
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue BCA B"
     },
     {
       "anchor": {
-        "x": 2.8299207212253714,
-        "y": 4.58
+        "x": 3.1137973538967914,
+        "y": 4.11421492392836
       },
       "prevControl": {
-        "x": 2.3071646664126666,
-        "y": 4.837775838126081
+        "x": 2.395957238900271,
+        "y": 4.417946095006697
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue BCA C"
     }
   ],
   "rotationTargets": [],

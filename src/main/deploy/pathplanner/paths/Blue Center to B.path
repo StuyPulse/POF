@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.359711113629195,
-        "y": 5.530775383617674
+        "x": 2.267677335262537,
+        "y": 5.592946872771572
       },
       "isLocked": false,
       "linkedName": "Blue BCA Starting Pose"
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 5.55
+        "x": 3.090096900059872,
+        "y": 5.657628859900576
       },
       "prevControl": {
-        "x": 2.393853468522427,
-        "y": 5.551255318985296
+        "x": 2.1856013617617,
+        "y": 5.5787055761019975
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

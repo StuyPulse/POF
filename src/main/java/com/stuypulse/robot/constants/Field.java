@@ -30,6 +30,8 @@ public interface Field {
     double SPEAKER_MAX_HEIGHT = 2.11; // represents the top of the speaker opening
     double SPEAKER_MIN_HEIGHT = 1.98; // represents the bottom of the speaker opening
 
+    double SPEAKER_OPENING_WIDTH = Units.inchesToMeters(41);
+
     public static Pose3d transformToOppositeAlliance(Pose3d pose) {
         Pose3d rotated = pose.rotateBy(new Rotation3d(0, 0, Math.PI));
 
@@ -155,12 +157,7 @@ public interface Field {
 
     public static Pose2d getAllianceSpeakerPose() {
         return (Robot.isBlue() ? NamedTags.BLUE_SPEAKER : NamedTags.RED_SPEAKER)
-            .getLocation().toPose2d().transformBy(new Transform2d(SPEAKER_OPENING_X, 0, new Rotation2d()));
-    }
-
-    public static Pose2d getSpeakerPathFindPose() {
-        return getAllianceSpeakerPose().transformBy(
-            new Transform2d(0, Units.inchesToMeters(200), new Rotation2d()));
+            .getLocation().toPose2d();
     }
 
     /*** AMP ***/

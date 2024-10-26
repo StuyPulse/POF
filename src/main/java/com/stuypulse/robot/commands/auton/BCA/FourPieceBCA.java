@@ -9,7 +9,6 @@ import com.stuypulse.robot.commands.auton.ShootRoutine;
 import com.stuypulse.robot.commands.intake.IntakeSetAcquire;
 import com.stuypulse.robot.commands.shooter.ShooterFeederShoot;
 import com.stuypulse.robot.commands.shooter.ShooterFeederStop;
-import com.stuypulse.robot.constants.Settings.Alignment.Shoot;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
@@ -39,8 +38,7 @@ public class FourPieceBCA extends SequentialCommandGroup {
 
             // Drive to A + Shoot A
             new IntakeSetAcquire(),
-            SwerveDrive.getInstance().followPathCommand(paths[4]),
-            new FollowPathThenShoot(paths[5], true),
+            new FollowPathThenShoot(paths[4], true),
             new ArmToFeed()
         );
     }

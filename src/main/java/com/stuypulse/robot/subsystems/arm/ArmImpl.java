@@ -1,11 +1,11 @@
 package com.stuypulse.robot.subsystems.arm;
 
-import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
-
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.stuypulse.robot.constants.Field;
+import com.stuypulse.robot.constants.Motors;
+import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
@@ -15,22 +15,16 @@ import com.stuypulse.robot.util.SpeakerAngleElinInterpolation;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
-import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Field;
-import com.stuypulse.robot.constants.Motors;
-import com.stuypulse.robot.constants.Ports;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -113,22 +107,48 @@ public class ArmImpl extends Arm {
             case FEED:
                 return Settings.Arm.FEED_ANGLE.get();
             case STOW:
-                return Settings.Arm.MIN_ANGLE.get();
+                return Settings.Arm.MIN_ANGLE;
             case PRE_CLIMB:
                 return Settings.Arm.PRE_CLIMB_ANGLE.get();
             case CLIMBING:
                 return Settings.Arm.POST_CLIMB_ANGLE.get();
             default:
-                return Settings.Arm.MIN_ANGLE.get();   
+                return Settings.Arm.MIN_ANGLE;   
         }
     }
 
     private double getSpeakerAngleElin() {
         try {
-            Pose2d speakerPose = Field.getAllianceSpeakerPose();
-            double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.WIDTH / 2);
-            SmartDashboard.putNumber("harry", distanceToSpeaker);
-            return SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
+            Pose2d speakerPose = Field.getAllianceSpeakerPose().transformBy(new Transform2d(Field.SPEAKER_OPENING_X - Units.inchesToMeters(1.5), 0, new Rotation2d()));
+            Pose2d robotPose = SwerveDrive.getInstance().getPose();
+
+            double angleFromSpeakerToRobot = Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX())));
+
+            // aim at the side of the speaker if youre on the side
+            // if (angleFromSpeakerToRobot > 30) {
+            //     speakerPose = speakerPose.transformBy(new Transform2d(0, Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+            // }
+            // if (angleFromSpeakerToRobot < 30) {
+            //     speakerPose = speakerPose.transformBy(new Transform2d(0, -Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+            // }
+
+            double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.LENGTH / 2);
+
+            double targetAngle = SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
+
+            if (distanceToSpeaker > 120) {
+                targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.2);
+            }
+
+            SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
+            SmartDashboard.putNumber("Angle to speaker", angleFromSpeakerToRobot);
+
+            // if the robot is more than 30 degrees off to the side from the perspective of the speaker
+            // this is intended to help with shooting from the sides
+            if (Math.abs(angleFromSpeakerToRobot) > 30) {
+                targetAngle += 2;
+            }
+            return targetAngle;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -304,7 +324,7 @@ public class ArmImpl extends Arm {
         super.periodic();
 
         if (bumpSwitchTriggered.get()) {
-            armEncoder.setPosition(Settings.Arm.MIN_ANGLE.get()/360);
+            armEncoder.setPosition(Settings.Arm.MIN_ANGLE/360);
             if (state == State.RESETTING) {
                 state = State.FEED;
             }
@@ -312,15 +332,15 @@ public class ArmImpl extends Arm {
         
         if (state == State.RESETTING) {
             setVoltage(-1.5);
-            controller.update(Settings.Arm.MIN_ANGLE.get(), Settings.Arm.MIN_ANGLE.get());
+            controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
         }
-        else if (getTargetDegrees() == Settings.Arm.MIN_ANGLE.get() && bumpSwitchTriggered.get()) {
+        else if (getTargetDegrees() == Settings.Arm.MIN_ANGLE && bumpSwitchTriggered.get() && state != State.CLIMBING) {
             setVoltage(0);
-            controller.update(Settings.Arm.MIN_ANGLE.get(), Settings.Arm.MIN_ANGLE.get());
+            controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
         }
         else {
-            controller.update(SLMath.clamp(getTargetDegrees(), Settings.Arm.MIN_ANGLE.get(), Settings.Arm.MAX_ANGLE.get()), getDegrees());
-            if (Shooter.getInstance().getFeederState() == Shooter.FeederState.SHOOTING && getDegrees() < Settings.Arm.MAX_ANGLE.get()) {
+            controller.update(SLMath.clamp(getTargetDegrees(), Settings.Arm.MIN_ANGLE, Settings.Arm.MAX_ANGLE), getDegrees());
+            if (Shooter.getInstance().getFeederState() == Shooter.FeederState.SHOOTING && getDegrees() < Settings.Arm.MAX_ANGLE) {
                 setVoltage(controller.getOutput() + 0.31);
             }
             else {

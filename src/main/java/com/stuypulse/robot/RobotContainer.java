@@ -298,10 +298,10 @@ public class RobotContainer {
         AutonConfig MOBILITY_RED = new AutonConfig("Mobility", Mobility::new, "Mobility");
 
         // BCA
-        //AutonConfig BCA_BLUE = new AutonConfig("4 BCA", FourPieceBCA::new,
-        //"Blue Center to B", "Blue B to Center", "Blue Center to C", "Blue C to Shoot Before A", "Blue Center to A", "Blue A to Center");
-        //AutonConfig BCA_RED = new AutonConfig("4 BCA", FourPieceBCA::new,
-        //"Red Center to B", "Red B to Center", "Red Center to C", "Red C to Shoot Before A", "Red Center to A", "Red A to Center");
+        AutonConfig BCA_BLUE = new AutonConfig("4 BCA", FourPieceBCA::new,
+        "Blue Center to B", "Blue B to Center","Blue 90 Deg B Shoot to C", "Blue C to Shoot Before A", "Blue Center to A");
+        AutonConfig BCA_RED = new AutonConfig("4 BCA", FourPieceBCA::new,
+        "Red Center to B", "Red B to Center", "Red 90 Deg B Shoot to C", "Red C to Shoot Before A", "Red Center to A");
 
        // HGF
         AutonConfig HGF_BLUE = new AutonConfig("4 HGF", FourPieceHGF::new,
@@ -377,8 +377,8 @@ public class RobotContainer {
         MOBILITY_BLUE.registerBlue(autonChooser);
         MOBILITY_RED.registerRed(autonChooser);
 
-        //BCA_BLUE.registerDefaultBlue(autonChooser);
-        //BCA_RED.registerDefaultRed(autonChooser);
+        BCA_BLUE.registerDefaultBlue(autonChooser);
+        BCA_RED.registerDefaultRed(autonChooser);
 
         New_BCA_Blue.registerDefaultBlue(autonChooser);
         New_BCA_Red.registerDefaultRed(autonChooser);
