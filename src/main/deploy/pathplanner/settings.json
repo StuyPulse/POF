@@ -14,7 +14,9 @@
   ],
   "autoFolders": [
     "Blue Autons",
-    "Red Autons"
+    "Blue Useable",
+    "Red Autons",
+    "Red Useable"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

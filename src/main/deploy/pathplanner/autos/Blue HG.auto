@@ -25,13 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red G to Shoot"
+            "pathName": "Blue G to Shoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Blue Autons",
+  "folder": "Blue Useable",
   "choreoAuto": false
 }

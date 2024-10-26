@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9554131415955136,
-        "y": 3.8122943482354206
+        "x": 2.9673160499594813,
+        "y": 2.9639016188374643
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9992452801857166,
-        "y": 1.9280280334064948
+        "x": 5.011148188549685,
+        "y": 1.0796353040085385
       },
       "isLocked": false,
       "linkedName": "Blue Midline Shoot Pose"
@@ -51,7 +51,7 @@
   "folder": "Blue To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -37.998857104781024
   },
   "useDefaultConstraints": false
 }

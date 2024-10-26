@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.276506153086713,
-        "y": 0.7616823697189053
+        "x": 0.771923300729042,
+        "y": 6.761454662232242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.272332632987606,
-        "y": 1.0543674551879954
+        "x": 1.35957917842175,
+        "y": 8.561439231323403
       },
       "isLocked": false,
-      "linkedName": "Red H"
+      "linkedName": "Blue ADEF Starting Pose"
     },
     {
       "anchor": {
-        "x": 8.292274406349408,
-        "y": 2.449077764598981
+        "x": 8.303868098476938,
+        "y": 7.429163844438801
       },
       "prevControl": {
-        "x": 8.289235785513661,
-        "y": 1.4938814123517958
+        "x": 6.354990656409885,
+        "y": 7.0765312838289365
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red G"
+      "linkedName": "Blue D"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 90.07372067708508
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -40,13 +45,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Red Reroutes",
+  "folder": "Blue To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 61.458398561733624
   },
   "useDefaultConstraints": true
 }

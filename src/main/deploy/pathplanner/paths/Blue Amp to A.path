@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3901542060896621,
-        "y": 6.569495408336055
+        "x": 0.771923300729042,
+        "y": 6.761454662232242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8598514847351095,
-        "y": 6.746049877940562
+        "x": 1.2416205793744894,
+        "y": 6.93800913183675
       },
       "isLocked": false,
       "linkedName": "Blue ADEF Starting Pose"
@@ -46,7 +46,7 @@
   "folder": "Blue To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 61.21333556498881
   },
   "useDefaultConstraints": false
 }

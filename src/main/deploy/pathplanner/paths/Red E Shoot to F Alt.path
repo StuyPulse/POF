@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.289822635262832,
-        "y": 2.4377803880235733
+        "x": 5.762431236544021,
+        "y": 6.679680885403438
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.717530173899634,
-        "y": 1.0805087588597786
+        "x": 7.32507474966587,
+        "y": 5.831704607047608
       },
       "isLocked": false,
-      "linkedName": "Blue G"
+      "linkedName": "Red DE Long Shots"
     },
     {
       "anchor": {
-        "x": 2.9673160499594813,
-        "y": 2.9639016188374643
+        "x": 8.285159462804046,
+        "y": 4.107340350097367
       },
       "prevControl": {
-        "x": 4.976458575723168,
-        "y": 1.3942720109172795
+        "x": 7.2484448847245915,
+        "y": 5.826945286703074
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue Midline Shoot Pose"
+      "linkedName": "Red F"
     }
   ],
   "rotationTargets": [],
@@ -33,20 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.83936907589442
+    "rotation": -53.72066885531223
   },
   "reversed": false,
-  "folder": "Blue To Shoot",
+  "folder": "Red To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 36.807073351380296
+    "rotation": 9.001886166114181
   },
   "useDefaultConstraints": false
 }

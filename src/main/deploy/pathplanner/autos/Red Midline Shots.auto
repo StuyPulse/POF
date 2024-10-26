@@ -7,43 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Source to H"
+            "pathName": "Red Amp to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue H to Shoot"
+            "pathName": "Red D to Shoot Alt"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue H Shoot to G"
+            "pathName": "Red D Shoot to E Alt"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue G to Shoot"
+            "pathName": "Red E to Shoot Alt"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue G Shoot to F"
+            "pathName": "Red E Shoot to F Alt"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue F to Shoot"
+            "pathName": "Red F to Shoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Blue Autons",
+  "folder": "Red Useable",
   "choreoAuto": false
 }

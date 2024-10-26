@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0546636591848677,
-        "y": 0.9823089731649555
+        "x": 6.182549423320572,
+        "y": 0.779613950410937
       },
       "isLocked": false,
       "linkedName": "Red HGF Starting Pose"
     },
     {
       "anchor": {
-        "x": 7.416583266214966,
-        "y": 1.3565219153230341
+        "x": 8.276506153086713,
+        "y": 0.7616823697189053
       },
       "prevControl": {
-        "x": 3.0294717209717748,
-        "y": 1.2682253151963656
+        "x": 6.694584988872359,
+        "y": 0.7575480106317357
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
   "folder": "Red To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -56.03820719524482
   },
   "useDefaultConstraints": false
 }

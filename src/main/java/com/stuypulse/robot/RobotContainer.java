@@ -18,6 +18,7 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.auton.Mobility;
 import com.stuypulse.robot.commands.auton.RerouteTest;
 import com.stuypulse.robot.commands.auton.ADEF.FivePieceADEF;
+import com.stuypulse.robot.commands.auton.ADEF.FourPieceMidlineDash;
 import com.stuypulse.robot.commands.auton.BCA.FourPieceBCA;
 import com.stuypulse.robot.commands.auton.BCA.RightAngleFourPieceBCA;
 import com.stuypulse.robot.commands.auton.BF_Series.FivePieceBFGH;
@@ -345,6 +346,12 @@ public class RobotContainer {
         AutonConfig BFCAD_RED = new AutonConfig("6 BFCAD", SixPieceBFCAD::new,
         "Red Center to B", "Red B to F", "Red F to Close C Shoot", "Red FC Shoot to C", "Red C to Shoot Before A", "Red Center to A", "Red A to Center", "Red A Shoot to D", "Red D to Shoot");
 
+        // Midline Notes
+        AutonConfig DEF_BLUE = new AutonConfig("4 DEF", FourPieceMidlineDash:: new, 
+        "Blue Amp to D", "Blue D to Shoot Alt", "Blue D Shoot to E Alt", "Blue E to Shoot Alt", "Blue E Shoot to F Alt", "Blue F to Shoot");
+        AutonConfig DEF_RED = new AutonConfig("4 DEF", FourPieceMidlineDash:: new, 
+        "Red Amp to D", "Red D to Shoot Alt", "Red D Shoot to E Alt", "Red E to Shoot Alt", "Red E Shoot to F Alt", "Red F to Shoot");
+
         // BFGH
         AutonConfig BFGH_BLUE = new AutonConfig("5 BFGH", FivePieceBFGH:: new,
         "Blue Center to B", "Blue B to F", "Blue F to Shoot", "Blue F Shoot to G", "Blue G to F Shoot", "Blue GF Shoot to H", "Blue H to F Shoot");
@@ -372,25 +379,28 @@ public class RobotContainer {
 
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
-        Straight_Line.registerBlue(autonChooser);
+        //Straight_Line.registerBlue(autonChooser);
 
         MOBILITY_BLUE.registerBlue(autonChooser);
         MOBILITY_RED.registerRed(autonChooser);
 
-        BCA_BLUE.registerDefaultBlue(autonChooser);
-        BCA_RED.registerDefaultRed(autonChooser);
+        DEF_BLUE.registerBlue(autonChooser);
+        DEF_RED.registerRed(autonChooser);
+
+        //BCA_BLUE.registerDefaultBlue(autonChooser);
+        //BCA_RED.registerDefaultRed(autonChooser);
 
         New_BCA_Blue.registerDefaultBlue(autonChooser);
         New_BCA_Red.registerDefaultRed(autonChooser);
 
-        BDEFA_BLUE.registerBlue(autonChooser);
-        BDEFA_RED.registerRed(autonChooser);
+        //BDEFA_BLUE.registerBlue(autonChooser);
+        //BDEFA_RED.registerRed(autonChooser);
 
-        BFCAD_BLUE.registerBlue(autonChooser);
-        BFCAD_RED.registerRed(autonChooser);
+        //BFCAD_BLUE.registerBlue(autonChooser);
+        //BFCAD_RED.registerRed(autonChooser);
 
-        BFGH_BLUE.registerBlue(autonChooser);
-        BFGH_RED.registerRed(autonChooser);
+        //BFGH_BLUE.registerBlue(autonChooser);
+        //BFGH_RED.registerRed(autonChooser);
 
         HGF_BLUE.registerBlue(autonChooser);
         HGF_RED.registerRed(autonChooser);
