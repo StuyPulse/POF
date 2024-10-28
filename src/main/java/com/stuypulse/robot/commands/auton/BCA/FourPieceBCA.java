@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class FourPieceBCA extends SequentialCommandGroup {
-    
     public FourPieceBCA(PathPlannerPath... paths) {
         addCommands(
             // Preload Shot

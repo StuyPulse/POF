@@ -173,7 +173,11 @@ public class RobotContainer {
             .whileTrue(new LEDSet(LEDInstructions.DEACQUIRING))
             .onFalse(new IntakeStop())
             .onFalse(new ShooterFeederStop());
-        
+        // manual unstuck note between intake and shooter
+        driver.getDPadDown()
+            .onTrue(new IntakeDeacquire().alongWith(new ShooterFeederAcquire()))
+            .onFalse(new IntakeStop().alongWith(new ShooterFeederStop()));
+
         // speaker align and score 
         // score amp
         driver.getRightBumper()
