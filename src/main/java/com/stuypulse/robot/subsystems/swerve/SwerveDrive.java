@@ -3,6 +3,8 @@ package com.stuypulse.robot.subsystems.swerve;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
@@ -25,6 +27,8 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
+import com.stuypulse.robot.constants.Settings.Alignment.Translation;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
 import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
@@ -32,6 +36,7 @@ import com.stuypulse.robot.util.vision.VisionData;
 import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -122,6 +127,21 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
             ),
             () -> false,
             this
+        );
+    }
+
+    public Command choreoSwervePath(ChoreoTrajectory trajectory) {
+        return Choreo.choreoSwerveCommand(
+            trajectory,
+            () -> getPose(),
+            Choreo.choreoSwerveController(
+                new PIDController(Translation.kP.getAsDouble(), Translation.kI.getAsDouble(), Translation.kD.getAsDouble()),
+                new PIDController(Translation.kP.getAsDouble(), Translation.kI.getAsDouble(), Translation.kD.getAsDouble()),
+                new PIDController(Rotation.kP.getAsDouble(), Rotation.kI.getAsDouble(), Rotation.kD.getAsDouble())
+            ),
+            (chassisSpeeds) -> setChassisSpeeds(chassisSpeeds),
+            () -> false,
+            SwerveDrive.getInstance()
         );
     }
 

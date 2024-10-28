@@ -29,6 +29,9 @@ import com.stuypulse.robot.commands.auton.HGF.FourPieceHGF;
 import com.stuypulse.robot.commands.auton.HGF.ReroutableFourPieceHGF;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceAmpSide;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceSourceSide;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoSquare;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSplit;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoStraightLine;
 import com.stuypulse.robot.commands.auton.tests.StraightLine;
 import com.stuypulse.robot.commands.intake.IntakeDeacquire;
 import com.stuypulse.robot.commands.intake.IntakeSetAcquire;
@@ -62,6 +65,7 @@ import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
+import com.stuypulse.robot.util.PathUtil.AutonConfig.ChoreoAutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -108,7 +112,9 @@ public class RobotContainer {
 
         if (Utils.isSimulation()) {
             swerve.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
+            new VisionDisable();
         }
+
         swerve.registerTelemetry(logger::telemeterize);
 
         LiveWindow.disableAllTelemetry();
@@ -364,11 +370,21 @@ public class RobotContainer {
         "Red Center to B", "Red B to Center", "Red 90 Deg B Shoot to C", "Red C to Shoot Before A", "Red Center to A", "Red A to Center");
 
         AutonConfig One_Piece_Mobility_Amp_Side_Blue = new AutonConfig("One Piece Amp Side", OnePieceAmpSide::new, 
-            "Blue Amp Side Mobility");
+        "Blue Amp Side Mobility");
 
         // Straight Line
         AutonConfig Straight_Line = new AutonConfig("Straight Line Test", StraightLine::new,
         "Straight Line");
+
+        // CHOREO
+
+        // ChoreoAutonConfig Choreo_Square_Split = new ChoreoAutonConfig("Choreo Square Split", ChoreoSquareSplit::new, 
+        // "Square.1", "Square.2", "Square.3", "Square.4");
+
+        // ChoreoAutonConfig Choreo_Square = new ChoreoAutonConfig("Choreo Square Full", ChoreoSquare::new, 
+        // "Square");
+
+        ChoreoAutonConfig Choreo_Straight_Line = new ChoreoAutonConfig("Chore Straight Line", ChoreoStraightLine::new, "ChoreoStraightLine");
 
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
@@ -409,6 +425,12 @@ public class RobotContainer {
 
         //Reroute_Test_Blue.registerBlue(autonChooser);
         //Reroute_Test_Red.registerRed(autonChooser);
+
+        // Choreo_Square.registerChoreoBlue(autonChooser);
+        // Choreo_Square_Split.registerChoreoBlue(autonChooser);
+        Choreo_Straight_Line.registerChoreoBlue(autonChooser);
+
+
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

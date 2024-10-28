@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
@@ -68,7 +70,52 @@ public class PathUtil {
             return this;
         }
 
+         /* CHOREO */
+
+    public static class ChoreoAutonConfig {
+        
+        private final String name;
+        private final Function<ChoreoTrajectory[], Command> auton;
+        private final String[] trajs;
+
+        public ChoreoAutonConfig(String name, Function<ChoreoTrajectory[], Command> auton, String... trajs) {
+            this.name = name;
+            this.auton = auton;
+            this.trajs = trajs;
+
+            for (String traj : trajs) {
+                try {
+                    Choreo.getTrajectory(traj);
+                } catch (RuntimeException e) {
+                    DriverStation.reportError("Trajectory \"" + traj + "\" not found. Did you mean \"" +
+                     PathUtil.findClosestMatch(PathUtil.getTrajectoryFileNames(), traj) + "\"?", false);
+                    throw e;
+                }
+            }
+        }
+
+        public ChoreoAutonConfig registerChoreoBlue(SendableChooser<Command> chooser){
+            chooser.addOption("Blue " + this.name, auton.apply(loadTrajectories(this.trajs)));
+            return this;
+        }
+
+        public ChoreoAutonConfig registerChoreoRed(SendableChooser<Command> chooser){
+            chooser.addOption("Red " + this.name, auton.apply(loadTrajectories(this.trajs)));
+            return this;
+        }
+
+        public ChoreoAutonConfig registerDefaultChoreoBlue(SendableChooser<Command> chooser) {
+            chooser.setDefaultOption("Blue " + this.name, auton.apply(loadTrajectories(this.trajs)));
+            return this;
+        }
+
+        public ChoreoAutonConfig registerDefaultChoreoRed(SendableChooser<Command> chooser) {
+            chooser.setDefaultOption("Blue " + this.name, auton.apply(loadTrajectories(this.trajs)));
+            return this;
+        }
+
     }
+}
     
     /*** PATH LOADING ***/
 
@@ -95,6 +142,34 @@ public class PathUtil {
     public static PathPlannerPath loadRed(String name) {
         return flipPath(PathPlannerPath.fromPathFile(name));
     }
+
+    /* CHOREO */
+
+    public static ChoreoTrajectory[] loadTrajectoriesRed(String... names) {
+        ChoreoTrajectory[] output = new ChoreoTrajectory[names.length];
+        for (int i = 0; i < names.length; i++) {
+            output[i] = loadChoreoRed(names[i]);
+        }
+        return output;
+    }
+    
+    public static ChoreoTrajectory[] loadTrajectories(String... names) {
+        ChoreoTrajectory[] output = new ChoreoTrajectory[names.length];
+        for (int i = 0; i < names.length; i++) {
+            output[i] = loadChoreo(names[i]);
+        }
+        return output;
+    }
+
+    public static ChoreoTrajectory loadChoreo(String name) {
+        return Choreo.getTrajectory(name);
+    }
+
+    public static ChoreoTrajectory loadChoreoRed(String name) {
+        return Choreo.getTrajectory(name).flipped();
+    }
+
+    
     
     
     /*** PATH MIRRORING ***/
@@ -149,6 +224,24 @@ public class PathUtil {
         Path path = Paths.get("").toAbsolutePath().resolve("src/main/deploy/pathplanner/paths");
         ArrayList<String> fileList = new ArrayList<String>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.path")) {
+            for (Path file : stream) {
+                fileList.add(file.getFileName().toString().replaceFirst(".path",""));
+            }
+        } catch (IOException error) {
+            DriverStation.reportError(error.getMessage(), false);
+        }
+        Collections.sort(fileList);
+        return fileList;
+    }
+
+     /* CHOREO */
+
+     public static List<String> getTrajectoryFileNames() {
+        //  ../../../../../deploy/choreo
+
+        Path path = Paths.get("").toAbsolutePath().resolve("src/main/deploy/choreo");
+        ArrayList<String> fileList = new ArrayList<String>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, "*.traj")) {
             for (Path file : stream) {
                 fileList.add(file.getFileName().toString().replaceFirst(".path",""));
             }

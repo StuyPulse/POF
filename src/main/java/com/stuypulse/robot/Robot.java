@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
         scheduler.schedule(new LEDReset());
 
         SmartDashboard.putString("Robot State", "AUTON");
+        scheduler.schedule(new VisionChangeWhiteList());
     }
 
     @Override
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot {
             auto.cancel();
         }
         SmartDashboard.putString("Robot State", "TELEOP");
+        scheduler.schedule(new VisionReloadWhiteList());
     }
 
     @Override
