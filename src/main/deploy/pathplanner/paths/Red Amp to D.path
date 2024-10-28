@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7824995681613388,
+        "y": 6.781693792182228
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4809658841787923,
+        "y": 8.395151462921975
+      },
+      "isLocked": false,
+      "linkedName": "Red ADEF Starting Pose"
+    },
+    {
+      "anchor": {
+        "x": 8.281950694955519,
+        "y": 7.472564688719121
+      },
+      "prevControl": {
+        "x": 4.749561334130109,
+        "y": 7.423336707722522
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red D"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 90.66852855556625
+    },
+    {
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 91.48598831446061
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Red To Note",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 62.43570515266472
+  },
+  "useDefaultConstraints": true
+}

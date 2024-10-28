@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.304224404745106,
+        "y": 5.774418150688153
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.804888064358584,
+        "y": 6.167483563162863
+      },
+      "isLocked": false,
+      "linkedName": "Blue E"
+    },
+    {
+      "anchor": {
+        "x": 5.797813658499342,
+        "y": 6.662518487797393
+      },
+      "prevControl": {
+        "x": 7.493477573483347,
+        "y": 6.218817461764985
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue DEF Shoot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 17.14111484001432
+  },
+  "reversed": false,
+  "folder": "Blue To Shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}

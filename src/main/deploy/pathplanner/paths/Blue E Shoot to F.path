@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7806787928390673,
-        "y": 6.027870676111723
+        "x": 4.445301349680081,
+        "y": 6.156732534819237
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.683796180278373,
-        "y": 3.722508437390387
+        "x": 4.3567972208489065,
+        "y": 3.8686051497847047
       },
       "isLocked": false,
-      "linkedName": "Blue DEF Shoot"
+      "linkedName": "Blue Close DEF Shot"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.0969083044936925
       },
       "prevControl": {
-        "x": 5.226887512926812,
-        "y": 4.141857441080955
+        "x": 4.5812063861850945,
+        "y": 3.9870593450264273
       },
       "nextControl": null,
       "isLocked": false,

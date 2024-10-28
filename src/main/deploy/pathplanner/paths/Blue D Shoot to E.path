@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7806787928390673,
-        "y": 6.027870676111723
+        "x": 4.445301349680081,
+        "y": 6.156732534819237
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.279718647400258,
-        "y": 7.277258605443138
+        "x": 6.477386914967283,
+        "y": 7.04436981604618
       },
       "isLocked": false,
-      "linkedName": "Blue DEF Shoot"
+      "linkedName": "Blue Close DEF Shot"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.774418150688153
       },
       "prevControl": {
-        "x": 7.393505583307462,
-        "y": 5.7328582221267
+        "x": 7.420685950022898,
+        "y": 6.011662048249713
       },
       "nextControl": null,
       "isLocked": false,
@@ -40,13 +40,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -10.44392231985493
   },
   "reversed": false,
   "folder": "Blue To Note",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -0.0672222368676542
   },
   "useDefaultConstraints": false
 }

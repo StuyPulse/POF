@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Center to B"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue B to Center"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Autons",
+  "choreoAuto": false
+}

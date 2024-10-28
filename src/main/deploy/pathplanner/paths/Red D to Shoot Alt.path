@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.288620786690979,
+        "y": 7.4527098868185835
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.987968359123289,
+        "y": 6.783180665554184
+      },
+      "isLocked": false,
+      "linkedName": "Red DE Shoot Pose"
+    },
+    {
+      "anchor": {
+        "x": 5.762431236544021,
+        "y": 6.679680885403438
+      },
+      "prevControl": {
+        "x": 7.3539773335541865,
+        "y": 7.176701390456047
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red DE Long Shots"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 5.776351579033
+  },
+  "reversed": false,
+  "folder": "Red To Shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
+}

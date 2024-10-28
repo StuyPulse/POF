@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.762431236544021,
+        "y": 6.679680885403438
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.32507474966587,
+        "y": 5.831704607047608
+      },
+      "isLocked": false,
+      "linkedName": "Red DE Long Shots"
+    },
+    {
+      "anchor": {
+        "x": 8.285159462804046,
+        "y": 4.107340350097367
+      },
+      "prevControl": {
+        "x": 7.2484448847245915,
+        "y": 5.826945286703074
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red F"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.72066885531223
+  },
+  "reversed": false,
+  "folder": "Red To Note",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 9.001886166114181
+  },
+  "useDefaultConstraints": false
+}

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.365670654890417,
-        "y": 3.567518045564365
+        "x": 3.2534642847063466,
+        "y": 2.6311847495489866
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.287158947348484,
-        "y": 2.4072769107971963
+        "x": 4.174952577164413,
+        "y": 1.470943614781818
       },
       "isLocked": false,
       "linkedName": "Red HG Shoot Pose"
     },
     {
       "anchor": {
-        "x": 7.416583266214966,
-        "y": 1.3565219153230341
+        "x": 8.276506153086713,
+        "y": 0.7616823697189053
       },
       "prevControl": {
-        "x": 4.957734392898985,
-        "y": 1.2700678383977868
+        "x": 5.8176572797707315,
+        "y": 0.675228292793658
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,27 +31,25 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.1,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 0.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.75,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 0.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Red To Note",
-  "idealStartingState": {
-    "velocity": 0,
-    "rotation": -40.21562048161929
-  },
-  "useDefaultConstraints": true
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
 }

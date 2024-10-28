@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.771923300729042,
+        "y": 6.761454662232242
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.35957917842175,
+        "y": 8.561439231323403
+      },
+      "isLocked": false,
+      "linkedName": "Blue ADEF Starting Pose"
+    },
+    {
+      "anchor": {
+        "x": 8.303868098476938,
+        "y": 7.429163844438801
+      },
+      "prevControl": {
+        "x": 6.354990656409885,
+        "y": 7.0765312838289365
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue D"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 90.07372067708508,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}

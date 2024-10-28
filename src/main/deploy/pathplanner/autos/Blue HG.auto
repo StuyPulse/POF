@@ -1,5 +1,12 @@
 {
   "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2,
+      "y": 2
+    },
+    "rotation": -60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -25,13 +32,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red G to Shoot"
+            "pathName": "Blue G to Shoot"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": "Blue Autons",
+  "folder": null,
   "choreoAuto": false
 }

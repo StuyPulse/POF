@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Amp to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue D to Shoot Alt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue D Shoot to E Alt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue E to Shoot Alt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue E Shoot to F Alt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue F to Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Useable",
+  "choreoAuto": false
+}
