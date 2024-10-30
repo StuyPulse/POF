@@ -29,7 +29,9 @@ import com.stuypulse.robot.commands.auton.HGF.FourPieceHGF;
 import com.stuypulse.robot.commands.auton.HGF.ReroutableFourPieceHGF;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceAmpSide;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceSourceSide;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoCircle;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquare;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSpin;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSplit;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoStraightLine;
 import com.stuypulse.robot.commands.auton.tests.StraightLine;
@@ -381,10 +383,16 @@ public class RobotContainer {
         // ChoreoAutonConfig Choreo_Square_Split = new ChoreoAutonConfig("Choreo Square Split", ChoreoSquareSplit::new, 
         // "Square.1", "Square.2", "Square.3", "Square.4");
 
-        // ChoreoAutonConfig Choreo_Square = new ChoreoAutonConfig("Choreo Square Full", ChoreoSquare::new, 
-        // "Square");
+        ChoreoAutonConfig Choreo_Square = new ChoreoAutonConfig("Choreo Square Full", ChoreoSquare::new, 
+        "ChoreoSquare");
 
-        ChoreoAutonConfig Choreo_Straight_Line = new ChoreoAutonConfig("Chore Straight Line", ChoreoStraightLine::new, "ChoreoStraightLine");
+        ChoreoAutonConfig Choreo_Straight_Line = new ChoreoAutonConfig("Choreo Straight Line", ChoreoStraightLine::new, "ChoreoStraightLine");
+
+        ChoreoAutonConfig Choreo_Square_Spin = new ChoreoAutonConfig("Choreo Square Spin", ChoreoSquareSpin::new, 
+        "Choreo Square Spin");
+
+        ChoreoAutonConfig Choreo_Circle = new ChoreoAutonConfig("Choreo Circle", ChoreoCircle::new, 
+        "Sac","Rod");
 
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
@@ -426,9 +434,11 @@ public class RobotContainer {
         //Reroute_Test_Blue.registerBlue(autonChooser);
         //Reroute_Test_Red.registerRed(autonChooser);
 
-        // Choreo_Square.registerChoreoBlue(autonChooser);
+        Choreo_Square.registerChoreoBlue(autonChooser);
         // Choreo_Square_Split.registerChoreoBlue(autonChooser);
         Choreo_Straight_Line.registerChoreoBlue(autonChooser);
+        Choreo_Square_Spin.registerChoreoBlue(autonChooser);
+        Choreo_Circle.registerChoreoBlue(autonChooser);
 
 
 
