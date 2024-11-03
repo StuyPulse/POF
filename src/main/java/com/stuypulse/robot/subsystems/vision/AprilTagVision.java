@@ -11,7 +11,7 @@ public abstract class AprilTagVision extends SubsystemBase {
     private static final AprilTagVision instance;
 
     static {
-        instance = new PhotonVision();
+        instance = new PhotonTagVision();
     }
 
     public static AprilTagVision getInstance() {

@@ -9,18 +9,15 @@ import edu.wpi.first.math.util.Units;
 /** This interface stores information about each camera. */
 public interface Cameras {
 
-    public interface Limelight {
-        // TO DO: find position
-        Pose3d[] POSITIONS = new Pose3d[] {
-            new Pose3d(
-                new Translation3d(Units.inchesToMeters(3), Units.inchesToMeters(0), Units.inchesToMeters(13.75)),
-                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(8), Units.degreesToRadians(2)))
-        };
-
-        String[] LIMELIGHTS = { "limelight" };
-
-        int[] PORTS = {5800, 5801, 5802, 5803, 5804, 5805};
-    }
+    public CameraConfig NOTE_CAMERA = new CameraConfig(
+        "driver-cam",
+        new Pose3d(
+            new Translation3d(Units.inchesToMeters(-11.25), Units.inchesToMeters(3.333797 - 1.4375), Units.inchesToMeters(23.929362)),
+            new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-15), Units.degreesToRadians(180))
+        ),
+        "11",
+        3000
+    );
 
     public CameraConfig[] APRILTAG_CAMERAS = new CameraConfig[] {
         // TO DO: find positions

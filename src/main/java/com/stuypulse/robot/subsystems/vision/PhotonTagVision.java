@@ -23,7 +23,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class PhotonVision extends AprilTagVision {
+public class PhotonTagVision extends AprilTagVision {
 
     private final PhotonCamera[] cameras;
     private final boolean[] enabled;
@@ -34,7 +34,7 @@ public class PhotonVision extends AprilTagVision {
 
     private final FieldObject2d robot;
 
-    protected PhotonVision() {
+    protected PhotonTagVision() {
         this.cameras = new PhotonCamera[Cameras.APRILTAG_CAMERAS.length];
         for (int i = 0; i < Cameras.APRILTAG_CAMERAS.length; i++) {
             cameras[i] = new PhotonCamera(Cameras.APRILTAG_CAMERAS[i].getName());

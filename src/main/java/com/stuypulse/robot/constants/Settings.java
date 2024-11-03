@@ -322,6 +322,11 @@ public interface Settings {
         double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.60;
     }
 
+    public interface NoteDetection {
+        double INTAKE_THRESHOLD_DISTANCE = 2.0;
+        double MAX_ANGLE = 40;
+    }
+
     public interface Buzz {
         double BUZZ_DURATION = 1.0;
         double BUZZ_INTENSITY = 1.0;

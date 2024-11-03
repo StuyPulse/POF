@@ -42,6 +42,7 @@ import com.stuypulse.robot.commands.shooter.ShooterFeederShoot;
 import com.stuypulse.robot.commands.shooter.ShooterFeederStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitForTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveNoteAssist;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveRobotRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveToPose;
@@ -62,6 +63,7 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
+import com.stuypulse.robot.subsystems.vision.NoteVision;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -86,7 +88,8 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
     
     // Subsystem
-    public final AprilTagVision vision = AprilTagVision.getInstance();
+    public final AprilTagVision tagVision = AprilTagVision.getInstance();
+    public final NoteVision noteVision = NoteVision.getInstance();
     
     public final Intake intake = Intake.getInstance();
     public final Shooter shooter = Shooter.getInstance();
@@ -118,8 +121,6 @@ public class RobotContainer {
         new Trigger(() -> Intake.getInstance().getState() == Intake.State.ACQUIRING && Intake.getInstance().hasNote()
                     || ((driver.getLeftTriggerPressed() || driver.getRightTriggerPressed()) && (Intake.getInstance().hasNote() || Shooter.getInstance().hasNote())))
             .onTrue(new BuzzController(driver, 1, 1));
-
-        // new VisionDisable();
     }
 
     /****************/
@@ -159,7 +160,9 @@ public class RobotContainer {
             .onTrue(new IntakeSetAcquire())
             .onFalse(new IntakeStop());
         
-        driver.getRightTriggerButton().onTrue(new ArmToFeed());
+        driver.getRightTriggerButton()
+            .onTrue(new ArmToFeed())
+            .whileTrue(new SwerveDriveDriveNoteAssist(driver));
         
         // drive robot relative
         driver.getLeftTriggerButton()
