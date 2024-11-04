@@ -1,5 +1,6 @@
 package com.stuypulse.robot.commands.auton;
 
+import com.choreo.lib.ChoreoTrajectory;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.stuypulse.robot.commands.arm.ArmToSpeaker;
@@ -30,4 +31,5 @@ public class FollowPathThenShoot extends SequentialCommandGroup{
                     : ShootRoutine.fromAnywhere().onlyIf(() -> Shooter.getInstance().hasNote())
         );
     }
+
 }
