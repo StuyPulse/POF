@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
         scheduler.schedule(new LEDReset());
 
         SmartDashboard.putString("Robot State", "AUTON");
-        scheduler.schedule(new VisionChangeWhiteList());
+        scheduler.schedule(new VisionChangeWhiteList(7,8));
     }
 
     @Override

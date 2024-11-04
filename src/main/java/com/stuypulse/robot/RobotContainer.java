@@ -25,10 +25,12 @@ import com.stuypulse.robot.commands.auton.BF_Series.SixPieceBDEFA;
 import com.stuypulse.robot.commands.auton.BF_Series.SixPieceBFCAD;
 import com.stuypulse.robot.commands.auton.HGF.ThreePieceGH;
 import com.stuypulse.robot.commands.auton.HGF.ThreePieceHG;
+// import com.stuypulse.robot.commands.auton.HGF.FourPieceChoreoHGF;
 import com.stuypulse.robot.commands.auton.HGF.FourPieceHGF;
 import com.stuypulse.robot.commands.auton.HGF.ReroutableFourPieceHGF;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceAmpSide;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceSourceSide;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoBCA;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoCircle;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquare;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSpin;
@@ -383,6 +385,9 @@ public class RobotContainer {
         // ChoreoAutonConfig Choreo_Square_Split = new ChoreoAutonConfig("Choreo Square Split", ChoreoSquareSplit::new, 
         // "Square.1", "Square.2", "Square.3", "Square.4");
 
+        // ChoreoAutonConfig Choreo_HGF = new ChoreoAutonConfig("CHoreo 4 HGF", FourPieceChoreoHGF::new, 
+        // "HGF");
+
         ChoreoAutonConfig Choreo_Square = new ChoreoAutonConfig("Choreo Square Full", ChoreoSquare::new, 
         "ChoreoSquare");
 
@@ -393,6 +398,9 @@ public class RobotContainer {
 
         ChoreoAutonConfig Choreo_Circle = new ChoreoAutonConfig("Choreo Circle", ChoreoCircle::new, 
         "Sac","Rod");
+
+        ChoreoAutonConfig Choreo_BCA = new ChoreoAutonConfig("Choreo BCA", ChoreoBCA::new, 
+        "BCA.1","BCA.2","BCA.3","BCA.4","BCA.5","BCA.6");
 
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
@@ -439,6 +447,8 @@ public class RobotContainer {
         Choreo_Straight_Line.registerChoreoBlue(autonChooser);
         Choreo_Square_Spin.registerChoreoBlue(autonChooser);
         Choreo_Circle.registerChoreoBlue(autonChooser);
+        // Choreo_HGF.registerChoreoBlue(autonChooser);
+        Choreo_BCA.registerChoreoBlue(autonChooser);
 
 
 
