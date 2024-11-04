@@ -7,6 +7,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.stuylib.network.SmartBoolean;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class PhotonNoteVision extends NoteVision{
@@ -35,9 +37,10 @@ public class PhotonNoteVision extends NoteVision{
         double closestNoteDistance = Double.MAX_VALUE;
         Translation2d closestRobotRelativeNotePose = new Translation2d();
         for (PhotonTrackedTarget note : result.targets) {
-            if (note.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm() < closestNoteDistance) {
-                closestNoteDistance = note.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
-                closestRobotRelativeNotePose = note.getBestCameraToTarget().getTranslation().toTranslation2d();
+            Translation2d notePose = Cameras.NOTE_CAMERA.getLocation().transformBy(new Transform3d(note.getBestCameraToTarget().getTranslation(), new Rotation3d())).getTranslation().toTranslation2d();
+            if (notePose.getNorm() < closestNoteDistance) {
+                closestNoteDistance = notePose.getNorm();
+                closestRobotRelativeNotePose = notePose;
             }
         }
         return closestRobotRelativeNotePose;

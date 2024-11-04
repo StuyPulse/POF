@@ -12,8 +12,8 @@ public interface Cameras {
     public CameraConfig NOTE_CAMERA = new CameraConfig(
         "driver-cam",
         new Pose3d(
-            new Translation3d(Units.inchesToMeters(-11.25), Units.inchesToMeters(3.333797 - 1.4375), Units.inchesToMeters(23.929362)),
-            new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-15), Units.degreesToRadians(180))
+            new Translation3d(Units.inchesToMeters(10.809731), Units.inchesToMeters(0), Units.inchesToMeters(15.530466)),
+            new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(48), Units.degreesToRadians(0))
         ),
         "11",
         3000
