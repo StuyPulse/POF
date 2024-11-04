@@ -1,5 +1,7 @@
 package com.stuypulse.robot.commands.swerve;
 
+import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
@@ -8,24 +10,21 @@ import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
-import com.stuypulse.stuylib.streams.vectors.filters.VMotionProfile;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 import com.stuypulse.stuylib.util.AngleVelocity;
 import com.stuypulse.stuylib.util.StopWatch;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.constants.Settings.Swerve.Assist;
+import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.vision.NoteVision;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveDriveNoteAssist extends Command {
@@ -49,7 +48,8 @@ public class SwerveDriveDriveNoteAssist extends Command {
 
     private final VStream speed;
     private final IStream driverTurn;
-    private final IStream assistTurn;
+    private final IStream assistAngleVelocity;
+    private final AngleController angleController;
 
     private Rotation2d lastAngleToNoteRobotRelative;
 
@@ -80,10 +80,13 @@ public class SwerveDriveDriveNoteAssist extends Command {
                 x -> x * Turn.MAX_TELEOP_TURN_SPEED.get(),
                 new LowPassFilter(Turn.RC));
 
+        angleController = new AnglePIDController(Motion.THETA.kP, Motion.THETA.kI, Motion.THETA.kD)
+            .setOutputFilter(x -> -x);
+
         lastAngleToNoteRobotRelative = new Rotation2d();
 
         AngleVelocity derivative = new AngleVelocity();
-        assistTurn = IStream.create(() -> derivative.get(Angle.fromRotation2d(mode == Mode.ASSIST ? lastAngleToNoteRobotRelative : new Rotation2d())))
+        assistAngleVelocity = IStream.create(() -> derivative.get(Angle.fromRotation2d(mode == Mode.ASSIST ? lastAngleToNoteRobotRelative : new Rotation2d())))
             .filtered(new LowPassFilter(Assist.ANGLE_DERIV_RC))
             // make angleVelocity contribute less once distance is less than REDUCED_FF_DIST
             // so that angular velocity doesn't oscillate
@@ -114,13 +117,12 @@ public class SwerveDriveDriveNoteAssist extends Command {
                 swerve.drive(speed.get(), driverTurn.get());
                 break;
             case ASSIST:
-                swerve.setChassisSpeeds(new ChassisSpeeds(
-                    speed.get().magnitude() * Math.cos(lastAngleToNoteRobotRelative.getRadians()),
-                    speed.get().magnitude() * Math.cos(lastAngleToNoteRobotRelative.getRadians()), 
-                    assistTurn.get()));
-                swerve.setControl(robotCentricDrive.withVelocityX(speed.get().x)
-                    .withVelocityY(speed.get().y)
-                    .withRotationalRate(assistTurn.get())         
+                swerve.setControl(robotCentricDrive
+                    .withVelocityX(speed.get().magnitude() * Math.cos(lastAngleToNoteRobotRelative.getRadians()))
+                    .withVelocityY(speed.get().magnitude() * Math.sin(lastAngleToNoteRobotRelative.getRadians()))
+                    .withRotationalRate(assistAngleVelocity.get() + angleController.update(
+                        Angle.fromDegrees(0),
+                        Angle.fromRotation2d(lastAngleToNoteRobotRelative)))
                 );
             default:
                 break;
