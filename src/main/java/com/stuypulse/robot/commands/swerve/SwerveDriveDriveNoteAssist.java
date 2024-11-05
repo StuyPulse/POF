@@ -107,6 +107,9 @@ public class SwerveDriveDriveNoteAssist extends Command {
                 stopWatch.reset();
                 lastAngleToNoteRobotRelative = notePose.getAngle();
             }
+            else {
+                mode = Mode.NORMAL;
+            }
         }
         else if (stopWatch.getTime() > 1.0) {
             mode = Mode.NORMAL;

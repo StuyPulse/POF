@@ -324,7 +324,7 @@ public interface Settings {
 
     public interface NoteDetection {
         double INTAKE_THRESHOLD_DISTANCE = 2.0;
-        double MAX_ANGLE = 40;
+        double MAX_ANGLE = 60;
     }
 
     public interface Buzz {
