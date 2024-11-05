@@ -20,6 +20,7 @@ import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.constants.Settings.Swerve.Assist;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
+import com.stuypulse.robot.subsystems.intake.Intake;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.vision.NoteVision;
 
@@ -131,5 +132,10 @@ public class SwerveDriveDriveNoteAssist extends Command {
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return Intake.getInstance().hasNote();
     }
 }
