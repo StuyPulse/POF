@@ -5,6 +5,7 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
@@ -15,6 +16,7 @@ import com.stuypulse.stuylib.util.AngleVelocity;
 import com.stuypulse.stuylib.util.StopWatch;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
@@ -27,7 +29,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SwerveDriveDriveNoteAssist extends Command {
+public class SwerveDriveDriveNoteAssistRobotRelative extends Command {
 
     private enum Mode {
         NORMAL,
@@ -53,7 +55,7 @@ public class SwerveDriveDriveNoteAssist extends Command {
 
     private Rotation2d lastAngleToNoteRobotRelative;
 
-    public SwerveDriveDriveNoteAssist(Gamepad driver) {
+    public SwerveDriveDriveNoteAssistRobotRelative(Gamepad driver) {
         swerve = SwerveDrive.getInstance();
         noteVision = NoteVision.getInstance();
 
@@ -117,7 +119,12 @@ public class SwerveDriveDriveNoteAssist extends Command {
 
         switch (mode) {
             case NORMAL:
-                swerve.drive(speed.get(), driverTurn.get());
+                Vector2D velocity = Robot.isBlue() ? speed.get() : speed.get().mul(-1);
+                swerve.setControl(robotCentricDrive
+                        .withVelocityX(Robot.isBlue() ? velocity.y : -velocity.y)
+                        .withVelocityY(Robot.isBlue() ? -velocity.x : velocity.x)
+                        .withRotationalRate(driverTurn.get())         
+                    );
                 break;
             case ASSIST:
                 swerve.setControl(robotCentricDrive

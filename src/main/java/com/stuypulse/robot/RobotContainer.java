@@ -43,6 +43,7 @@ import com.stuypulse.robot.commands.shooter.ShooterFeederStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitForTarget;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveNoteAssist;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDriveNoteAssistRobotRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveRobotRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveToPose;
@@ -167,7 +168,7 @@ public class RobotContainer {
         // drive robot relative
         driver.getLeftTriggerButton()
             .onTrue(new ArmToFeed())
-            .whileTrue(new SwerveDriveDriveRobotRelative(driver))
+            .whileTrue(new SwerveDriveDriveNoteAssistRobotRelative(driver))
             .whileTrue(new LEDSet(LEDInstructions.ROBOT_RELATIVE_INTAKING));
         
         // deacquire
