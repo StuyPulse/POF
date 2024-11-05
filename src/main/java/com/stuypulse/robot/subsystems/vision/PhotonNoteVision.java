@@ -1,10 +1,12 @@
 package com.stuypulse.robot.subsystems.vision;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.stuypulse.robot.constants.Cameras;
+import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.network.SmartBoolean;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -44,10 +46,20 @@ public class PhotonNoteVision extends NoteVision{
             double noteYaw = Units.degreesToRadians(note.getYaw());
             double notePitch = Units.degreesToRadians(note.getPitch());
 
-            double noteDistX = (1/Math.tan(notePitch-offset.getRotation().getY()))* offset.getZ();
-            double noteDistY = Math.tan(noteYaw-offset.getRotation().getZ())*noteDistX;
+            // these are not scaled yet to the correct distance from the camera
+            double noteX = (1/Math.tan(notePitch-offset.getRotation().getY()))* offset.getZ();
+            double noteY = Math.tan(noteYaw-offset.getRotation().getZ())*noteX;
 
-            Translation2d notePose = new Translation2d(noteDistX+offset.getX(), noteDistY+ offset.getY());
+            // scaling step
+            double distanceToNote = PhotonUtils.calculateDistanceToTargetMeters(
+                Cameras.NOTE_CAMERA.getLocation().getZ(), 
+                0, 
+                -Cameras.NOTE_CAMERA.getLocation().getRotation().getY(), 
+                notePitch
+            );
+            Translation2d cameraToNote = new Vector2D(noteX, noteY).normalize().mul(distanceToNote).getTranslation2d();
+
+            Translation2d notePose = cameraToNote.plus(new Translation2d(offset.getX(), offset.getY()));
             if (notePose.getNorm() < closestNoteDistance) {
                 closestNoteDistance = notePose.getNorm();
                 closestRobotRelativeNotePose = notePose;
