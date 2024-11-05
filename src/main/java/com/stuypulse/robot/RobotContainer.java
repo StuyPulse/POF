@@ -32,6 +32,7 @@ import com.stuypulse.robot.commands.auton.SideAutons.OnePieceAmpSide;
 import com.stuypulse.robot.commands.auton.SideAutons.OnePieceSourceSide;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoBCA;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoCircle;
+import com.stuypulse.robot.commands.auton.choreo.ChoreoHGF;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquare;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSpin;
 import com.stuypulse.robot.commands.auton.choreo.ChoreoSquareSplit;
@@ -402,6 +403,9 @@ public class RobotContainer {
         ChoreoAutonConfig Choreo_BCA = new ChoreoAutonConfig("Choreo BCA", ChoreoBCA::new, 
         "BCA.1","BCA.2","BCA.3","BCA.4","BCA.5","BCA.6");
 
+        ChoreoAutonConfig Choreo_HGF = new ChoreoAutonConfig("Choreo HGF", ChoreoHGF::new, 
+        "HGF.1","HGF.2","HGF.3","HGF.4","HGF.5","HGF.6");
+
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
         Straight_Line.registerBlue(autonChooser);
@@ -449,6 +453,7 @@ public class RobotContainer {
         Choreo_Circle.registerChoreoBlue(autonChooser);
         // Choreo_HGF.registerChoreoBlue(autonChooser);
         Choreo_BCA.registerChoreoBlue(autonChooser);
+        Choreo_HGF.registerChoreoBlue(autonChooser);
 
 
 
