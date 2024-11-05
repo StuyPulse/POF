@@ -105,13 +105,21 @@ public class SwerveDriveDriveNoteAssistRobotRelative extends Command {
     public void execute() {
         if (noteVision.hasNoteData()) {
             Translation2d notePose = noteVision.getRobotRelativeNotePose();
-            if (notePose.getNorm() < Settings.NoteDetection.INTAKE_THRESHOLD_DISTANCE && Math.abs(notePose.getAngle().getDegrees()) < Settings.NoteDetection.MAX_ANGLE) {
+            if (notePose.getNorm() < Settings.NoteDetection.INTAKE_THRESHOLD_DISTANCE && Math.abs(notePose.getAngle().getDegrees()) < Settings.NoteDetection.MAX_ANGLE_FROM_CAMERA) {
                 mode = Mode.ASSIST;
                 stopWatch.reset();
                 lastAngleToNoteRobotRelative = notePose.getAngle();
             }
             else {
                 mode = Mode.NORMAL;
+            }
+
+            if (speed.get().magnitude() > 0) {
+                Rotation2d noteDirection = swerve.getPose().getRotation().plus(lastAngleToNoteRobotRelative);
+                Rotation2d driveDirection = speed.get().getAngle().getRotation2d();
+                if (Math.abs(noteDirection.minus(driveDirection).getDegrees()) > Settings.NoteDetection.MAX_DRIVE_ANGLE_TO_NOTE_ANGLE) {
+                    mode = Mode.NORMAL;
+                }
             }
         }
         else if (stopWatch.getTime() > 1.0) {

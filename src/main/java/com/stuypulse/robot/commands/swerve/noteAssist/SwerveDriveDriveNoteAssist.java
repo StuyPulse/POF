@@ -5,6 +5,7 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
@@ -15,6 +16,7 @@ import com.stuypulse.stuylib.util.AngleVelocity;
 import com.stuypulse.stuylib.util.StopWatch;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
@@ -103,13 +105,21 @@ public class SwerveDriveDriveNoteAssist extends Command {
     public void execute() {
         if (noteVision.hasNoteData()) {
             Translation2d notePose = noteVision.getRobotRelativeNotePose();
-            if (notePose.getNorm() < Settings.NoteDetection.INTAKE_THRESHOLD_DISTANCE && Math.abs(notePose.getAngle().getDegrees()) < Settings.NoteDetection.MAX_ANGLE) {
+            if (notePose.getNorm() < Settings.NoteDetection.INTAKE_THRESHOLD_DISTANCE && Math.abs(notePose.getAngle().getDegrees()) < Settings.NoteDetection.MAX_ANGLE_FROM_CAMERA) {
                 mode = Mode.ASSIST;
                 stopWatch.reset();
                 lastAngleToNoteRobotRelative = notePose.getAngle();
             }
             else {
                 mode = Mode.NORMAL;
+            }
+
+            if (speed.get().magnitude() > 0) {
+                Rotation2d noteDirection = swerve.getPose().getRotation().plus(lastAngleToNoteRobotRelative);
+                Rotation2d driveDirection = Robot.isBlue() ? speed.get().getAngle().getRotation2d() : speed.get().mul(-1).getAngle().getRotation2d();
+                if (Math.abs(noteDirection.minus(driveDirection).getDegrees()) > Settings.NoteDetection.MAX_DRIVE_ANGLE_TO_NOTE_ANGLE) {
+                    mode = Mode.NORMAL;
+                }
             }
         }
         else if (stopWatch.getTime() > 1.0) {
