@@ -43,13 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue A to Center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Blue A Shoot to D"
+            "pathName": "Blue A to D"
           }
         },
         {

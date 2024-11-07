@@ -39,14 +39,13 @@ public class SixPieceBFCAD extends SequentialCommandGroup {
 
             // Get A + Shoot A
             new IntakeSetAcquire(),
-            SwerveDrive.getInstance().followPathCommand(paths[5]),
-            new FollowPathThenShoot(paths[6], false),
+            new FollowPathThenShoot(paths[5], false),
             new ArmToFeed(),
 
             // Get D to Shoot D
             new IntakeSetAcquire(),
-            SwerveDrive.getInstance().followPathCommand(paths[7]),
-            new FollowPathThenShoot(paths[8], true),
+            SwerveDrive.getInstance().followPathCommand(paths[6]),
+            new FollowPathThenShoot(paths[7], true),
             new ArmToFeed()
         );
 

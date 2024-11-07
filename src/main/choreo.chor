@@ -14710,7 +14710,7 @@
                         "last"
                     ],
                     "type": "MaxVelocity",
-                    "velocity": 1
+                    "velocity": 2.5
                 },
                 {
                     "scope": [
@@ -14767,22 +14767,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "B Shooting Pose",
-                    "target": 2,
-                    "trajTargetIndex": 2,
-                    "targetTimestamp": 3.03493833108107,
-                    "offset": 0,
-                    "command": {
-                        "type": "named",
-                        "data": {
-                            "name": "Shoot"
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "ADEF": {
             "waypoints": [

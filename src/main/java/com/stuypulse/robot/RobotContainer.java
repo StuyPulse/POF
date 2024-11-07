@@ -353,7 +353,7 @@ public class RobotContainer {
 
         // BFCAD
         AutonConfig BFCAD_BLUE = new AutonConfig("6 BFCAD", SixPieceBFCAD::new,
-        "Blue Center to B", "Blue B to F", "Blue F to Close C Shoot", "Blue FC Shoot to C", "Blue C to Shoot Before A", "Blue Center to A", "Blue A to Center", "Blue A Shoot to D", "Blue D to Shoot");
+        "Blue Center to B", "Blue B to F", "Blue F to Close C Shoot", "Blue FC Shoot to C", "Blue C to Shoot Before A", "Blue Center to A", "Blue A to D", "Blue D to Shoot");
         AutonConfig BFCAD_RED = new AutonConfig("6 BFCAD", SixPieceBFCAD::new,
         "Red Center to B", "Red B to F", "Red F to Close C Shoot", "Red FC Shoot to C", "Red C to Shoot Before A", "Red Center to A", "Red A to Center", "Red A Shoot to D", "Red D to Shoot");
 
