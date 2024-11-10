@@ -1,5 +1,7 @@
 package com.stuypulse.robot.subsystems.vision;
 
+import java.util.ArrayList;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -44,10 +46,10 @@ public class PhotonNoteVision extends NoteVision{
         for (PhotonTrackedTarget note : result.targets) {
             Pose3d offset = Cameras.NOTE_CAMERA.getLocation();
             double noteYaw = Units.degreesToRadians(note.getYaw());
-            double notePitch = Units.degreesToRadians(note.getPitch());
+            double notePitch = Units.degreesToRadians(-note.getPitch());
 
             // these are not scaled yet to the correct distance from the camera
-            double noteX = (1/Math.tan(notePitch-offset.getRotation().getY()))* offset.getZ();
+            double noteX = -(1/Math.tan(notePitch-offset.getRotation().getY()))* offset.getZ();
             double noteY = Math.tan(noteYaw-offset.getRotation().getZ())*noteX;
 
             // scaling step
@@ -58,7 +60,7 @@ public class PhotonNoteVision extends NoteVision{
                 notePitch
             );
             Translation2d cameraToNote = new Vector2D(noteX, noteY).normalize().mul(distanceToNote).getTranslation2d();
-
+            
             Translation2d notePose = cameraToNote.plus(new Translation2d(offset.getX(), offset.getY()));
             if (notePose.getNorm() < closestNoteDistance) {
                 closestNoteDistance = notePose.getNorm();

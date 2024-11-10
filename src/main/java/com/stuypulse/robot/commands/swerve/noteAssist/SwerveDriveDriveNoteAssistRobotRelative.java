@@ -28,6 +28,7 @@ import com.stuypulse.robot.subsystems.vision.NoteVision;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveDriveNoteAssistRobotRelative extends Command {
@@ -116,7 +117,9 @@ public class SwerveDriveDriveNoteAssistRobotRelative extends Command {
 
             if (speed.get().magnitude() > 0) {
                 Rotation2d noteDirection = swerve.getPose().getRotation().plus(lastAngleToNoteRobotRelative);
-                Rotation2d driveDirection = speed.get().getAngle().getRotation2d();
+                Rotation2d driveDirection = Robot.isBlue() ? speed.get().getAngle().getRotation2d().plus(Rotation2d.fromDegrees(90)) : speed.get().getAngle().getRotation2d().minus(Rotation2d.fromDegrees(90));
+                SmartDashboard.putNumber("ian/drive direction", driveDirection.getDegrees());
+                SmartDashboard.putNumber("ian/note direction", noteDirection.getDegrees());
                 if (Math.abs(noteDirection.minus(driveDirection).getDegrees()) > Settings.NoteDetection.MAX_DRIVE_ANGLE_TO_NOTE_ANGLE) {
                     mode = Mode.NORMAL;
                 }
