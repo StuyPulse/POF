@@ -54,6 +54,7 @@ public class PhotonRobotVision extends RobotVision{
         return robotToRobot;
     }
 
+    @Override
     public List<Pair<Translation2d, Translation2d>> getRobotPositionsAsBoundingBoxes() {
         return Robot.isReal() ? getRealRobotPositionsAsBoundingBoxes() : getSimRobotPositionsAsBoundingBoxes();
     }
