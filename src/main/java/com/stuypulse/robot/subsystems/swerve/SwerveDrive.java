@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -26,7 +27,7 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
-import com.stuypulse.robot.subsystems.vision.AprilTagVision;
+import com.stuypulse.robot.subsystems.vision.aprilTags.AprilTagVision;
 import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
 import com.stuypulse.robot.util.vision.VisionData;
 import com.stuypulse.stuylib.math.Vector2D;
@@ -97,8 +98,6 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         field = new Field2d();
         initFieldObject();
         SmartDashboard.putData("Field", field);
-
-        configureAutoBuilder();
     }
 
     /*** PATH FOLLOWING ***/
@@ -197,10 +196,6 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
     public Pose2d getPose() {
         return m_odometry.getEstimatedPosition();
-    }
-
-    public void setPose(Pose2d pose) {
-        m_odometry.resetPosition(getGyroAngle(), m_modulePositions, pose);
     }
 
     public Field2d getField() {

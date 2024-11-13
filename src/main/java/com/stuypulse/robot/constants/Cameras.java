@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 /** This interface stores information about each camera. */
 public interface Cameras {
 
-    public CameraConfig NOTE_CAMERA = new CameraConfig(
+    public CameraConfig DRIVER_CAMERA = new CameraConfig(
         "driver-cam",
         new Pose3d(
             new Translation3d(Units.inchesToMeters(10.809731), Units.inchesToMeters(0), Units.inchesToMeters(15.530466)),

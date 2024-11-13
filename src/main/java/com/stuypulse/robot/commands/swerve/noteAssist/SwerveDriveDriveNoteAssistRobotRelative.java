@@ -24,7 +24,7 @@ import com.stuypulse.robot.constants.Settings.Swerve.Assist;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.intake.Intake;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
-import com.stuypulse.robot.subsystems.vision.NoteVision;
+import com.stuypulse.robot.subsystems.vision.notes.NoteVision;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;

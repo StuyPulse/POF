@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems.vision;
+package com.stuypulse.robot.subsystems.vision.notes;
 
 import java.util.ArrayList;
 
@@ -21,11 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PhotonNoteVision extends NoteVision{
 
     private final PhotonCamera camera;
-    private final SmartBoolean enabled;
 
     public PhotonNoteVision() {
-        this.camera = new PhotonCamera(Cameras.NOTE_CAMERA.getName());
-        this.enabled = new SmartBoolean("Note Detection/Enabled", true);
+        this.camera = new PhotonCamera(Cameras.DRIVER_CAMERA.getName());
     }
 
     @Override
@@ -44,19 +42,19 @@ public class PhotonNoteVision extends NoteVision{
         double closestNoteDistance = Double.MAX_VALUE;
         Translation2d closestRobotRelativeNotePose = new Translation2d();
         for (PhotonTrackedTarget note : result.targets) {
-            Pose3d offset = Cameras.NOTE_CAMERA.getLocation();
+            Pose3d offset = Cameras.DRIVER_CAMERA.getLocation();
             double noteYaw = Units.degreesToRadians(note.getYaw());
             double notePitch = Units.degreesToRadians(-note.getPitch());
 
             // these are not scaled yet to the correct distance from the camera
-            double noteX = -(1/Math.tan(notePitch-offset.getRotation().getY()))* offset.getZ();
+            double noteX = (1/Math.tan(offset.getRotation().getY() - notePitch))* offset.getZ();
             double noteY = Math.tan(noteYaw-offset.getRotation().getZ())*noteX;
 
             // scaling step
             double distanceToNote = PhotonUtils.calculateDistanceToTargetMeters(
-                Cameras.NOTE_CAMERA.getLocation().getZ(), 
+                Cameras.DRIVER_CAMERA.getLocation().getZ(), 
                 0, 
-                -Cameras.NOTE_CAMERA.getLocation().getRotation().getY(), 
+                -Cameras.DRIVER_CAMERA.getLocation().getRotation().getY(), 
                 notePitch
             );
             Translation2d cameraToNote = new Vector2D(noteX, noteY).normalize().mul(distanceToNote).getTranslation2d();

@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems.vision;
+package com.stuypulse.robot.subsystems.vision.aprilTags;
 
 import com.stuypulse.robot.util.vision.VisionData;
 

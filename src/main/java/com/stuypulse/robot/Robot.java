@@ -1,9 +1,10 @@
 package com.stuypulse.robot;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.stuypulse.robot.commands.AutoDrive;
 import com.stuypulse.robot.commands.leds.LEDReset;
-import com.stuypulse.robot.commands.vision.VisionChangeWhiteList;
 import com.stuypulse.robot.commands.vision.VisionReloadWhiteList;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -34,6 +35,8 @@ public class Robot extends TimedRobot {
         scheduler = CommandScheduler.getInstance();
 
         robot = new RobotContainer();
+
+        scheduler.schedule(PathfindingCommand.warmupCommand());
 
         if (Robot.isReal()) CameraServer.startAutomaticCapture().setVideoMode(PixelFormat.kMJPEG, 80, 60, 30);
 
@@ -97,6 +100,7 @@ public class Robot extends TimedRobot {
         if (auto != null) {
             auto.cancel();
         }
+        // scheduler.schedule(new AutoDrive());
         SmartDashboard.putString("Robot State", "TELEOP");
     }
 

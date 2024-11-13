@@ -184,8 +184,16 @@ public interface Settings {
                     MAX_ANGULAR_VELOCITY.get(),
                     MAX_ANGULAR_ACCELERATION.get());
 
-            PIDConstants XY = new PIDConstants(2.0, 0, 0.25);
-            PIDConstants THETA = new PIDConstants(5.0, 0, 0.2);
+            PIDConstants XY = new PIDConstants(
+                2.0, 
+                0, 
+                0.25
+            );
+            PIDConstants THETA = new PIDConstants(
+                Robot.isReal() ? 5.0 : 0.0, 
+                0, 
+                Robot.isReal() ? 0.2 : 0.0
+            );
         }
 
         public interface Turn {
@@ -250,8 +258,8 @@ public interface Settings {
         }
 
         public interface Simulation {
-            double TURN_INERTIA = 0.00001;
-            double DRIVE_INERTIA = 0.00001;
+            double TURN_INERTIA = 0.1;
+            double DRIVE_INERTIA = 0.1;
             // Simulated voltage necessary to overcome friction
             double TURN_FRICTION_VOLTAGE = 0.25;
             double DRIVE_FRICTION_VOLTAGE = 0.25;
@@ -326,6 +334,10 @@ public interface Settings {
         double INTAKE_THRESHOLD_DISTANCE = 2.0;
         double MAX_ANGLE_FROM_CAMERA = 60;
         double MAX_DRIVE_ANGLE_TO_NOTE_ANGLE = 60;
+    }
+
+    public interface RobotDetection {
+        double averageRobotSideLength = Units.inchesToMeters(45); // estimate??
     }
 
     public interface Buzz {

@@ -1,6 +1,6 @@
 package com.stuypulse.robot.commands.vision;
 
-import com.stuypulse.robot.subsystems.vision.PhotonTagVision;
+import com.stuypulse.robot.subsystems.vision.aprilTags.PhotonTagVision;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 

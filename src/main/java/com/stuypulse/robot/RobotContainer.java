@@ -45,6 +45,7 @@ import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDriveRobotRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveSeedFieldRelative;
 import com.stuypulse.robot.commands.swerve.SwerveDriveToPose;
+import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedFerry;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedManualFerry;
 import com.stuypulse.robot.commands.swerve.driveAligned.SwerveDriveDriveAlignedSpeaker;
@@ -63,8 +64,10 @@ import com.stuypulse.robot.subsystems.leds.LEDController;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
-import com.stuypulse.robot.subsystems.vision.AprilTagVision;
-import com.stuypulse.robot.subsystems.vision.NoteVision;
+import com.stuypulse.robot.subsystems.vision.aprilTags.AprilTagVision;
+import com.stuypulse.robot.subsystems.vision.notes.NoteVision;
+import com.stuypulse.robot.subsystems.vision.robots.RobotVision;
+import com.stuypulse.robot.util.DefenseBotSim;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -90,7 +93,8 @@ public class RobotContainer {
     
     // Subsystem
     public final AprilTagVision tagVision = AprilTagVision.getInstance();
-    public final NoteVision noteVision = NoteVision.getInstance();
+    // public final NoteVision noteVision = NoteVision.getInstance();
+    public final RobotVision robotVision = RobotVision.getInstance();
     
     public final Intake intake = Intake.getInstance();
     public final Shooter shooter = Shooter.getInstance();
@@ -101,6 +105,8 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry();
 
+    // private final DefenseBotSim defenseBot = DefenseBotSim.getInstance();
+
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
     public static SendableChooser<Double> delayChooser = new SendableChooser<>();
@@ -108,6 +114,7 @@ public class RobotContainer {
     // Robot container
 
     public RobotContainer() {
+        swerve.configureAutoBuilder();
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();
@@ -129,7 +136,8 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        // swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        swerve.setDefaultCommand(SwervePathFind.test());
         leds.setDefaultCommand(new LEDDefaultMode());
     }
 
@@ -153,11 +161,20 @@ public class RobotContainer {
         driver.getDPadDown().onTrue(new ArmToClimbing());
 
         // intake with either trigger and when driving
-        new Trigger(() -> (driver.getRightTriggerPressed() 
+        // new Trigger(() -> (driver.getRightTriggerPressed() 
+        //                 || driver.getLeftTriggerPressed() 
+        //                 || (driver.getLeftStick().distance() > Settings.Driver.Drive.DEADBAND.get() + 0.1 
+        //                     && !Intake.getInstance().hasNote()
+        //                     && !Shooter.getInstance().hasNote())))
+        //     .onTrue(new IntakeSetAcquire())
+        //     .onFalse(new IntakeStop());
+
+        new Trigger(() -> driver.getRightTriggerPressed() 
                         || driver.getLeftTriggerPressed() 
-                        || (driver.getLeftStick().distance() > Settings.Driver.Drive.DEADBAND.get() + 0.1 
+                        || (Math.hypot(swerve.getChassisSpeeds().vxMetersPerSecond, swerve.getChassisSpeeds().vyMetersPerSecond) > 0.1
                             && !Intake.getInstance().hasNote()
-                            && !Shooter.getInstance().hasNote())))
+                            && !Shooter.getInstance().hasNote())
+                    )
             .onTrue(new IntakeSetAcquire())
             .onFalse(new IntakeStop());
         
@@ -302,6 +319,7 @@ public class RobotContainer {
 
     public void configureAutons() {
         autonChooser.addOption("Do Nothing", new DoNothingAuton());
+        autonChooser.addOption("sus", SwervePathFind.toPose(new Pose2d(1, 4, new Rotation2d())));
         
         for (double i = 0.0; i < 16.0; i++){
             delayChooser.addOption(i + " Seconds", i);

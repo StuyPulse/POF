@@ -1,4 +1,4 @@
-package com.stuypulse.robot.subsystems.vision;
+package com.stuypulse.robot.subsystems.vision.notes;
 
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.network.SmartBoolean;
@@ -36,6 +36,11 @@ public abstract class NoteVision extends SubsystemBase {
 
     public final Rotation2d getRotationToNote() {
         return getRobotRelativeNotePose().getAngle();
+    }
+
+    public boolean noteIsUsable() {
+        return getRobotRelativeNotePose().getNorm() < Settings.NoteDetection.INTAKE_THRESHOLD_DISTANCE
+                && Math.abs(getRotationToNote().getDegrees()) < Settings.NoteDetection.MAX_ANGLE_FROM_CAMERA;
     }
 
     @Override
