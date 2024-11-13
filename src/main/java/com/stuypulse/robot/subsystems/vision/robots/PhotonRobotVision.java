@@ -63,8 +63,7 @@ public class PhotonRobotVision extends RobotVision{
         ArrayList<Translation2d> robotPositions= new ArrayList<Translation2d>();
         camera.getLatestResult().getTargets().forEach(
             (PhotonTrackedTarget target) ->  {
-                SwerveDrive.getInstance().getPose().transformBy(new Transform2d(targetToRobotRelativeTranslation2d(target), new Rotation2d()));
-                robotPositions.add(targetToRobotRelativeTranslation2d(target));
+                robotPositions.add(SwerveDrive.getInstance().getPose().transformBy(new Transform2d(targetToRobotRelativeTranslation2d(target), new Rotation2d())).getTranslation());
             }
         );
         
