@@ -18,6 +18,7 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.auton.Mobility;
 import com.stuypulse.robot.commands.auton.RerouteTest;
 import com.stuypulse.robot.commands.auton.ADEF.FivePieceADEF;
+import com.stuypulse.robot.commands.auton.ADEF.ReroutableFivePieceADEF;
 import com.stuypulse.robot.commands.auton.BCA.FourPieceBCA;
 import com.stuypulse.robot.commands.auton.BCA.RightAngleFourPieceBCA;
 import com.stuypulse.robot.commands.auton.BF_Series.FivePieceBFGH;
@@ -378,6 +379,9 @@ public class RobotContainer {
         AutonConfig One_Piece_Mobility_Amp_Side_Blue = new AutonConfig("One Piece Amp Side", OnePieceAmpSide::new, 
         "Blue Amp Side Mobility");
 
+        AutonConfig Reroutable_ADEF_Blue = new AutonConfig("Reroutable 5 ADEF", ReroutableFivePieceADEF::new,
+        "Blue Amp to A", "Blue A to D", "Blue D to Shoot", "Blue D Shoot to E", "Blue E to Shoot", "Blue E Shoot to F", "Blue F to Shoot", "Blue D to E Reroute", "Blue E to F Reroute");
+
         // Straight Line
         AutonConfig Straight_Line = new AutonConfig("Straight Line Test", StraightLine::new,
         "Straight Line");
@@ -440,6 +444,8 @@ public class RobotContainer {
 
         GH_BLUE.registerBlue(autonChooser);
         GH_RED.registerRed(autonChooser);
+
+        Reroutable_ADEF_Blue.registerBlue(autonChooser);
 
         //ReroutableHGF_BLUE.registerBlue(autonChooser);
         //ReroutableHGF_RED.registerRed(autonChooser);
