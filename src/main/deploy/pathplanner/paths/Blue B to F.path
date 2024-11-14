@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.090096900059872,
-        "y": 5.657628859900576
+        "x": 2.896445404001919,
+        "y": 5.5301848373414
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.03449572583669,
-        "y": 4.889927367949974
+        "x": 5.032620250425686,
+        "y": 4.940186408150594
       },
       "isLocked": false,
       "linkedName": "Blue BCA B"
     },
     {
       "anchor": {
-        "x": 5.381541387152715,
-        "y": 4.0969083044936925
+        "x": 5.110770091910554,
+        "y": 4.225911109229626
       },
       "prevControl": {
-        "x": 4.692305268167084,
-        "y": 4.115224476728716
+        "x": 4.6280172715098455,
+        "y": 4.486770722457084
       },
       "nextControl": {
-        "x": 6.112392080426523,
-        "y": 4.077486241709475
+        "x": 5.789830454660909,
+        "y": 3.8589750373945195
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.288957304291097,
-        "y": 4.0969083044936925
+        "x": 8.292585066651615,
+        "y": 4.087486124046323
       },
       "prevControl": {
-        "x": 6.643001648168476,
-        "y": 4.0836879702033215
+        "x": 6.894320501603966,
+        "y": 4.070027116906086
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -64,5 +64,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

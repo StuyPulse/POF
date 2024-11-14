@@ -22,6 +22,7 @@ import com.stuypulse.robot.commands.auton.ADEF.ReroutableFivePieceADEF;
 import com.stuypulse.robot.commands.auton.BCA.FourPieceBCA;
 import com.stuypulse.robot.commands.auton.BCA.RightAngleFourPieceBCA;
 import com.stuypulse.robot.commands.auton.BF_Series.FivePieceBFGH;
+import com.stuypulse.robot.commands.auton.BF_Series.ReroutableFivePieceBFED;
 import com.stuypulse.robot.commands.auton.BF_Series.SixPieceBDEFA;
 import com.stuypulse.robot.commands.auton.BF_Series.SixPieceBFCAD;
 import com.stuypulse.robot.commands.auton.HGF.ThreePieceGH;
@@ -346,6 +347,10 @@ public class RobotContainer {
         AutonConfig ADEF_RED = new AutonConfig("5 ADEF", FivePieceADEF::new,
         "Red Amp to A", "Red A to D", "Red D to Shoot", "Red D Shoot to E", "Red E to Shoot", "Red E Shoot to F", "Red F to Shoot");
 
+        // BFED
+        AutonConfig Reroutable_BFED_BLUE = new AutonConfig("5 Reroutable BFED Test", ReroutableFivePieceBFED::new,
+        "Blue Center to B", "Blue B to F", "Blue F to Shoot", "Blue F Shoot to E", "Blue E to Shoot", "Blue E Shoot to D", "Blue D to Shoot", "Blue F to E Reroute", "Blue E to D Reroute");
+
         // BDEFA
         AutonConfig BDEFA_BLUE = new AutonConfig("6 BDEFA", SixPieceBDEFA::new,
         "Blue Center to B", "Blue B to D", "Blue D to Shoot", "Blue D Shoot to E", "Blue E to Shoot", "Blue E Shoot to F", "Blue F to Shoot", "Blue F Shoot to A", "Blue Center to A");
@@ -382,6 +387,7 @@ public class RobotContainer {
         AutonConfig Reroutable_ADEF_Blue = new AutonConfig("Reroutable 5 ADEF", ReroutableFivePieceADEF::new,
         "Blue Amp to A", "Blue A to D", "Blue D to Shoot", "Blue D Shoot to E", "Blue E to Shoot", "Blue E Shoot to F", "Blue F to Shoot", "Blue D to E Reroute", "Blue E to F Reroute");
 
+        
         // Straight Line
         AutonConfig Straight_Line = new AutonConfig("Straight Line Test", StraightLine::new,
         "Straight Line");
@@ -430,6 +436,8 @@ public class RobotContainer {
         BDEFA_BLUE.registerBlue(autonChooser);
         BDEFA_RED.registerRed(autonChooser);
 
+        Reroutable_BFED_BLUE.registerBlue(autonChooser);
+
         BFCAD_BLUE.registerBlue(autonChooser);
         BFCAD_RED.registerRed(autonChooser);
 
@@ -444,6 +452,8 @@ public class RobotContainer {
 
         GH_BLUE.registerBlue(autonChooser);
         GH_RED.registerRed(autonChooser);
+
+
 
         Reroutable_ADEF_Blue.registerBlue(autonChooser);
 
