@@ -14710,7 +14710,7 @@
                         "last"
                     ],
                     "type": "MaxVelocity",
-                    "velocity": 2.5
+                    "velocity": 1
                 },
                 {
                     "scope": [

@@ -469,10 +469,12 @@ public class RobotContainer {
         Choreo_Square.registerChoreoBlue(autonChooser);
         // Choreo_Square_Split.registerChoreoBlue(autonChooser);
         Choreo_Straight_Line.registerChoreoBlue(autonChooser);
+        Choreo_Straight_Line.registerChoreoRed(autonChooser);
         Choreo_Square_Spin.registerChoreoBlue(autonChooser);
         Choreo_Circle.registerChoreoBlue(autonChooser);
         // Choreo_HGF.registerChoreoBlue(autonChooser);
         Choreo_BCA.registerChoreoBlue(autonChooser);
+        Choreo_BCA.registerChoreoRed(autonChooser);
         Choreo_HGF.registerChoreoBlue(autonChooser);
         Choreo_ADEF.registerChoreoBlue(autonChooser);
 
