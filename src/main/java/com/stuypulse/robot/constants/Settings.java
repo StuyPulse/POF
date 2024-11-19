@@ -229,9 +229,9 @@ public interface Settings {
         }
 
         public interface FrontLeft {
-            boolean DRIVE_INVERTED = false;
+            boolean DRIVE_INVERTED = true;
             String ID = "Front Left";
-            Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromRotations(0.052734375);
+            Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromRotations(0.506);
             Translation2d MODULE_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * -0.5);
         }
 
