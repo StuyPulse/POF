@@ -5,7 +5,9 @@ import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.auton.FollowPathThenShoot;
 import com.stuypulse.robot.commands.auton.ShootRoutine;
 import com.stuypulse.robot.commands.intake.IntakeSetAcquire;
+import com.stuypulse.robot.commands.vision.VisionDisable;
 import com.stuypulse.robot.subsystems.intake.Intake;
+import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -21,6 +23,8 @@ public class ReroutableFivePieceBFED extends SequentialCommandGroup {
 
         addCommands(
             
+            new VisionDisable(),
+
             // Preload Shot
             ShootRoutine.fromAnywhere(),
             new ArmToFeed(),
@@ -92,7 +96,7 @@ public class ReroutableFivePieceBFED extends SequentialCommandGroup {
                 ),
 
                 // Runs F to E redirection if hasNote is false at F
-                Intake.getInstance()::hasNote
+                Shooter.getInstance()::hasNote
                 )
         );
     }

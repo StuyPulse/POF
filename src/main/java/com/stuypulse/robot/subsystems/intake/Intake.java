@@ -51,6 +51,14 @@ public abstract class Intake extends SubsystemBase {
 
     public abstract boolean hasNote();
 
+    public boolean alwaysTrue() {
+        return true;
+    }
+
+    public boolean alwaysFalse() {
+        return false;
+    }
+
     @Override
     public void periodic() {
         if (state == State.ACQUIRING && hasNote()) {
