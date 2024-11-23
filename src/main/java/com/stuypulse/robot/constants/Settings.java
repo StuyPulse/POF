@@ -320,9 +320,7 @@ public interface Settings {
     public interface Vision {
         SmartBoolean IS_ACTIVE = new SmartBoolean("Vision/Is Active", true);
         double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.2;
-    }
-
-    public interface Buzz {
+        double DISTANCE_THRESHOLD = 0;     //PLACEHOLDER VALUE, (METERS?)
         double BUZZ_DURATION = 1.0;
         double BUZZ_INTENSITY = 1.0;
     }
