@@ -7,37 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Center to B"
+            "pathName": "Blue Amp to A"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue B to Center"
+            "pathName": "Blue A to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue 90 Deg B Shoot to C"
+            "pathName": "Blue D to Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue C to Shoot Before A"
+            "pathName": "Blue D Shoot to E"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue Center to A"
+            "pathName": "Blue E to Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Blue A to Center"
+            "pathName": "Blue E Shoot to F"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue F to Shoot"
           }
         }
       ]

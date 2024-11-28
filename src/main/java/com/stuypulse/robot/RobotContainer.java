@@ -18,7 +18,11 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.auton.Mobility;
 import com.stuypulse.robot.commands.auton.RerouteTest;
 import com.stuypulse.robot.commands.auton.ADEF.FivePieceADEF;
+<<<<<<< HEAD
 import com.stuypulse.robot.commands.auton.ADEF.ReroutableFivePieceADEF;
+=======
+import com.stuypulse.robot.commands.auton.ADEF.FourPieceMidlineDash;
+>>>>>>> origin/main
 import com.stuypulse.robot.commands.auton.BCA.FourPieceBCA;
 import com.stuypulse.robot.commands.auton.BCA.RightAngleFourPieceBCA;
 import com.stuypulse.robot.commands.auton.BF_Series.FivePieceBFGH;
@@ -110,6 +114,7 @@ public class RobotContainer {
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+    public static SendableChooser<Double> delayChooser = new SendableChooser<>();
 
     // Robot container
 
@@ -186,7 +191,11 @@ public class RobotContainer {
             .whileTrue(new LEDSet(LEDInstructions.DEACQUIRING))
             .onFalse(new IntakeStop())
             .onFalse(new ShooterFeederStop());
-        
+        // manual unstuck note between intake and shooter
+        driver.getDPadDown()
+            .onTrue(new IntakeDeacquire().alongWith(new ShooterFeederAcquire()))
+            .onFalse(new IntakeStop().alongWith(new ShooterFeederStop()));
+
         // speaker align and score 
         // score amp
         driver.getRightBumper()
@@ -307,6 +316,11 @@ public class RobotContainer {
     public void configureAutons() {
         autonChooser.addOption("Do Nothing", new DoNothingAuton());
         
+        for (double i = 0.0; i < 16.0; i++){
+            delayChooser.addOption(i + " Seconds", i);
+        }
+        
+        
         // Mobility
         AutonConfig MOBILITY_BLUE = new AutonConfig("Mobility", Mobility::new, "Mobility");
         AutonConfig MOBILITY_RED = new AutonConfig("Mobility", Mobility::new, "Mobility");
@@ -362,6 +376,12 @@ public class RobotContainer {
         "Blue Center to B", "Blue B to F", "Blue F to Close C Shoot", "Blue FC Shoot to C", "Blue C to Shoot Before A", "Blue Center to A", "Blue A to D", "Blue D to Shoot");
         AutonConfig BFCAD_RED = new AutonConfig("6 BFCAD", SixPieceBFCAD::new,
         "Red Center to B", "Red B to F", "Red F to Close C Shoot", "Red FC Shoot to C", "Red C to Shoot Before A", "Red Center to A", "Red A to Center", "Red A Shoot to D", "Red D to Shoot");
+
+        // Midline Notes
+        AutonConfig DEF_BLUE = new AutonConfig("4 DEF", FourPieceMidlineDash:: new, 
+        "Blue Amp to D", "Blue D to Shoot Alt", "Blue D Shoot to E Alt", "Blue E to Shoot Alt", "Blue E Shoot to F Alt", "Blue F to Shoot");
+        AutonConfig DEF_RED = new AutonConfig("4 DEF", FourPieceMidlineDash:: new, 
+        "Red Amp to D", "Red D to Shoot Alt", "Red D Shoot to E Alt", "Red E to Shoot Alt", "Red E Shoot to F Alt", "Red F to Shoot");
 
         // BFGH
         AutonConfig BFGH_BLUE = new AutonConfig("5 BFGH", FivePieceBFGH:: new,
@@ -422,27 +442,35 @@ public class RobotContainer {
 
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
-        Straight_Line.registerBlue(autonChooser);
+        //Straight_Line.registerBlue(autonChooser);
 
         MOBILITY_BLUE.registerBlue(autonChooser);
         MOBILITY_RED.registerRed(autonChooser);
 
-        BCA_BLUE.registerDefaultBlue(autonChooser);
-        BCA_RED.registerDefaultRed(autonChooser);
+        DEF_BLUE.registerBlue(autonChooser);
+        DEF_RED.registerRed(autonChooser);
+
+        //BCA_BLUE.registerDefaultBlue(autonChooser);
+        //BCA_RED.registerDefaultRed(autonChooser);
 
         New_BCA_Blue.registerDefaultBlue(autonChooser);
         New_BCA_Red.registerDefaultRed(autonChooser);
 
-        BDEFA_BLUE.registerBlue(autonChooser);
-        BDEFA_RED.registerRed(autonChooser);
+        //BDEFA_BLUE.registerBlue(autonChooser);
+        //BDEFA_RED.registerRed(autonChooser);
 
+<<<<<<< HEAD
         Reroutable_BFED_BLUE.registerBlue(autonChooser);
 
         BFCAD_BLUE.registerBlue(autonChooser);
         BFCAD_RED.registerRed(autonChooser);
+=======
+        //BFCAD_BLUE.registerBlue(autonChooser);
+        //BFCAD_RED.registerRed(autonChooser);
+>>>>>>> origin/main
 
-        BFGH_BLUE.registerBlue(autonChooser);
-        BFGH_RED.registerRed(autonChooser);
+        //BFGH_BLUE.registerBlue(autonChooser);
+        //BFGH_RED.registerRed(autonChooser);
 
         HGF_BLUE.registerBlue(autonChooser);
         HGF_RED.registerRed(autonChooser);
@@ -493,5 +521,16 @@ public class RobotContainer {
         }
 
         return autonChooser.getSelected().getName();
+    }
+
+    public void getDefaultDelay() {
+        delayChooser.setDefaultOption("Zero Second", 0.0);
+    }
+    public double getDelaySeconds() {
+        return delayChooser.getSelected();
+    }
+
+    public Command delayWaitCommand() {
+        return new WaitCommand(delayChooser.getSelected());
     }
 }

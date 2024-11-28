@@ -42,7 +42,7 @@ public abstract class ShootRoutine {
                 new ShooterWaitForTarget().withTimeout(Settings.Shooter.MAX_WAIT_TO_REACH_TARGET)
             ),
             new ShooterFeederShoot(),
-            new WaitUntilCommand(() -> !Shooter.getInstance().hasNote()).alongWith(new WaitCommand(0.5)),
+            new WaitUntilCommand(() -> !Shooter.getInstance().hasNote()).alongWith(new WaitCommand(0.75)),
             new ShooterFeederStop()
         );
     }

@@ -1,38 +1,41 @@
-package com.stuypulse.robot.commands.auton.HGF;
+package com.stuypulse.robot.commands.auton.ADEF;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.stuypulse.robot.commands.arm.ArmToFeed;
 import com.stuypulse.robot.commands.auton.FollowPathThenShoot;
 import com.stuypulse.robot.commands.auton.ShootRoutine;
 import com.stuypulse.robot.commands.intake.IntakeSetAcquire;
-import com.stuypulse.robot.commands.swerve.SwerveDriveToPose;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class ThreePieceGH extends SequentialCommandGroup {
+public class FourPieceMidlineDash extends SequentialCommandGroup {
     
-     public ThreePieceGH(PathPlannerPath... paths) {
+    public FourPieceMidlineDash(PathPlannerPath... paths) {
+        
         addCommands(
             // Preload Shot
-            ShootRoutine.fromSubwoofer(),
+            ShootRoutine.fromAnywhere(),
             new ArmToFeed(),
 
-            // new WaitCommand(2.5),
-
-            // Drive to G + Shoot G
+            // Drive to D + Shoot D
             new IntakeSetAcquire(),
             SwerveDrive.getInstance().followPathCommand(paths[0]),
             new FollowPathThenShoot(paths[1], false),
             new ArmToFeed(),
 
-            // Drive to H + Shoot H
+            // Drive to E + Shoot E
             new IntakeSetAcquire(),
             SwerveDrive.getInstance().followPathCommand(paths[2]),
-            new FollowPathThenShoot(paths[3], true),
+            new FollowPathThenShoot(paths[3], false),
+            new ArmToFeed(),
+
+            // Drive to F + Shoot F
+            new IntakeSetAcquire(),
+            SwerveDrive.getInstance().followPathCommand(paths[4]),
+            new FollowPathThenShoot(paths[5], true),
             new ArmToFeed()
         );
     }

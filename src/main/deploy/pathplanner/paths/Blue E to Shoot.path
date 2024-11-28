@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.7806787928390673,
-        "y": 6.027870676111723
+        "x": 4.445301349680081,
+        "y": 6.156732534819237
       },
       "prevControl": {
-        "x": 4.849538212965315,
-        "y": 6.758714216502507
+        "x": 5.514160769806328,
+        "y": 6.887576075210021
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Blue DEF Shoot"
+      "linkedName": "Blue Close DEF Shot"
     }
   ],
   "rotationTargets": [],
@@ -40,7 +40,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.14111484001432
+    "rotation": 8.066836177505122
   },
   "reversed": false,
   "folder": "Blue To Shoot",

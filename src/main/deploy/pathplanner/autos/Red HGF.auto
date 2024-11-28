@@ -1,5 +1,12 @@
 {
   "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.88,
+      "y": 4.21
+    },
+    "rotation": -60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -7,7 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Source to G"
+            "pathName": "Red Source to H"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red H to Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red H Shoot to G"
           }
         },
         {
@@ -19,19 +38,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red G Shoot to H"
+            "pathName": "Red G Shoot to F"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red H to Shoot"
+            "pathName": "Red F to Shoot"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": "Red Useable",
+  "folder": null,
   "choreoAuto": false
 }

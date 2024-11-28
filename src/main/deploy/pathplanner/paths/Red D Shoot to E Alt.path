@@ -3,47 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.88,
-        "y": 4.21
+        "x": 5.762431236544021,
+        "y": 6.679680885403438
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7800008249589148,
-        "y": 0.5613194132371174
+        "x": 6.899909632828153,
+        "y": 6.253447406108623
       },
       "isLocked": false,
-      "linkedName": "Red HGF Starting Pose"
+      "linkedName": "Red DE Long Shots"
     },
     {
       "anchor": {
-        "x": 8.292274406349408,
-        "y": 2.449077764598981
+        "x": 8.298956684408905,
+        "y": 5.788149614803694
       },
       "prevControl": {
-        "x": 5.241470539921136,
-        "y": 0.877061583182996
+        "x": 6.850202419110588,
+        "y": 6.2795840843579205
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Red G"
+      "linkedName": "Red E"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.75,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.820024158319185,
-    "rotateFast": false
+    "rotation": -7.867150286788811
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Red To Note",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 10.841373394284963
+  },
   "useDefaultConstraints": false
 }

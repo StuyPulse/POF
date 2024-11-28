@@ -1,5 +1,12 @@
 {
   "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8795509328910394,
+      "y": 4.209895599278378
+    },
+    "rotation": -60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -7,49 +14,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red Amp to A"
+            "pathName": "Blue Source to H"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red A to D"
+            "pathName": "Blue H to Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red D to Shoot"
+            "pathName": "Blue H Shoot to G"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red D Shoot to E"
+            "pathName": "Blue G to Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red E to Shoot"
+            "pathName": "Blue G Shoot to F"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Red E Shoot to F"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red F to Shoot"
+            "pathName": "Blue F to Shoot"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": "Red Autons",
+  "folder": null,
   "choreoAuto": false
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9554131415955136,
-        "y": 3.8122943482354206
+        "x": 2.9673160499594813,
+        "y": 2.9639016188374643
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9992452801857166,
-        "y": 1.9280280334064948
+        "x": 5.011148188549685,
+        "y": 1.0796353040085385
       },
       "isLocked": false,
       "linkedName": "Blue Midline Shoot Pose"
@@ -31,27 +31,25 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 26.187378361039833
+      "rotationDegrees": 26.187378361039833,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.25,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.75,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 61.30469161044191
+    "rotation": 61.30469161044191,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue To Note",
-  "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
-  },
+  "folder": null,
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }
