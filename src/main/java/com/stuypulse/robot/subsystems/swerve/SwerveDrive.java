@@ -289,15 +289,9 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
             timestampSum += data.getTimestamp() * data.getArea();
         }
 
-        Pose2d averagedPose = poseSum.div(areaSum);
-        double odometryToVisionDistance = averagedPose.minus(getPose()).getTranslation().getNorm(); //calculate difference between the odometry pose & averagedpose
-
-            if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
-                addVisionMeasurement(averagedPose, timestampSum / areaSum,
-                    DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
-            }  
-            //Must Account for Edgecase where the robot pose is initalized at (0,0), and the vision data is all rejected based off distance
-        }
+        addVisionMeasurement(poseSum.div(areaSum), timestampSum / areaSum,
+            DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
+    }
 
     public void setVisionEnabled(boolean enabled) {
         Settings.Vision.IS_ACTIVE.set(enabled);
