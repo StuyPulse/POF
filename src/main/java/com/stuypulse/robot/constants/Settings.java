@@ -296,6 +296,9 @@ public interface Settings {
     }
 
     public interface Driver {
+        double BUZZ_DURATION = 1.0;
+        double BUZZ_INTENSITY = 1.0;
+
         public interface Drive {
             SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.03);
 
@@ -321,7 +324,5 @@ public interface Settings {
         SmartBoolean IS_ACTIVE = new SmartBoolean("Vision/Is Active", true);
         double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.2;
         double DISTANCE_THRESHOLD = 0;     //PLACEHOLDER VALUE, (METERS?)
-        double BUZZ_DURATION = 1.0;
-        double BUZZ_INTENSITY = 1.0;
     }
 }

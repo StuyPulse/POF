@@ -18,11 +18,8 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.auton.Mobility;
 import com.stuypulse.robot.commands.auton.RerouteTest;
 import com.stuypulse.robot.commands.auton.ADEF.FivePieceADEF;
-<<<<<<< HEAD
-import com.stuypulse.robot.commands.auton.ADEF.ReroutableFivePieceADEF;
-=======
 import com.stuypulse.robot.commands.auton.ADEF.FourPieceMidlineDash;
->>>>>>> origin/main
+import com.stuypulse.robot.commands.auton.ADEF.ReroutableFivePieceADEF;
 import com.stuypulse.robot.commands.auton.BCA.FourPieceBCA;
 import com.stuypulse.robot.commands.auton.BCA.RightAngleFourPieceBCA;
 import com.stuypulse.robot.commands.auton.BF_Series.FivePieceBFGH;
@@ -459,15 +456,10 @@ public class RobotContainer {
         //BDEFA_BLUE.registerBlue(autonChooser);
         //BDEFA_RED.registerRed(autonChooser);
 
-<<<<<<< HEAD
         Reroutable_BFED_BLUE.registerBlue(autonChooser);
 
         BFCAD_BLUE.registerBlue(autonChooser);
         BFCAD_RED.registerRed(autonChooser);
-=======
-        //BFCAD_BLUE.registerBlue(autonChooser);
-        //BFCAD_RED.registerRed(autonChooser);
->>>>>>> origin/main
 
         //BFGH_BLUE.registerBlue(autonChooser);
         //BFGH_RED.registerRed(autonChooser);
@@ -480,8 +472,6 @@ public class RobotContainer {
 
         GH_BLUE.registerBlue(autonChooser);
         GH_RED.registerRed(autonChooser);
-
-
 
         Reroutable_ADEF_Blue.registerBlue(autonChooser);
 
@@ -505,8 +495,6 @@ public class RobotContainer {
         Choreo_BCA.registerChoreoRed(autonChooser);
         Choreo_HGF.registerChoreoBlue(autonChooser);
         Choreo_ADEF.registerChoreoBlue(autonChooser);
-
-
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

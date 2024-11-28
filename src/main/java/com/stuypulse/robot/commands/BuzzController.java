@@ -29,7 +29,7 @@ public class BuzzController extends InstantCommand {
     }
 
     public BuzzController(Gamepad driver) {
-        this(driver, Settings.Buzz.BUZZ_INTENSITY);
+        this(driver, Settings.Driver.BUZZ_INTENSITY);
     }
 
     @Override
