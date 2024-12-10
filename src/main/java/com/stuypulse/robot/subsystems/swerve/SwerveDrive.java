@@ -82,6 +82,7 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private ArrayList<Double> ambiguities = new ArrayList<>();
 
     private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
 
@@ -287,17 +288,34 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
             areaSum += data.getArea();
 
             timestampSum += data.getTimestamp() * data.getArea();
+
+            for (double ambiguity : data.getAmbiguities()) {
+                ambiguities.add(ambiguity);
+            }
         }
+
+        int count = 0;
+        for (double ambiguity : ambiguities) if (ambiguity < 0.2) count++;
 
         Pose2d averagedPose = poseSum.div(areaSum);
         double odometryToVisionDistance = averagedPose.minus(getPose()).getTranslation().getNorm(); //calculate difference between the odometry pose & averagedpose
-
-            if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
-                addVisionMeasurement(averagedPose, timestampSum / areaSum,
+        
+        if (ambiguities.size() >= 20) {
+            if (count >= 18) {
+                if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
+                    addVisionMeasurement(averagedPose, timestampSum / areaSum,
                     DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
-            }  
-            //Must Account for Edgecase where the robot pose is initalized at (0,0), and the vision data is all rejected based off distance
+                } // if it doesn't pass the distance check, nothing is added
+            } else if (count <= 18) {
+                addVisionMeasurement(averagedPose, timestampSum/areaSum,
+                VecBuilder.fill(0, 0, 0));
+            }
+            ambiguities.clear();
+        } else if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
+            addVisionMeasurement(averagedPose, timestampSum / areaSum,
+                       DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
         }
+    }
 
     public void setVisionEnabled(boolean enabled) {
         Settings.Vision.IS_ACTIVE.set(enabled);
@@ -320,11 +338,10 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         }
 
         field.setRobotPose(getPose());
-
+    
         ArrayList<VisionData> outputs = AprilTagVision.getInstance().getOutputs();
         if (Settings.Vision.IS_ACTIVE.get() && outputs.size() > 0) {
             updateEstimatorWithVisionData(outputs);
-
         }
 
         for (int i = 0; i < Modules.length; i++) {

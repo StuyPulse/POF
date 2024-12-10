@@ -5,6 +5,7 @@
 /***************************************************************/
 
 package com.stuypulse.robot.util.vision;
+import java.util.ArrayList;
 
 import com.stuypulse.robot.constants.Field;
 
@@ -17,12 +18,14 @@ public class VisionData {
     private final int[] ids;
     private final double timestamp;
     private final double area;
+    private final ArrayList<Double> ambiguities;
 
-    public VisionData(Pose3d outputPose, int[] ids, double timestamp, double area) {
+    public VisionData(Pose3d outputPose, int[] ids, double timestamp, double area, ArrayList<Double> ambiguities) {
         this.outputPose = outputPose;
         this.ids = ids;
         this.timestamp = timestamp;
         this.area = area;
+        this.ambiguities = ambiguities;
     }
 
     /**
@@ -41,6 +44,15 @@ public class VisionData {
      */
     public int[] getIDs() {
         return ids;
+    }
+
+    /**
+     * Returns the ambiguity of the vision data.
+     *
+     * @return a list of the ambiguities of the vision data
+     */
+    public ArrayList<Double> getAmbiguities() {
+        return ambiguities;
     }
 
     /**

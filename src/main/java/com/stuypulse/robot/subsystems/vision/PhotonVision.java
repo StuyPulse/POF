@@ -106,6 +106,12 @@ public class PhotonVision extends AprilTagVision {
                                 );
     }
 
+    public ArrayList<Double> getAmbiguities(PhotonPipelineResult result) {
+        ArrayList<Double> ambiguities = new ArrayList<>();
+        for (PhotonTrackedTarget target : result.getTargets()) ambiguities.add(target.getPoseAmbiguity());
+        return ambiguities;
+    }
+
     @Override
     public void periodic() {
         super.periodic();
@@ -121,7 +127,7 @@ public class PhotonVision extends AprilTagVision {
                 if (latestResult.hasTargets()) {
                     estimatedRobotPose.ifPresent(
                         (EstimatedRobotPose robotPose) -> {
-                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds, latestResult.getBestTarget().getArea());
+                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds, latestResult.getBestTarget().getArea(), getAmbiguities(latestResult));
                             outputs.add(data);
                             updateTelemetry("Vision/" + cameras[index].getName(), data);
                         }
