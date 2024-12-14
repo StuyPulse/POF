@@ -321,21 +321,24 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
                 if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD && leastAmbiguousData != null) {
                     addVisionMeasurement(averagedPose, timestampSum / areaSum,
                     VecBuilder.fill(
-                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData), 
-                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData),
+                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(0.7, leastAmbiguousData), leastAmbiguousData), 
+                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(0.7, leastAmbiguousData), leastAmbiguousData),
                         5));
                 } // but if the next averagedPose doesn't pass the distance check, nothing is added
             } else if (count <= 18) {
                 // if less than 90% of last 20 tracked tags pass ambiguity check, decrease confidence
                 addVisionMeasurement(averagedPose, timestampSum/areaSum,
-                VecBuilder.fill(2, 2, 5));
+                VecBuilder.fill(
+                    PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(2, leastAmbiguousData), leastAmbiguousData), 
+                    PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(2, leastAmbiguousData), leastAmbiguousData),
+                 5));
             }
-            ambiguities.clear();
+
         } else if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD && leastAmbiguousData != null) {
             addVisionMeasurement(averagedPose, timestampSum / areaSum,
             VecBuilder.fill(
-                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData), 
-                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData),
+                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(0.7, leastAmbiguousData), leastAmbiguousData), 
+                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(0.7, leastAmbiguousData), leastAmbiguousData),
              5));
         }
     }

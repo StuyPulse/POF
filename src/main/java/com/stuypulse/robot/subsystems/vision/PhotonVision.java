@@ -127,9 +127,9 @@ public class PhotonVision extends AprilTagVision {
             Math.pow(data.getBestTarget().getBestCameraToTarget().getY(), 2) +
             Math.pow(data.getBestTarget().getBestCameraToTarget().getZ(), 2)
         );
-        double m = 0.1;
+        double m = 0.15;
         if (distance > 6) return 10; // if further than 6 meters from target, blow up stddev
-        return stddev + (m * distance);
+        return stddev * (1 + (m * distance));
     }
 
 
@@ -143,8 +143,7 @@ public class PhotonVision extends AprilTagVision {
     public static double updateAngleToTagStddev(double stddev, VisionData data) {
         double angle = data.getBestTarget().getYaw(); 
         double sine = Math.sin(angle * Math.PI / 180); // deg to rad for sin calculation
-        double m = 1;
-        return stddev - (m * sine); // higher sine value = more confident (lower stddev)
+        return stddev * (1 - (sine - 0.05)); // higher sine value = more confident (lower stddev)
     }
 
     @Override
