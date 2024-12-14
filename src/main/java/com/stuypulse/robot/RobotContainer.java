@@ -66,8 +66,6 @@ import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.aprilTags.AprilTagVision;
 import com.stuypulse.robot.subsystems.vision.notes.NoteVision;
-import com.stuypulse.robot.subsystems.vision.robots.RobotVision;
-import com.stuypulse.robot.util.DefenseBotSim;
 import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -93,8 +91,7 @@ public class RobotContainer {
     
     // Subsystem
     public final AprilTagVision tagVision = AprilTagVision.getInstance();
-    // public final NoteVision noteVision = NoteVision.getInstance();
-    public final RobotVision robotVision = RobotVision.getInstance();
+    public final NoteVision noteVision = NoteVision.getInstance();
     
     public final Intake intake = Intake.getInstance();
     public final Shooter shooter = Shooter.getInstance();
@@ -136,8 +133,7 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        // swerve.setDefaultCommand(new SwerveDriveDrive(driver));
-        swerve.setDefaultCommand(SwervePathFind.test());
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         leds.setDefaultCommand(new LEDDefaultMode());
     }
 
@@ -159,15 +155,6 @@ public class RobotContainer {
             .onTrue(new IntakeStop());
 
         driver.getDPadDown().onTrue(new ArmToClimbing());
-
-        // intake with either trigger and when driving
-        // new Trigger(() -> (driver.getRightTriggerPressed() 
-        //                 || driver.getLeftTriggerPressed() 
-        //                 || (driver.getLeftStick().distance() > Settings.Driver.Drive.DEADBAND.get() + 0.1 
-        //                     && !Intake.getInstance().hasNote()
-        //                     && !Shooter.getInstance().hasNote())))
-        //     .onTrue(new IntakeSetAcquire())
-        //     .onFalse(new IntakeStop());
 
         new Trigger(() -> driver.getRightTriggerPressed() 
                         || driver.getLeftTriggerPressed() 
@@ -295,18 +282,12 @@ public class RobotContainer {
             .onFalse(new ShooterFeederStop())
             .onFalse(new ArmToFeed());
         
-        // human player attention button
-        // driver.getRightButton().whileTrue(new LEDSet(LEDInstructions.ATTENTION));
-
         // "special deacquire"
         driver.getRightButton()
             .onTrue(new IntakeDeacquire())
             .onTrue(new ShooterFeederAcquire())
             .onFalse(new IntakeStop())
             .onFalse(new ShooterFeederStop());
-
-        // driver.getRightButton()
-        //     .whileTrue(new SwerveDriveToPose(() -> Field.getAllianceSpeakerPose().plus(new Transform2d(3.75, 0, new Rotation2d()))));
     }
 
     private void configureOperatorBindings() {

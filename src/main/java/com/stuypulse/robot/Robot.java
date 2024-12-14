@@ -3,7 +3,6 @@ package com.stuypulse.robot;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.stuypulse.robot.commands.AutoDrive;
 import com.stuypulse.robot.commands.leds.LEDReset;
 import com.stuypulse.robot.commands.vision.VisionReloadWhiteList;
 
