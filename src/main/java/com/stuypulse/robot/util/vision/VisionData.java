@@ -1,4 +1,4 @@
-/************************ PROJECT IZZI *************************/
+/************************ PROJECT POF *************************/
 /* Copyright (c) 2024 StuyPulse Robotics. All rights reserved. */
 /* Use of this source code is governed by an MIT-style license */
 /* that can be found in the repository LICENSE file.           */
@@ -6,6 +6,8 @@
 
 package com.stuypulse.robot.util.vision;
 import java.util.ArrayList;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.stuypulse.robot.constants.Field;
 
@@ -15,16 +17,16 @@ import edu.wpi.first.math.geometry.Pose3d;
 public class VisionData {
 
     private final Pose3d outputPose;
+    private final PhotonTrackedTarget bestTarget;
     private final int[] ids;
     private final double timestamp;
-    private final double area;
-    private final ArrayList<Double> ambiguities;
+    private final double[] ambiguities;
 
-    public VisionData(Pose3d outputPose, int[] ids, double timestamp, double area, ArrayList<Double> ambiguities) {
+    public VisionData(Pose3d outputPose, PhotonTrackedTarget bestTarget, int[] ids, double timestamp, double[] ambiguities) {
         this.outputPose = outputPose;
+        this.bestTarget = bestTarget;
         this.ids = ids;
         this.timestamp = timestamp;
-        this.area = area;
         this.ambiguities = ambiguities;
     }
 
@@ -35,6 +37,15 @@ public class VisionData {
      */
     public Pose3d getPose() {
         return outputPose;
+    }
+
+    /**
+     * Returns the best target of the vision data.
+     *
+     * @return the best target of the vision data
+     */
+    public PhotonTrackedTarget getBestTarget() {
+        return bestTarget;
     }
 
     /**
@@ -49,9 +60,9 @@ public class VisionData {
     /**
      * Returns the ambiguity of the vision data.
      *
-     * @return a list of the ambiguities of the vision data
+     * @return the ambiguities of the vision data
      */
-    public ArrayList<Double> getAmbiguities() {
+    public double[] getAmbiguities() {
         return ambiguities;
     }
 
@@ -91,7 +102,7 @@ public class VisionData {
      * @return the area percentage of the primary tag
      */
     public double getArea() {
-        return area;
+        return bestTarget.getArea();
     }
 
     /**

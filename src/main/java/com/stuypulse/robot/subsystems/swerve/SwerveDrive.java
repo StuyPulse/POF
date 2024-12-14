@@ -1,7 +1,11 @@
 package com.stuypulse.robot.subsystems.swerve;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.function.Supplier;
+
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
@@ -31,6 +35,7 @@ import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
 import com.stuypulse.robot.constants.Settings.Alignment.Translation;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
+import com.stuypulse.robot.subsystems.vision.PhotonVision;
 import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
 import com.stuypulse.robot.util.vision.VisionData;
 import com.stuypulse.stuylib.math.Vector2D;
@@ -82,7 +87,7 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    private ArrayList<Double> ambiguities = new ArrayList<>();
+    private Queue<Double> ambiguities = new LinkedList<>();
 
     private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
 
@@ -276,6 +281,8 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         Pose2d poseSum = new Pose2d();
         double timestampSum = 0;
         double areaSum = 0;
+        double minAmbiguity = 1;
+        VisionData leastAmbiguousData = null;
 
         for (VisionData data : outputs) {
             Pose2d weighted = data.getPose().toPose2d().times(data.getArea());
@@ -291,6 +298,13 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
             for (double ambiguity : data.getAmbiguities()) {
                 ambiguities.add(ambiguity);
+                if (ambiguities.size() > 20) {
+                    ambiguities.poll(); // remove oldest ambiguity; max size of 20 ambiguities
+                }
+                if (ambiguity < minAmbiguity) {
+                    minAmbiguity = ambiguity;
+                    leastAmbiguousData = data;
+                }
             }
         }
 
@@ -302,18 +316,27 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         
         if (ambiguities.size() >= 20) {
             if (count >= 18) {
-                if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
+                // if more than 90% of last 20 tracked tags pass the ambiguity check,
+                // and the next averagedPose passes distance check, trust measurement,
+                if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD && leastAmbiguousData != null) {
                     addVisionMeasurement(averagedPose, timestampSum / areaSum,
-                    DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
-                } // if it doesn't pass the distance check, nothing is added
+                    VecBuilder.fill(
+                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData), 
+                        PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData),
+                        5));
+                } // but if the next averagedPose doesn't pass the distance check, nothing is added
             } else if (count <= 18) {
+                // if less than 90% of last 20 tracked tags pass ambiguity check, decrease confidence
                 addVisionMeasurement(averagedPose, timestampSum/areaSum,
-                VecBuilder.fill(0, 0, 0));
+                VecBuilder.fill(2, 2, 5));
             }
             ambiguities.clear();
-        } else if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD) {
+        } else if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD && leastAmbiguousData != null) {
             addVisionMeasurement(averagedPose, timestampSum / areaSum,
-                       DriverStation.isAutonomous() ? VecBuilder.fill(0.7, 0.7, 5) : VecBuilder.fill(0.7, 0.7, 5));
+            VecBuilder.fill(
+                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData), 
+                PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(1, leastAmbiguousData), leastAmbiguousData),
+             5));
         }
     }
 

@@ -99,6 +99,12 @@ public class PhotonVision extends AprilTagVision {
         return ids.stream().mapToInt(i -> i).toArray();
     }
 
+    private double[] getAmbiguities(PhotonPipelineResult pipelineResult) {
+        ArrayList<Double> ambiguities = new ArrayList<>();
+        for (PhotonTrackedTarget target : pipelineResult.getTargets()) ambiguities.add(target.getPoseAmbiguity());
+        return ambiguities.stream().mapToDouble(i -> i).toArray();
+    }
+
     private void filterResult(PhotonPipelineResult result) {
         result.targets.removeIf((PhotonTrackedTarget target) -> 
                                 target.getPoseAmbiguity() > Settings.Vision.POSE_AMBIGUITY_RATIO_THRESHOLD 
@@ -106,10 +112,39 @@ public class PhotonVision extends AprilTagVision {
                                 );
     }
 
-    public ArrayList<Double> getAmbiguities(PhotonPipelineResult result) {
-        ArrayList<Double> ambiguities = new ArrayList<>();
-        for (PhotonTrackedTarget target : result.getTargets()) ambiguities.add(target.getPoseAmbiguity());
-        return ambiguities;
+
+    /**
+     * Updates the given stddev based on distance to tag.
+     *
+     * @param stddev the initial stddev
+     * @param bestTarget the best tracked target
+     * @return the updated stddev using a linear model based off distance relative to tag
+     */
+    public static double updateDistanceToTagStddev(double stddev, VisionData data) {
+        // in  meters
+        double distance = Math.sqrt(
+            Math.pow(data.getBestTarget().getBestCameraToTarget().getX(), 2) +
+            Math.pow(data.getBestTarget().getBestCameraToTarget().getY(), 2) +
+            Math.pow(data.getBestTarget().getBestCameraToTarget().getZ(), 2)
+        );
+        double m = 0.1;
+        if (distance > 6) return 10; // if further than 6 meters from target, blow up stddev
+        return stddev + (m * distance);
+    }
+
+
+    /**
+     * Updates the given stddev based on distance to tag.
+     *
+     * @param stddev the initial stddev
+     * @param bestTarget the best tracked target
+     * @return the updated stddev using a sine model based off angle relative to tag
+     */
+    public static double updateAngleToTagStddev(double stddev, VisionData data) {
+        double angle = data.getBestTarget().getYaw(); 
+        double sine = Math.sin(angle * Math.PI / 180); // deg to rad for sin calculation
+        double m = 1;
+        return stddev - (m * sine); // higher sine value = more confident (lower stddev)
     }
 
     @Override
@@ -127,7 +162,13 @@ public class PhotonVision extends AprilTagVision {
                 if (latestResult.hasTargets()) {
                     estimatedRobotPose.ifPresent(
                         (EstimatedRobotPose robotPose) -> {
-                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds, latestResult.getBestTarget().getArea(), getAmbiguities(latestResult));
+                            VisionData data = new VisionData(
+                                robotPose.estimatedPose,
+                                latestResult.getBestTarget(),
+                                getIDs(latestResult), 
+                                robotPose.timestampSeconds, 
+                                getAmbiguities(latestResult)
+                                );
                             outputs.add(data);
                             updateTelemetry("Vision/" + cameras[index].getName(), data);
                         }
