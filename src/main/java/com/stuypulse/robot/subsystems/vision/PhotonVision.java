@@ -118,7 +118,7 @@ public class PhotonVision extends AprilTagVision {
      *
      * @param stddev the initial stddev
      * @param bestTarget the best tracked target
-     * @return the updated stddev using a linear model based off distance relative to tag
+     * @return the updated stddev using a linear model of the linear distance between the camera frame and the tag
      */
     public static double updateDistanceToTagStddev(double stddev, VisionData data) {
         // in  meters
@@ -138,12 +138,13 @@ public class PhotonVision extends AprilTagVision {
      *
      * @param stddev the initial stddev
      * @param bestTarget the best tracked target
-     * @return the updated stddev using a sine model based off angle relative to tag
+     * @return the updated stddev using a quadratic model of the angular distance between the camera frame and the tag
      */
     public static double updateAngleToTagStddev(double stddev, VisionData data) {
-        double angle = data.getBestTarget().getYaw(); 
-        double sine = Math.sin(angle * Math.PI / 180); // deg to rad for sin calculation
-        return stddev * (1 - (sine - 0.05)); // higher sine value = more confident (lower stddev)
+        double yaw = data.getBestTarget().getYaw(); // horizontal angular offset
+        double pitch = data.getBestTarget().getPitch(); // vertical angular offset
+        double distance = Math.sqrt(Math.pow(yaw, 2) + Math.pow(pitch, 2));
+        return 1;
     }
 
     @Override

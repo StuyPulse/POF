@@ -333,7 +333,7 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
                     PhotonVision.updateAngleToTagStddev(PhotonVision.updateDistanceToTagStddev(2, leastAmbiguousData), leastAmbiguousData),
                  5));
             }
-
+        // proceed with regular distance check if queue has ambiguity of less than 20 tracked tags
         } else if (odometryToVisionDistance <= Settings.Vision.DISTANCE_THRESHOLD && leastAmbiguousData != null) {
             addVisionMeasurement(averagedPose, timestampSum / areaSum,
             VecBuilder.fill(
