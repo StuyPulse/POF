@@ -1,5 +1,7 @@
 package com.stuypulse.robot.constants;
 
+import com.stuypulse.robot.subsystems.vision.LimelightHelpers;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +22,8 @@ public interface Cameras {
         String[] LIMELIGHTS = { "limelight" };
 
         int[] PORTS = {5800, 5801, 5802, 5803, 5804, 5805};
+
+
     }
 
     public CameraConfig[] APRILTAG_CAMERAS = new CameraConfig[] {
@@ -85,6 +89,31 @@ public interface Cameras {
             this.location = location;
             this.ip = ip;
             this.forwardedPort = port;
+
+            // Set a custom crop window for improved performance (-1 to 1 for each value)
+            LimelightHelpers.setCropWindow("", -0.5, 0.5, -0.5, 0.5);
+
+
+            // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
+            LimelightHelpers.setCameraPose_RobotSpace("", 
+                0.5,    // Forward offset (meters)
+                0.0,    // Side offset (meters)
+                0.5,    // Height offset (meters)
+                0.0,    // Roll (degrees)
+                30.0,   // Pitch (degrees)
+                0.0     // Yaw (degrees)
+            );
+
+            // Set AprilTag offset tracking point (meters)
+            LimelightHelpers.setFiducial3DOffset("", 
+                0.0,    // Forward offset
+                0.0,    // Side offset  
+                0.5     // Height offset
+            );
+
+            // Configure AprilTag detection
+            LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1, 2, 3, 4}); // Only track these tag IDs
+            LimelightHelpers.SetFiducialDownscalingOverride("", 2.0f); // Process at half resolution for improved framerate and reduced range
         }
 
         public String getName() {
