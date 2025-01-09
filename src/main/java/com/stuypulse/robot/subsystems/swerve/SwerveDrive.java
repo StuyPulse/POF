@@ -35,6 +35,9 @@ import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
 import com.stuypulse.robot.constants.Settings.Alignment.Translation;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
+import com.stuypulse.robot.subsystems.vision.LimelightHelpers;
+import com.stuypulse.robot.subsystems.vision.LimelightHelpers.LimelightResults;
+import com.stuypulse.robot.subsystems.vision.LimelightHelpers.LimelightTarget_Fiducial;
 import com.stuypulse.robot.subsystems.vision.PhotonVision;
 import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
 import com.stuypulse.robot.util.vision.VisionData;
@@ -42,7 +45,9 @@ import com.stuypulse.stuylib.math.Vector2D;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -349,6 +354,33 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
     @Override
     public void periodic() {
+        double robotYaw = m_yawGetter.getValueAsDouble();  
+        LimelightHelpers.SetRobotOrientation("", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+        m_odometry.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+        m_odometry.addVisionMeasurement(
+            limelightMeasurement.pose,
+            limelightMeasurement.timestampSeconds
+        );
+
+        LimelightResults results = LimelightHelpers.getLatestResults("");
+
+        if (results.targets_Fiducials.length > 0) {
+        LimelightTarget_Fiducial tag = results.targets_Fiducials[0];
+        double id = tag.fiducialID;          // Tag ID
+        String family = tag.fiducialFamily;   // Tag family (e.g., "16h5")
+        
+        Pose3d robotPoseField = tag.getRobotPose_FieldSpace();    // Robot's pose in field space
+        Pose3d cameraPoseTag = tag.getCameraPose_TargetSpace();   // Camera's pose relative to tag
+        Pose3d robotPoseTag = tag.getRobotPose_TargetSpace();     // Robot's pose relative to tag
+        Pose3d tagPoseCamera = tag.getTargetPose_CameraSpace();   // Tag's pose relative to camera
+        Pose3d tagPoseRobot = tag.getTargetPose_RobotSpace();     // Tag's pose relative to robot
+        
+        double tx = tag.tx;                  // Horizontal offset from crosshair
+        double ty = tag.ty;                  // Vertical offset from crosshair
+        double ta = tag.ta;                  // Target area (0-100% of image)
+    }
+
         String[] moduleIds = {"Front Left", "Front Right", "Back Left", "Back Right"};
         for (int i = 0; i < Modules.length; i++) {
             SmartDashboard.putNumber("Swerve/Modules/" + moduleIds[i] + "/Target Angle (deg)", Modules[i].getTargetState().angle.getDegrees());
@@ -365,10 +397,10 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
 
         field.setRobotPose(getPose());
     
-        ArrayList<VisionData> outputs = AprilTagVision.getInstance().getOutputs();
-        if (Settings.Vision.IS_ACTIVE.get() && outputs.size() > 0) {
-            updateEstimatorWithVisionData(outputs);
-        }
+        // ArrayList<VisionData> outputs = AprilTagVision.getInstance().getOutputs();
+        // if (Settings.Vision.IS_ACTIVE.get() && outputs.size() > 0) {
+        //     updateEstimatorWithVisionData(outputs);
+        // }
 
         for (int i = 0; i < Modules.length; i++) {
             modules2D[i].setPose(new Pose2d(
@@ -376,5 +408,6 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
                 getModule(i).getCurrentState().angle.plus(getPose().getRotation())
             ));
         }
+
     }
 }
