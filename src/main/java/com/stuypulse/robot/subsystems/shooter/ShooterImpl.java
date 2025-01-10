@@ -18,6 +18,7 @@ import com.stuypulse.robot.util.ShooterLobFerryInterpolation;
 import com.stuypulse.robot.util.ShooterLowFerryInterpolation;
 import com.stuypulse.robot.util.ShooterSpeeds;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
@@ -46,6 +47,11 @@ public class ShooterImpl extends Shooter {
 
     private final SmartNumber leftTargetRPM;
     private final SmartNumber rightTargetRPM;
+
+    private final SmartNumber manualLeftTargetRPM;
+    private final SmartNumber manualRightTargetRPM;
+
+    private final SmartBoolean manualRPMOverride;
 
     protected ShooterImpl() {
         leftMotor = new CANSparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
@@ -87,6 +93,11 @@ public class ShooterImpl extends Shooter {
 
         leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
         rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());
+
+        manualLeftTargetRPM = new SmartNumber("Shooter/Manual/Left Target RPM", 0);
+        manualRightTargetRPM = new SmartNumber("Shooter/Manual/Right Target RPM", 0);
+
+        manualRPMOverride = new SmartBoolean("Shooter/Manual/Manual Override", false);
     }
 
     private double getLeftShooterRPM() {
@@ -224,9 +235,14 @@ public class ShooterImpl extends Shooter {
     public void periodic () {
         super.periodic();
 
-        setFeederBasedOnState();
-        setFlywheelsBasedOnState();
-
+        if (manualRPMOverride.get()) {
+            setLeftShooterRPM(manualLeftTargetRPM.get());
+            setRightShooterRPM(manualRightTargetRPM.get());
+        } else {
+            setFeederBasedOnState();
+            setFlywheelsBasedOnState();
+        }
+        
         SmartDashboard.putNumber("Shooter/Feeder Speed", feederMotor.get());
 
         SmartDashboard.putNumber("Shooter/Left Voltage", leftMotor.getBusVoltage());

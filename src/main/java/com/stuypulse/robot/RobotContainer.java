@@ -15,6 +15,7 @@ import com.stuypulse.robot.commands.arm.ArmToSubwooferShot;
 import com.stuypulse.robot.commands.arm.ArmWaitUntilAtTarget;
 import com.stuypulse.robot.commands.auton.CenterMobilityWithWait;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.auton.FakeAuton;
 import com.stuypulse.robot.commands.auton.Mobility;
 import com.stuypulse.robot.commands.auton.RerouteTest;
 import com.stuypulse.robot.commands.auton.ADEF.FivePieceADEF;
@@ -387,6 +388,8 @@ public class RobotContainer {
         AutonConfig Straight_Line = new AutonConfig("Straight Line Test", StraightLine::new,
         "Straight Line");
 
+        AutonConfig Fake_Auton = new AutonConfig("Fake Auton", FakeAuton::new, "Blue Source to G", "Blue G to Shoot");
+
         One_Piece_Mobility_Amp_Side_Blue.registerBlue(autonChooser);
 
         //Straight_Line.registerBlue(autonChooser);
@@ -429,6 +432,8 @@ public class RobotContainer {
 
         //Reroute_Test_Blue.registerBlue(autonChooser);
         //Reroute_Test_Red.registerRed(autonChooser);
+
+        Fake_Auton.registerBlue(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

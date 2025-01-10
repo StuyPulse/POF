@@ -16,6 +16,8 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.network.SmartBoolean;
+import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.booleans.BStream;
 import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.streams.numbers.filters.MotionProfile;
@@ -42,6 +44,9 @@ public class ArmImpl extends Arm {
     private final Controller controller;
     private final MotionProfile motionProfile;
 
+    private final SmartNumber targetAngleManual;
+    private final SmartBoolean manualAngleOverride;
+
     protected ArmImpl() {
         super();
         leftMotor = new CANSparkMax(Ports.Arm.LEFT_MOTOR, MotorType.kBrushless);
@@ -66,6 +71,9 @@ public class ArmImpl extends Arm {
             .add(new ArmEncoderFeedforward(Settings.Arm.Feedforward.kG))
             .add(new PIDController(Settings.Arm.PID.kP, Settings.Arm.PID.kI, Settings.Arm.PID.kD))
             .setSetpointFilter(motionProfile);
+
+        targetAngleManual = new SmartNumber("Arm/Manual/Target Angle", Settings.Arm.MIN_ANGLE);
+        manualAngleOverride = new SmartBoolean("Arm/Manual/Manual Override", false);
     } 
 
     @Override
@@ -329,22 +337,29 @@ public class ArmImpl extends Arm {
                 state = State.FEED;
             }
         }
+
+        if (manualAngleOverride.get()) {
+            controller.update(SLMath.clamp(targetAngleManual.getAsDouble(), Settings.Arm.MIN_ANGLE, Settings.Arm.MAX_ANGLE), getDegrees());
+            setVoltage(controller.getOutput());
+        } else {
         
-        if (state == State.RESETTING) {
-            setVoltage(-1.5);
-            controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
-        }
-        else if (getTargetDegrees() == Settings.Arm.MIN_ANGLE && bumpSwitchTriggered.get() && state != State.CLIMBING) {
-            setVoltage(0);
-            controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
-        }
-        else {
-            controller.update(SLMath.clamp(getTargetDegrees(), Settings.Arm.MIN_ANGLE, Settings.Arm.MAX_ANGLE), getDegrees());
-            if (Shooter.getInstance().getFeederState() == Shooter.FeederState.SHOOTING && getDegrees() < Settings.Arm.MAX_ANGLE) {
-                setVoltage(controller.getOutput() + 0.31);
+            if (state == State.RESETTING) {
+                setVoltage(-1.5);
+                controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
             }
+            else if (getTargetDegrees() == Settings.Arm.MIN_ANGLE && bumpSwitchTriggered.get() && state != State.CLIMBING) {
+                setVoltage(0);
+                controller.update(Settings.Arm.MIN_ANGLE, Settings.Arm.MIN_ANGLE);
+            }
+            
             else {
-                setVoltage(controller.getOutput());
+                controller.update(SLMath.clamp(getTargetDegrees(), Settings.Arm.MIN_ANGLE, Settings.Arm.MAX_ANGLE), getDegrees());
+                if (Shooter.getInstance().getFeederState() == Shooter.FeederState.SHOOTING && getDegrees() < Settings.Arm.MAX_ANGLE) {
+                    setVoltage(controller.getOutput() + 0.31);
+                }
+                else {
+                    setVoltage(controller.getOutput());
+                }
             }
         }
 
