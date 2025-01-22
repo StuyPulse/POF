@@ -5,11 +5,11 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstantsFactory;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants.SteerFeedbackType;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -40,12 +40,12 @@ public class SwerveDriveConstants {
     // leave this null to skip applying Pigeon 2 configs
     private static final Pigeon2Configuration pigeonConfigs = null;
 
-    public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
+    public static final LegacySwerveDrivetrainConstants DrivetrainConstants = new LegacySwerveDrivetrainConstants()
             .withCANbusName(Settings.Swerve.CAN_BUS_NAME)
             .withPigeon2Id(Ports.Gyro.PIGEON2)
             .withPigeon2Configs(pigeonConfigs);
 
-    private static final SwerveModuleConstantsFactory ConstantCreator = new SwerveModuleConstantsFactory()
+    private static final LegacySwerveModuleConstantsFactory ConstantCreator = new LegacySwerveModuleConstantsFactory()
             .withDriveMotorGearRatio(Settings.Swerve.Drive.GEAR_RATIO)
             .withSteerMotorGearRatio(Settings.Swerve.Turn.GEAR_RATIO)
             .withWheelRadius(Settings.Swerve.Drive.WHEEL_DIAMETER / 2)
@@ -65,7 +65,7 @@ public class SwerveDriveConstants {
             .withSteerMotorInitialConfigs(steerInitialConfigs)
             .withCANcoderInitialConfigs(cancoderInitialConfigs);
 
-    public static final SwerveModuleConstants FrontLeft = ConstantCreator.createModuleConstants(
+    public static final LegacySwerveModuleConstants FrontLeft = ConstantCreator.createModuleConstants(
         Ports.Swerve.FrontLeft.TURN, 
         Ports.Swerve.FrontLeft.DRIVE, 
         Ports.Swerve.FrontLeft.ENCODER, 
@@ -74,7 +74,7 @@ public class SwerveDriveConstants {
         Settings.Swerve.FrontLeft.MODULE_OFFSET.getY(), 
         Settings.Swerve.FrontLeft.DRIVE_INVERTED)
         .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
-    public static final SwerveModuleConstants FrontRight = ConstantCreator.createModuleConstants(
+    public static final LegacySwerveModuleConstants FrontRight = ConstantCreator.createModuleConstants(
         Ports.Swerve.FrontRight.TURN, 
         Ports.Swerve.FrontRight.DRIVE, 
         Ports.Swerve.FrontRight.ENCODER, 
@@ -83,7 +83,7 @@ public class SwerveDriveConstants {
         Settings.Swerve.FrontRight.MODULE_OFFSET.getY(), 
         Settings.Swerve.FrontRight.DRIVE_INVERTED)
         .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
-    public static final SwerveModuleConstants BackLeft = ConstantCreator.createModuleConstants(
+    public static final LegacySwerveModuleConstants BackLeft = ConstantCreator.createModuleConstants(
         Ports.Swerve.BackLeft.TURN, 
         Ports.Swerve.BackLeft.DRIVE, 
         Ports.Swerve.BackLeft.ENCODER, 
@@ -92,7 +92,7 @@ public class SwerveDriveConstants {
         Settings.Swerve.BackLeft.MODULE_OFFSET.getY(), 
         Settings.Swerve.BackLeft.DRIVE_INVERTED)
         .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
-    public static final SwerveModuleConstants BackRight = ConstantCreator.createModuleConstants(
+    public static final LegacySwerveModuleConstants BackRight = ConstantCreator.createModuleConstants(
         Ports.Swerve.BackRight.TURN, 
         Ports.Swerve.BackRight.DRIVE, 
         Ports.Swerve.BackRight.ENCODER, 

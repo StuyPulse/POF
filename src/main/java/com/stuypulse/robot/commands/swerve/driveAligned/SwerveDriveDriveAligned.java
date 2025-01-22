@@ -24,7 +24,7 @@ public abstract class SwerveDriveDriveAligned extends Command {
     private final SwerveDrive swerve;
     private final VStream drive;
 
-    private final AngleController controller;
+    // private final AngleController controller;
     private final IStream angleVelocity;
 
     public SwerveDriveDriveAligned(Gamepad driver) {
@@ -39,8 +39,8 @@ public abstract class SwerveDriveDriveAligned extends Command {
                 new VRateLimit(Drive.MAX_TELEOP_ACCEL.get()),
                 new VLowPassFilter(Drive.RC.get()));
 
-        controller = new AnglePIDController(Motion.THETA.kP, Motion.THETA.kI, Motion.THETA.kD)
-            .setOutputFilter(x -> -x);
+        // controller = new AnglePIDController(Motion.THETA.kP, Motion.THETA.kI, Motion.THETA.kD)
+        //     .setOutputFilter(x -> -x);
 
         AngleVelocity derivative = new AngleVelocity();
 
@@ -60,10 +60,10 @@ public abstract class SwerveDriveDriveAligned extends Command {
 
     @Override
     public void execute() {
-        swerve.drive(
-            drive.get(),
-            angleVelocity.get() + controller.update(
-                Angle.fromRotation2d(getTargetAngle()),
-                Angle.fromRotation2d(swerve.getPose().getRotation())));
+        // swerve.drive(
+        //     drive.get(),
+        //     angleVelocity.get() + controller.update(
+        //         Angle.fromRotation2d(getTargetAngle()),
+        //         Angle.fromRotation2d(swerve.getPose().getRotation())));
     }
 }

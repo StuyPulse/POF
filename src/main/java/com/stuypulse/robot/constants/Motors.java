@@ -1,8 +1,8 @@
 package com.stuypulse.robot.constants;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.SparkMax;
+import com.revrobotics.SparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.stuypulse.robot.constants.Motors.TalonSRXConfig.CANSparkConfig;
 import com.revrobotics.CANSparkBase;

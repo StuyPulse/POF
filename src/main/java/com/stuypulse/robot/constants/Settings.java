@@ -1,7 +1,7 @@
 package com.stuypulse.robot.constants;
 
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.PIDConstants;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.util.ShooterSpeeds;
 import com.stuypulse.stuylib.network.SmartBoolean;
@@ -184,8 +184,8 @@ public interface Settings {
                     MAX_ANGULAR_VELOCITY.get(),
                     MAX_ANGULAR_ACCELERATION.get());
 
-            PIDConstants XY = new PIDConstants(2.0, 0, 0.25);
-            PIDConstants THETA = new PIDConstants(5.0, 0, 0.2);
+            double XY = 0.00;
+            double THETA = 0.0;
         }
 
         public interface Turn {
@@ -258,25 +258,30 @@ public interface Settings {
         }
     }
 
+    
+
     public interface Alignment {
         double DEBOUNCE_TIME = 0.05;
 
         SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance", 0.1);
         SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance", 0.1);
-        SmartNumber ANGLE_TOLERANCE = new SmartNumber("Alignment/Angle Tolerance", 6);
+        SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Angle Tolerance", 6);
 
         SmartNumber CLIMB_SETUP_DISTANCE = new SmartNumber("Alignment/Climb/Setup Distance", Units.inchesToMeters(21.0));
         SmartNumber INTO_CHAIN_SPEED = new SmartNumber("Alignment/Climb/Into Chain Speed", 0.25);
 
         double MAX_ALIGNMENT_SPEED = 2.5;
 
-        public interface Translation {
+        double XY_DEBOUNCE = 0.1;
+            double THETA_DEBOUNCE = 0.1;
+
+        public interface XY {
             SmartNumber kP = new SmartNumber("Alignment/Translation/kP", 6.0);
             SmartNumber kI = new SmartNumber("Alignment/Translation/kI", 0.0);
             SmartNumber kD = new SmartNumber("Alignment/Translation/kD", 0.2);
         }
 
-        public interface Rotation {
+        public interface Theta {
             SmartNumber kP = new SmartNumber("Alignment/Rotation/kP", 6.0);
             SmartNumber kI = new SmartNumber("Alignment/Rotation/kI", 0.0);
             SmartNumber kD = new SmartNumber("Alignment/Rotation/kD", 0.4);

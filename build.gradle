@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.3.2"
+    id "edu.wpi.first.GradleRIO" version "2025.2.1"
     id "com.diffplug.spotless" version "6.22.0"
 }
 
@@ -12,14 +12,12 @@ allprojects {
 
 // Set this to the latest version of StuyLib.
 // You can check here: https://github.com/StuyPulse/StuyLib/releases.
-final String STUYLIB_VERSION = 'v2024.1.5'
+final String STUYLIB_VERSION = 'v2025.1.1'
 
 def ROBOT_MAIN_CLASS = "com.stuypulse.robot.Main"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -38,15 +36,6 @@ deploy {
                 // getTargetTypeClass is a shortcut to get the class type using a string
 
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
-                    // Enable VisualVM connection
-                    // jvmArgs.add("-Dcom.sun.management.jmxremote=true")
-                    // jvmArgs.add("-Dcom.sun.management.jmxremote.port=1198")
-                    // jvmArgs.add("-Dcom.sun.management.jmxremote.local.only=false")
-                    // jvmArgs.add("-Dcom.sun.management.jmxremote.ssl=false")
-                    // jvmArgs.add("-Dcom.sun.management.jmxremote.authenticate=false")
-                    // jvmArgs.add("-Djava.rmi.server.hostname=10.6.94.2")
-                    jvmArgs.add("-XX:+HeapDumpOnOutOfMemoryError")
-                    jvmArgs.add("-XX:HeapDumpPath=/u/frc-usercode.hprof")
                 }
 
                 // Static files artifact
@@ -100,14 +89,7 @@ spotless {
     enforceCheck = false
     java {
         targetExclude("src/main/java/com/stuypulse/robot/commands/autons/*.java")
-        licenseHeader '''
-/************************ PROJECT IZZI *************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved. */
-/* Use of this source code is governed by an MIT-style license */
-/* that can be found in the repository LICENSE file.           */
-/***************************************************************/
-
-'''
+        licenseHeaderFile "LICENSE"
 
         googleJavaFormat().aosp()
         
