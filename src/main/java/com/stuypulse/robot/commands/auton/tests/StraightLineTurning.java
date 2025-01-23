@@ -11,7 +11,7 @@ public class StraightLineTurning extends SequentialCommandGroup {
     public StraightLineTurning() {
         addCommands(
             new VisionChangeWhiteList(7, 8),
-            SwerveDrive.getInstance().followPathCommand("Straight Line Turning"),
+            // SwerveDrive.getInstance().followPathCommand("Straight Line Turning"),
             new VisionReloadWhiteList()
         );
     }

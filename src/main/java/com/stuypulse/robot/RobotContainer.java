@@ -392,16 +392,16 @@ public class RobotContainer {
         //Straight_Line.registerBlue(autonChooser);
 
         MOBILITY_BLUE.registerBlue(autonChooser);
-        MOBILITY_RED.registerRed(autonChooser);
+        // MOBILITY_RED.registerRed(autonChooser);
 
         DEF_BLUE.registerBlue(autonChooser);
-        DEF_RED.registerRed(autonChooser);
+        // DEF_RED.registerRed(autonChooser);
 
         //BCA_BLUE.registerDefaultBlue(autonChooser);
         //BCA_RED.registerDefaultRed(autonChooser);
 
         New_BCA_Blue.registerDefaultBlue(autonChooser);
-        New_BCA_Red.registerDefaultRed(autonChooser);
+        // New_BCA_Red.registerDefaultRed(autonChooser);
 
         //BDEFA_BLUE.registerBlue(autonChooser);
         //BDEFA_RED.registerRed(autonChooser);
@@ -413,19 +413,19 @@ public class RobotContainer {
         //BFGH_RED.registerRed(autonChooser);
 
         HGF_BLUE.registerBlue(autonChooser);
-        HGF_RED.registerRed(autonChooser);
+        // HGF_RED.registerRed(autonChooser);
 
         HG_BLUE.registerBlue(autonChooser);
-        HG_RED.registerRed(autonChooser);
+        // HG_RED.registerRed(autonChooser);
 
         GH_BLUE.registerBlue(autonChooser);
-        GH_RED.registerRed(autonChooser);
+        // GH_RED.registerRed(autonChooser);
 
         //ReroutableHGF_BLUE.registerBlue(autonChooser);
         //ReroutableHGF_RED.registerRed(autonChooser);
 
         ADEF_BLUE.registerBlue(autonChooser);
-        ADEF_RED.registerRed(autonChooser);
+        // ADEF_RED.registerRed(autonChooser);
 
         //Reroute_Test_Blue.registerBlue(autonChooser);
         //Reroute_Test_Red.registerRed(autonChooser);

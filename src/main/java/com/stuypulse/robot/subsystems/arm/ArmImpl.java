@@ -1,7 +1,10 @@
 package com.stuypulse.robot.subsystems.arm;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkMaxConfigAccessor;
 import com.revrobotics.RelativeEncoder;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Motors;
@@ -10,7 +13,6 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.util.ArmEncoderFeedforward;
-import com.stuypulse.robot.util.FilteredRelativeEncoder;
 import com.stuypulse.robot.util.SpeakerAngleElinInterpolation;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
@@ -32,10 +34,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmImpl extends Arm {
     
-    private final CANSparkMax leftMotor;
-    private final CANSparkMax rightMotor;
+    private final SparkMax leftMotor;
+    private final SparkMax rightMotor;
     private final RelativeEncoder armEncoder;
-    
+    private final SparkBaseConfig leftConfig;
+    private final SparkBaseConfig rightConfig;
     private final DigitalInput bumpSwitch;
     private final BStream bumpSwitchTriggered;
 
@@ -44,19 +47,25 @@ public class ArmImpl extends Arm {
 
     protected ArmImpl() {
         super();
-        leftMotor = new CANSparkMax(Ports.Arm.LEFT_MOTOR, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(Ports.Arm.RIGHT_MOTOR, MotorType.kBrushless);
-        armEncoder = new FilteredRelativeEncoder(leftMotor);
-        armEncoder.setPosition((-90 + 12.25)/360);
+        leftMotor = new SparkMax(Ports.Arm.LEFT_MOTOR, MotorType.kBrushless);
+        rightMotor = new SparkMax(Ports.Arm.RIGHT_MOTOR, MotorType.kBrushless);
+     
+        armEncoder = leftMotor.getEncoder();
+        // armEncoder.setPosition((-90 + 12.25)/360);
 
         bumpSwitch = new DigitalInput(Ports.Arm.BUMP_SWITCH);
         bumpSwitchTriggered = BStream.create(bumpSwitch).not().filtered(new BDebounce.Rising(Settings.Arm.BUMP_SWITCH_DEBOUNCE_TIME));
 
-        armEncoder.setPositionConversionFactor(Settings.Arm.Encoder.GEAR_RATIO);
-        armEncoder.setVelocityConversionFactor(Settings.Arm.Encoder.GEAR_RATIO);
         
-        Motors.Arm.LEFT_MOTOR.configure(leftMotor);
-        Motors.Arm.RIGHT_MOTOR.configure(rightMotor);
+        
+        leftConfig = new SparkMaxConfig();
+        rightConfig = new SparkMaxConfig();
+        leftConfig.encoder.positionConversionFactor(Settings.Arm.Encoder.GEAR_RATIO);
+        rightConfig.encoder.positionConversionFactor(Settings.Arm.Encoder.GEAR_RATIO);
+
+        leftMotor.configure(leftConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        rightMotor.configure(rightConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        // Motors.Arm.RIGHT_MOTOR.configure(rightMotor);
         
         motionProfile = new MotionProfile(
             Settings.Arm.MAX_VELOCITY, 

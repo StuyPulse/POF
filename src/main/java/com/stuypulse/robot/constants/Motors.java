@@ -1,11 +1,13 @@
 package com.stuypulse.robot.constants;
-
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.SparkMax;
-import com.revrobotics.SparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.config.BaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkBaseConfigAccessor;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.stuypulse.robot.constants.Motors.TalonSRXConfig.CANSparkConfig;
-import com.revrobotics.CANSparkBase;
 
 /*-
  * File containing all of the configurations that different motors require.
@@ -28,19 +30,16 @@ public interface Motors {
         ABS_ENCODER_VELOCITY
     }
 
-    public static void disableStatusFrames(CANSparkBase motor, StatusFrame... ids) {
+    public static void disableStatusFrames(SparkBase motor, StatusFrame... ids) {
         final int kDisableStatusFrame = 500;
 
-        for (StatusFrame id : ids) {
-            motor.setPeriodicFramePeriod(PeriodicFrame.fromId(id.ordinal()), kDisableStatusFrame);
-        }
     }
 
     /** Classes to store all of the values a motor needs */
 
     public interface Arm {
-        CANSparkConfig LEFT_MOTOR = new CANSparkConfig(false, IdleMode.kBrake, 40, 0.35, true); 
-        CANSparkConfig RIGHT_MOTOR = new CANSparkConfig(true, IdleMode.kBrake, 40, 0.35, true); 
+        SparkMax LEFT_MOTOR = new SparkMax(Ports.Arm.LEFT_MOTOR, MotorType.kBrushless); 
+        SparkMax RIGHT_MOTOR = new SparkMax(Ports.Arm.RIGHT_MOTOR, MotorType.kBrushless); 
     }
 
     public interface Intake {
@@ -78,12 +77,8 @@ public interface Motors {
             this(inverted, neutralMode, peakCurrentLimitAmps, 0.0);
         }
 
-    public static void disableStatusFrames(CANSparkBase motor, StatusFrame... ids) {
+    public static void disableStatusFrames(SparkBase motor, StatusFrame... ids) {
         final int kDisableStatusFrame = 500;
-
-        for (StatusFrame id : ids) {
-            motor.setPeriodicFramePeriod(PeriodicFrame.fromId(id.ordinal()), kDisableStatusFrame);
-        }
     }
 
     public static class CANSparkConfig {
@@ -114,28 +109,6 @@ public interface Motors {
             this(inverted, idleMode, 80, enableVoltageCompensation);
         }
 
-        public void configure(CANSparkBase motor) {
-            motor.setInverted(INVERTED);
-            motor.setIdleMode(IDLE_MODE);
-            motor.setSmartCurrentLimit(CURRENT_LIMIT_AMPS);
-            motor.setOpenLoopRampRate(OPEN_LOOP_RAMP_RATE);
-            if (ENABLE_VOLTAGE_COMPENSATION) {
-                motor.enableVoltageCompensation(12);
-            }
-            motor.burnFlash();
-        }
-
-        public void configureAsFollower(CANSparkMax motor, CANSparkMax follows) {
-            motor.setInverted(INVERTED);
-            motor.setIdleMode(IDLE_MODE);
-            motor.setSmartCurrentLimit(CURRENT_LIMIT_AMPS);
-            motor.setOpenLoopRampRate(OPEN_LOOP_RAMP_RATE);
-            if (ENABLE_VOLTAGE_COMPENSATION) {
-                motor.enableVoltageCompensation(12);
-            }
-            motor.follow(follows);
-            motor.burnFlash();
-        }
     }
 }
 }

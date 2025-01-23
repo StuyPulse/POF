@@ -1,11 +1,11 @@
 package com.stuypulse.robot.commands.swerve;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings.Alignment;
-import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
-import com.stuypulse.robot.constants.Settings.Alignment.Translation;
+import com.stuypulse.robot.constants.Settings.Alignment.Theta;
+import com.stuypulse.robot.constants.Settings.Alignment.XY;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.util.HolonomicController;
@@ -25,7 +25,7 @@ public class SwerveDriveDriveToClimb extends Command {
     
     private final SwerveDrive swerve;
 
-    private final SwerveRequest.FieldCentric drive;
+    private final LegacySwerveRequest.FieldCentric drive;
     
     private final HolonomicController controller;
     
@@ -42,16 +42,16 @@ public class SwerveDriveDriveToClimb extends Command {
     public SwerveDriveDriveToClimb(double distance) {
         swerve = SwerveDrive.getInstance();
 
-        drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+        drive = new LegacySwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
         
         this.distance = distance;
 
         targetPose2d = swerve.getField().getObject("Target Pose");
 
         controller = new HolonomicController(
-            new PIDController(Translation.kP, Translation.kI, Translation.kD),
-            new PIDController(Translation.kP, Translation.kI, Translation.kD),
-            new AnglePIDController(Rotation.kP, Rotation.kI, Rotation.kD));
+            new PIDController(XY.kP, XY.kI, XY.kD),
+            new PIDController(XY.kP, XY.kI, XY.kD),
+            new AnglePIDController(Theta.kP, Theta.kI, Theta.kD));
     }
     
     private Pose2d getTargetPose() {
@@ -81,7 +81,7 @@ public class SwerveDriveDriveToClimb extends Command {
         controller.update(targetPose, swerve.getPose());
         
         double rotation = SLMath.clamp(controller.getOutput().omegaRadiansPerSecond, Motion.MAX_ANGULAR_VELOCITY.get());
-        if (Math.abs(rotation) < Alignment.Rotation.ALIGN_OMEGA_DEADBAND.get())
+        if (Math.abs(rotation) < Alignment.Theta.ALIGN_OMEGA_DEADBAND.get())
             rotation = 0;
         
         Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)

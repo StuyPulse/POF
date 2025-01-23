@@ -11,7 +11,7 @@ public class SimpleNote extends SequentialCommandGroup {
     public SimpleNote() {
         addCommands(
             new VisionChangeWhiteList(7, 8),
-            SwerveDrive.getInstance().followPathCommand("Simple Note"),
+            // SwerveDrive.getInstance().followPathCommand("Simple Note"),
             new VisionReloadWhiteList()
         );
     }

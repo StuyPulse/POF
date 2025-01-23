@@ -10,8 +10,8 @@ import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Driver.Drive;
@@ -26,7 +26,7 @@ public class SwerveDriveDriveRobotRelative extends Command {
 
     private final Gamepad driver;
 
-    private final SwerveRequest.RobotCentric drive;
+    private final LegacySwerveRequest.RobotCentric drive;
 
     private final VStream speed;
     private final IStream turn;
@@ -53,7 +53,7 @@ public class SwerveDriveDriveRobotRelative extends Command {
 
         this.driver = driver;
 
-        drive = new SwerveRequest.RobotCentric()
+        drive = new LegacySwerveRequest.RobotCentric()
             .withDeadband(Settings.Swerve.MAX_LINEAR_VELOCITY * Settings.Driver.Drive.DEADBAND.get())
             .withRotationalDeadband(Settings.Swerve.MAX_ANGULAR_VELOCITY * Settings.Driver.Turn.DEADBAND.get())
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 

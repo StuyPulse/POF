@@ -32,7 +32,7 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Alignment;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
-import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
+// import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
 import com.stuypulse.robot.util.vision.VisionData;
 import com.stuypulse.stuylib.math.Vector2D;
 
@@ -67,7 +67,7 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
         SwerveDriveConstants.FrontRight,
         SwerveDriveConstants.BackLeft,
         SwerveDriveConstants.BackRight
-    }
+    };
     static {
         instance = new SwerveDrive(
             SwerveDriveConstants.DrivetrainConstants,
@@ -76,8 +76,6 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
             SwerveDriveConstants.FrontRight,
             SwerveDriveConstants.BackLeft,
             SwerveDriveConstants.BackRight
-            // SwerveDriveConstants.DrivetrainConstants,
-            // SwerveDriveConstants.UpdateOdometryFrequency
         );
     }
 
@@ -95,8 +93,8 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
 
     private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
 
-    protected SwerveDrive(SwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, SwerveModuleConstants... modules) {
-        super(driveTrainConstants, UpdateOdometryFrequency, modules);
+    protected SwerveDrive(LegacySwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, LegacySwerveModuleConstants... modules) {
+        super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -118,9 +116,11 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
 
     /*** PATH FOLLOWING ***/
 
-    public Command followPathCommand(String pathName) {
-        return followPathCommand(PathPlannerPath.fromPathFile(pathName));
-    }
+    // public Command followPathCommand(String pathName) {
+
+    //     return followPathCommand(PathPlannerPath.fromPathFile(pathName));
+
+    // }
 
     public Command followPathCommand(PathPlannerPath path) {
         return AutoBuilder.followPath(path);

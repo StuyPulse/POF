@@ -1,7 +1,8 @@
 package com.stuypulse.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.streams.booleans.BStream;
@@ -9,15 +10,20 @@ import com.stuypulse.stuylib.streams.booleans.filters.BDebounce;
 import com.stuypulse.stuylib.util.StopWatch;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.stuypulse.robot.constants.Ports;
 
 public class IntakeImpl extends Intake {
 
-    private final CANSparkMax funnelMotorLeft;
-    private final CANSparkMax funnelMotorRight;
-    private final CANSparkMax intakeMotor;
+    private final SparkMax funnelMotorLeft;
+    private final SparkMax funnelMotorRight;
+    private final SparkMax intakeMotor;
+
+    private final SparkMaxConfig leftConfig;
+    private final SparkMaxConfig rightConfig;
+    private final SparkMaxConfig intakeConfig;
 
     private final DigitalInput IRSensor;
 
@@ -25,13 +31,17 @@ public class IntakeImpl extends Intake {
 
     public IntakeImpl() {
         super();
-        funnelMotorLeft = new CANSparkMax(Ports.Intake.FUNNEL_LEFT, MotorType.kBrushless);
-        funnelMotorRight = new CANSparkMax(Ports.Intake.FUNNEL_RIGHT, MotorType.kBrushless);        
-        intakeMotor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, MotorType.kBrushless);
+        funnelMotorLeft = new SparkMax(Ports.Intake.FUNNEL_LEFT, MotorType.kBrushless);
+        funnelMotorRight = new SparkMax(Ports.Intake.FUNNEL_RIGHT, MotorType.kBrushless);        
+        intakeMotor = new SparkMax(Ports.Intake.INTAKE_MOTOR, MotorType.kBrushless);
 
-        Motors.Intake.LEFT_FUNNEL_MOTOR_CONFIG.configure(funnelMotorLeft);
-        Motors.Intake.RIGHT_FUNNEL_MOTOR_CONFIG.configure(funnelMotorRight);
-        Motors.Intake.INTAKE_MOTOR_CONFIG.configure(intakeMotor);
+        leftConfig = new SparkMaxConfig();
+        rightConfig = new SparkMaxConfig();
+        intakeConfig = new SparkMaxConfig();
+
+        funnelMotorLeft.configure(leftConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        funnelMotorRight.configure(rightConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        intakeMotor.configure(intakeConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
 
         IRSensor = new DigitalInput(Ports.Intake.IRSensor);
 

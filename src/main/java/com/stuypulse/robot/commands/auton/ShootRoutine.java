@@ -7,7 +7,7 @@ import com.stuypulse.robot.commands.leds.LEDSet;
 import com.stuypulse.robot.commands.shooter.ShooterFeederShoot;
 import com.stuypulse.robot.commands.shooter.ShooterFeederStop;
 import com.stuypulse.robot.commands.shooter.ShooterWaitForTarget;
-import com.stuypulse.robot.commands.swerve.SwerveDriveAlignToSpeaker;
+// import com.stuypulse.robot.commands.swerve.SwerveDriveAlignToSpeaker;
 import com.stuypulse.robot.constants.LEDInstructions;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.intake.Intake;
@@ -37,7 +37,7 @@ public abstract class ShootRoutine {
         return new SequentialCommandGroup(
             new ArmToSpeaker(),
             new ParallelCommandGroup(
-                new SwerveDriveAlignToSpeaker(),
+                // new SwerveDriveAlignToSpeaker(),
                 new ArmWaitUntilAtTarget().withTimeout(Settings.Arm.MAX_WAIT_TO_REACH_TARGET),
                 new ShooterWaitForTarget().withTimeout(Settings.Shooter.MAX_WAIT_TO_REACH_TARGET)
             ),
@@ -51,7 +51,7 @@ public abstract class ShootRoutine {
         return new SequentialCommandGroup(
             new ArmToSpeaker(),
             new ParallelCommandGroup(
-                new SwerveDriveAlignToSpeaker(),
+                // new SwerveDriveAlignToSpeaker(),
                 new ArmWaitUntilAtTarget().withTimeout(Settings.Arm.MAX_WAIT_TO_REACH_TARGET),
                 new ShooterWaitForTarget().withTimeout(Settings.Shooter.MAX_WAIT_TO_REACH_TARGET)
             ),

@@ -1,7 +1,8 @@
 package com.stuypulse.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrain.LegacySwerveDriveState;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrain.LegacySwerveDriveState;
 import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -69,7 +70,7 @@ public class Telemetry {
     };
 
     /* Accept the swerve drive state and telemeterize it to smartdashboard */
-    public void telemeterize(SwerveDriveState state) {
+    public void telemeterize(LegacySwerveDriveState state) {
         /* Telemeterize the pose */
         Pose2d pose = state.Pose;
         fieldTypePub.set("Field2d");

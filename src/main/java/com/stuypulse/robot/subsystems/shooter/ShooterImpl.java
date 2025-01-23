@@ -1,10 +1,11 @@
 package com.stuypulse.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
@@ -13,7 +14,6 @@ import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Motors.StatusFrame;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
-import com.stuypulse.robot.util.FilteredRelativeEncoder;
 import com.stuypulse.robot.util.ShooterLobFerryInterpolation;
 import com.stuypulse.robot.util.ShooterLowFerryInterpolation;
 import com.stuypulse.robot.util.ShooterSpeeds;
@@ -31,16 +31,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterImpl extends Shooter {
     
-    private final CANSparkMax leftMotor;
-    private final CANSparkMax rightMotor;
-    private final CANSparkMax feederMotor;
+    private final SparkMax leftMotor;
+    private final SparkMax rightMotor;
+    private final SparkMax feederMotor;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
     private final DigitalInput feederBeam;
 
-    private final SparkPIDController leftController;
-    private final SparkPIDController rightController;
+    private final SparkMaxConfig leftConfig;
+    private final SparkMaxConfig rightConfig;
+    private final SparkMaxConfig feederConfig;
+
+    private final SparkClosedLoopController leftController;
+    private final SparkClosedLoopController rightController;
 
     private final BStream hasNote;
 
@@ -48,30 +52,34 @@ public class ShooterImpl extends Shooter {
     private final SmartNumber rightTargetRPM;
 
     protected ShooterImpl() {
-        leftMotor = new CANSparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(Ports.Shooter.RIGHT_MOTOR, MotorType.kBrushless);
-        feederMotor = new CANSparkMax(Ports.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+        leftMotor = new SparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
+        rightMotor = new SparkMax(Ports.Shooter.RIGHT_MOTOR, MotorType.kBrushless);
+        feederMotor = new SparkMax(Ports.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
 
-        leftEncoder = new FilteredRelativeEncoder(leftMotor);
-        rightEncoder = new FilteredRelativeEncoder(rightMotor);
+        leftEncoder = leftMotor.getEncoder();
+        rightEncoder = rightMotor.getEncoder();
 
         feederBeam = new DigitalInput(Ports.Shooter.RECIEVER_IR);
         
-        leftEncoder.setVelocityConversionFactor(1.2);
-        rightEncoder.setVelocityConversionFactor(1.0);
+        leftConfig = new SparkMaxConfig();
+        rightConfig = new SparkMaxConfig();
+        feederConfig = new SparkMaxConfig();
+
+        leftConfig.encoder.velocityConversionFactor(1.2);
+        rightConfig.encoder.velocityConversionFactor(1.0);
         
-        leftController = leftMotor.getPIDController();
-        rightController = rightMotor.getPIDController();
+        leftController = leftMotor.getClosedLoopController();
+        rightController = rightMotor.getClosedLoopController();
 
-        leftController.setP(Settings.Shooter.LEFT.PID.kP);
-        leftController.setI(Settings.Shooter.LEFT.PID.kI);
-        leftController.setD(Settings.Shooter.LEFT.PID.kD);
-        leftController.setFF(Settings.Shooter.LEFT.FF.kV);
+        // leftController.setP(Settings.Shooter.LEFT.PID.kP);
+        // leftController.setI(Settings.Shooter.LEFT.PID.kI);
+        // leftController.setD(Settings.Shooter.LEFT.PID.kD);
+        // leftController.setFF(Settings.Shooter.LEFT.FF.kV);
 
-        rightController.setP(Settings.Shooter.RIGHT.PID.kP);
-        rightController.setI(Settings.Shooter.RIGHT.PID.kI);
-        rightController.setD(Settings.Shooter.RIGHT.PID.kD);
-        rightController.setFF(Settings.Shooter.RIGHT.FF.kV);
+        // rightController.setP(Settings.Shooter.RIGHT.PID.kP);
+        // rightController.setI(Settings.Shooter.RIGHT.PID.kI);
+        // rightController.setD(Settings.Shooter.RIGHT.PID.kD);
+        // rightController.setFF(Settings.Shooter.RIGHT.FF.kV);
         
         hasNote = BStream.create(feederBeam).not()
             .filtered(new BDebounce.Falling(Settings.Shooter.HAS_NOTE_FALLING_DEBOUNCE))
@@ -81,9 +89,9 @@ public class ShooterImpl extends Shooter {
         Motors.disableStatusFrames(rightMotor, StatusFrame.ANALOG_SENSOR, StatusFrame.ALTERNATE_ENCODER, StatusFrame.ABS_ENCODER_VELOCITY);
         Motors.disableStatusFrames(feederMotor, StatusFrame.ANALOG_SENSOR, StatusFrame.ALTERNATE_ENCODER, StatusFrame.ABS_ENCODER_VELOCITY);
 
-        Motors.Shooter.LEFT_SHOOTER.configure(leftMotor);
-        Motors.Shooter.RIGHT_SHOOTER.configure(rightMotor);
-        Motors.Shooter.FEEDER_MOTOR.configure(feederMotor); 
+        leftMotor.configure(leftConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        rightMotor.configure(rightConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
+        feederMotor.configure(feederConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
 
         leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
         rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());

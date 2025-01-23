@@ -9,12 +9,12 @@ public class Speed extends SequentialCommandGroup {
     
     public Speed() {
         addCommands(
-            SwerveDrive.getInstance().followPathCommand("SPEED A"),
-            SwerveDrive.getInstance().followPathCommand("SPEED B"),
-            SwerveDrive.getInstance().followPathCommand("SPEED A"),
-            SwerveDrive.getInstance().followPathCommand("SPEED B"),
-            SwerveDrive.getInstance().followPathCommand("SPEED A"),
-            SwerveDrive.getInstance().followPathCommand("SPEED B"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED A"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED B"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED A"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED B"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED A"),
+            // SwerveDrive.getInstance().followPathCommand("SPEED B"),
             new VisionEnable()
         );
     }

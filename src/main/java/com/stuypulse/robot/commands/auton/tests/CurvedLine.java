@@ -11,7 +11,7 @@ public class CurvedLine extends SequentialCommandGroup {
     public CurvedLine() {
         addCommands(
             new VisionChangeWhiteList(7, 8),
-            SwerveDrive.getInstance().followPathCommand("Curved Line"),
+            // SwerveDrive.getInstance().followPathCommand("Curved Line"),
             new VisionReloadWhiteList()
         );
     }

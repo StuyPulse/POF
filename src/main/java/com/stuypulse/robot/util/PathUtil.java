@@ -40,10 +40,10 @@ public class PathUtil {
             for (String path : paths) {
                 try {
                     PathPlannerPath.fromPathFile(path);
-                } catch (RuntimeException e) {
+                    
+                } catch (Exception e) {
                     DriverStation.reportError("Path \"" + path + "\" not found. Did you mean \"" + PathUtil.findClosestMatch(PathUtil.getPathFileNames(), path) + "\"?", false);
-
-                    throw e;
+                    System.exit(0);
                 }
             }
         }
@@ -53,32 +53,32 @@ public class PathUtil {
             return this;
         }
 
-        public AutonConfig registerRed(SendableChooser<Command> chooser) {
-            chooser.addOption("Red " + name, auton.apply(loadPathsRed(paths)));
-            return this;
-        }
+        // public AutonConfig registerRed(SendableChooser<Command> chooser) {
+        //     chooser.addOption("Red " + name, auton.apply(loadPathsRed(paths)));
+        //     return this;
+        // }
                 
         public AutonConfig registerDefaultBlue(SendableChooser<Command> chooser) {
             chooser.setDefaultOption("Blue " + name, auton.apply(loadPaths(paths)));
             return this;
         }
 
-        public AutonConfig registerDefaultRed(SendableChooser<Command> chooser) {
-            chooser.setDefaultOption("Red " + name, auton.apply(loadPathsRed(paths)));
-            return this;
-        }
+        // public AutonConfig registerDefaultRed(SendableChooser<Command> chooser) {
+        //     chooser.setDefaultOption("Red " + name, auton.apply(loadPathsRed(paths)));
+        //     return this;
+        // }
 
     }
     
     /*** PATH LOADING ***/
 
-    public static PathPlannerPath[] loadPathsRed(String... names) {
-        PathPlannerPath[] output = new PathPlannerPath[names.length];
-        for (int i = 0; i < names.length; i++) {
-            output[i] = loadRed(names[i]);
-        }
-        return output;
-    }
+    // public static PathPlannerPath[] loadPathsRed(String... names) {
+    //     PathPlannerPath[] output = new PathPlannerPath[names.length];
+    //     for (int i = 0; i < names.length; i++) {
+    //         output[i] = loadRed(names[i]);
+    //     }
+    //     return output;
+    // }
 
     public static PathPlannerPath[] loadPaths(String... names) {
         PathPlannerPath[] output = new PathPlannerPath[names.length];
@@ -89,12 +89,26 @@ public class PathUtil {
     }
 
     public static PathPlannerPath load(String name) {
-        return PathPlannerPath.fromPathFile(name);
+        try {
+            return PathPlannerPath.fromPathFile(name);
+        } catch (Exception e) {
+            DriverStation.reportError("Path \"" + name + "\" not found. Did you mean \"" + PathUtil.findClosestMatch(PathUtil.getPathFileNames(), name) + "\"?", false);
+            System.exit(0);
+            return null;
+        }
+        
     }
     
-    public static PathPlannerPath loadRed(String name) {
-        return flipPath(PathPlannerPath.fromPathFile(name));
-    }
+    // public static PathPlannerPath loadRed(String name) {
+    //     try {
+    //         return flipPath(PathPlannerPath.fromPathFile(name));
+    //     } catch (Exception e) {
+    //         DriverStation.reportError("Path \"" + name + "\" not found. Did you mean \"" + PathUtil.findClosestMatch(PathUtil.getPathFileNames(), name) + "\"?", false);
+    //         System.exit(0);
+    //         return null;
+    //     }
+        
+    // }
     
     
     /*** PATH MIRRORING ***/
@@ -113,33 +127,33 @@ public class PathUtil {
             flipFieldRotation(pose.getRotation()));
     }
 
-    public static PathPoint flipPathPoint(PathPoint point) {
-        return new PathPoint(
-            flipFieldTranslation(point.position), 
-            point.rotationTarget == null ? null : new RotationTarget(
-                point.rotationTarget.getPosition(),
-                flipFieldRotation(point.rotationTarget.getTarget())),
-            point.constraints
-        );
-    }
+    // public static PathPoint flipPathPoint(PathPoint point) {
+        // return new PathPoint(
+        //     flipFieldTranslation(point.position), 
+        //     point.rotationTarget == null ? null : new RotationTarget(
+        //         point.rotationTarget.getPosition(),
+        //         flipFieldRotation(point.rotationTarget.getTarget())),
+        //     point.constraints
+        // );
+    // }
 
-    public static PathPlannerPath flipPath(PathPlannerPath path) {
-        List<PathPoint> newPathPoints = path.getAllPathPoints()
-            .stream().map(PathUtil::flipPathPoint)
-            .collect(Collectors.toList());
+    // public static PathPlannerPath flipPath(PathPlannerPath path) {
+    //     List<PathPoint> newPathPoints = path.getAllPathPoints()
+    //         .stream().map(PathUtil::flipPathPoint)
+    //         .collect(Collectors.toList());
         
-        GoalEndState newEndState =
-            new GoalEndState(
-                path.getGoalEndState().getVelocity(),
-                flipFieldRotation(path.getGoalEndState().getRotation()),
-                path.getGoalEndState().shouldRotateFast());
+    //     GoalEndState newEndState =
+    //         new GoalEndState(
+    //             path.getGoalEndState().getVelocity(),
+    //             flipFieldRotation(path.getGoalEndState().getRotation()),
+    //             path.getGoalEndState().shouldRotateFast());
 
-        return PathPlannerPath.fromPathPoints(
-            newPathPoints,
-            path.getGlobalConstraints(),
-            newEndState
-        );
-    }
+    //     return PathPlannerPath.fromPathPoints(
+    //         newPathPoints,
+    //         path.getGlobalConstraints(),
+    //         newEndState
+    //     );
+    // }
 
     /*** PATH FILENAME CORRECTION ***/
 

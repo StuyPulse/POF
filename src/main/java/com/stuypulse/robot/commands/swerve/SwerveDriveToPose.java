@@ -2,11 +2,11 @@ package com.stuypulse.robot.commands.swerve;
 
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.config.PIDConstants;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings.Alignment;
-import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
-import com.stuypulse.robot.constants.Settings.Alignment.Translation;
+import com.stuypulse.robot.constants.Settings.Alignment.Theta;
+import com.stuypulse.robot.constants.Settings.Alignment.XY;
 import com.stuypulse.robot.constants.Settings.Swerve;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
@@ -77,9 +77,9 @@ public class SwerveDriveToPose extends Command {
         maxSpeed = 4.9;
 
         controller = new HolonomicController(
-            new PIDController(Translation.kP, Translation.kI, Translation.kD),
-            new PIDController(Translation.kP, Translation.kI, Translation.kD),
-            new AnglePIDController(Rotation.kP, Rotation.kI, Rotation.kD));
+            new PIDController(XY.kP, XY.kI, XY.kD),
+            new PIDController(XY.kP, XY.kI, XY.kD),
+            new AnglePIDController(Theta.kP, Theta.kI, Theta.kD));
 
         isAligned = BStream.create(this::isAligned)
             .filtered(new BDebounceRC.Both(Alignment.DEBOUNCE_TIME));
@@ -94,7 +94,7 @@ public class SwerveDriveToPose extends Command {
 
         xTolerance = Alignment.X_TOLERANCE.get();
         yTolerance = Alignment.Y_TOLERANCE.get();
-        thetaTolerance = Alignment.ANGLE_TOLERANCE.get();
+        thetaTolerance = Alignment.THETA_TOLERANCE.get();
         velocityTolerance = 0.15;
 
         addRequirements(swerve);
