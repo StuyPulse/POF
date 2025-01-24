@@ -48,8 +48,8 @@ public class ShooterImpl extends Shooter {
 
     private final BStream hasNote;
 
-    private final SmartNumber leftTargetRPM;
-    private final SmartNumber rightTargetRPM;
+    // private final SmartNumber leftTargetRPM;
+    // private final SmartNumber rightTargetRPM;
 
     protected ShooterImpl() {
         leftMotor = new SparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
@@ -93,8 +93,8 @@ public class ShooterImpl extends Shooter {
         rightMotor.configure(rightConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
         feederMotor.configure(feederConfig, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kPersistParameters);
 
-        leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
-        rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());
+        // leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
+        // rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());
     }
 
     private double getLeftShooterRPM() {
@@ -105,15 +105,19 @@ public class ShooterImpl extends Shooter {
         return rightEncoder.getVelocity();
     }
 
-    @Override
-    public boolean atTargetSpeeds() {
-        return Math.abs(getLeftShooterRPM() - leftTargetRPM.get()) < Settings.Shooter.TARGET_RPM_THRESHOLD 
-            && Math.abs(getRightShooterRPM() - rightTargetRPM.get()) < Settings.Shooter.TARGET_RPM_THRESHOLD;
-    }
+    // @Override
+    // public boolean atTargetSpeeds() {
+    //     return Math.abs(getLeftShooterRPM() - leftTargetRPM.get()) < Settings.Shooter.TARGET_RPM_THRESHOLD 
+    //         && Math.abs(getRightShooterRPM() - rightTargetRPM.get()) < Settings.Shooter.TARGET_RPM_THRESHOLD;
+    // }
 
-    private void setTargetSpeeds(ShooterSpeeds speeds) {
-        this.leftTargetRPM.set(speeds.getLeftRPM());
-        this.rightTargetRPM.set(speeds.getRightRPM());
+    // private void setTargetSpeeds(ShooterSpeeds speeds) {
+    //     this.leftTargetRPM.set(speeds.getLeftRPM());
+    //     this.rightTargetRPM.set(speeds.getRightRPM());
+    // }
+
+    public boolean atTargetSpeeds(){
+        return true;
     }
 
     private void setLeftShooterRPM(double rpm) {
@@ -144,62 +148,62 @@ public class ShooterImpl extends Shooter {
         }
     }
 
-    private void setFlywheelsBasedOnState() {
-        double manualFerryDistance = Units.metersToInches(Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose()));
-        switch (getFlywheelState()) {
-            case SPEAKER:
-                setTargetSpeeds(getSpeakerShotSpeeds());
-                break;
-            case LOW_FERRY:
-                setTargetSpeeds(getLowFerrySpeeds());
-                break;
-            case LOW_FERRY_MANUAL:
-                setTargetSpeeds(new ShooterSpeeds(ShooterLowFerryInterpolation.getRPM(manualFerryDistance)));
-                break;
-            case LOB_FERRY:
-                setTargetSpeeds(getLobFerrySpeeds());
-                break;
-            case LOB_FERRY_MANUAL:
-                setTargetSpeeds(new ShooterSpeeds(ShooterLobFerryInterpolation.getRPM(manualFerryDistance)));
-                break;
-            case STOP:
-                setTargetSpeeds(new ShooterSpeeds());
-                break;
-            default:
-                setTargetSpeeds(new ShooterSpeeds());
-                break;
-        }
+    // private void setFlywheelsBasedOnState() {
+    //     double manualFerryDistance = Units.metersToInches(Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose()));
+    //     switch (getFlywheelState()) {
+    //         case SPEAKER:
+    //             setTargetSpeeds(getSpeakerShotSpeeds());
+    //             break;
+    //         case LOW_FERRY:
+    //             setTargetSpeeds(getLowFerrySpeeds());
+    //             break;
+    //         case LOW_FERRY_MANUAL:
+    //             setTargetSpeeds(new ShooterSpeeds(ShooterLowFerryInterpolation.getRPM(manualFerryDistance)));
+    //             break;
+    //         case LOB_FERRY:
+    //             setTargetSpeeds(getLobFerrySpeeds());
+    //             break;
+    //         case LOB_FERRY_MANUAL:
+    //             setTargetSpeeds(new ShooterSpeeds(ShooterLobFerryInterpolation.getRPM(manualFerryDistance)));
+    //             break;
+    //         case STOP:
+    //             setTargetSpeeds(new ShooterSpeeds());
+    //             break;
+    //         default:
+    //             setTargetSpeeds(new ShooterSpeeds());
+    //             break;
+    //     }
 
-        if (leftTargetRPM.get() == 0) {
-            leftMotor.set(0);
-        }
-        else {
-            setLeftShooterRPM(leftTargetRPM.get());
-        }
+    //     if (leftTargetRPM.get() == 0) {
+    //         leftMotor.set(0);
+    //     }
+    //     else {
+    //         setLeftShooterRPM(leftTargetRPM.get());
+    //     }
 
-        if (rightTargetRPM.get() == 0) {
-            rightMotor.set(0);
-        }
-        else {
-            setRightShooterRPM(rightTargetRPM.get());
-        }
-    }
+    //     if (rightTargetRPM.get() == 0) {
+    //         rightMotor.set(0);
+    //     }
+    //     else {
+    //         setRightShooterRPM(rightTargetRPM.get());
+    //     }
+    // }
 
-    private ShooterSpeeds getSpeakerShotSpeeds() {
-        Pose2d speakerPose = Field.getAllianceSpeakerPose();
-        Pose2d robotPose = SwerveDrive.getInstance().getPose();
-        double distanceToSpeaker = robotPose.minus(speakerPose).getTranslation().getNorm() - Settings.LENGTH / 2;
-        // return new ShooterSpeeds(
-        //     4000 + SLMath.clamp(distanceToSpeaker - 1.5, 0, Double.MAX_VALUE) * 600,
-        //     500
-        // );
-        if (distanceToSpeaker <= 1.5) {
-            return new ShooterSpeeds(4000, 500);
-        }
-        else {
-            return new ShooterSpeeds(5500, 500);
-        }
-    }
+    // private ShooterSpeeds getSpeakerShotSpeeds() {
+    //     Pose2d speakerPose = Field.getAllianceSpeakerPose();
+    //     Pose2d robotPose = SwerveDrive.getInstance().getPose();
+    //     double distanceToSpeaker = robotPose.minus(speakerPose).getTranslation().getNorm() - Settings.LENGTH / 2;
+    //     // return new ShooterSpeeds(
+    //     //     4000 + SLMath.clamp(distanceToSpeaker - 1.5, 0, Double.MAX_VALUE) * 600,
+    //     //     500
+    //     // );
+    //     if (distanceToSpeaker <= 1.5) {
+    //         return new ShooterSpeeds(4000, 500);
+    //     }
+    //     else {
+    //         return new ShooterSpeeds(5500, 500);
+    //     }
+    // }
 
     @Override
     public boolean hasNote() {
@@ -233,7 +237,7 @@ public class ShooterImpl extends Shooter {
         super.periodic();
 
         setFeederBasedOnState();
-        setFlywheelsBasedOnState();
+        // setFlywheelsBasedOnState();
 
         SmartDashboard.putNumber("Shooter/Feeder Speed", feederMotor.get());
 

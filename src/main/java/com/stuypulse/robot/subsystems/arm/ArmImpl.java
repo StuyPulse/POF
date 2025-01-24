@@ -102,9 +102,9 @@ public class ArmImpl extends Arm {
                 return Settings.Arm.AMP_ANGLE.get();
             case SUBWOOFER_SHOT:
                 return Settings.Arm.SUBWOOFER_SHOT_ANGLE.get();
-            case SPEAKER:
-                // return getSpeakerAngle();
-                return getSpeakerAngleElin();
+            // case SPEAKER:
+            //     // return getSpeakerAngle();
+            //     return getSpeakerAngleElin();
             case LOW_FERRY:
                 return Settings.Arm.LOW_FERRY_ANGLE.get();
             case LOW_FERRY_MANUAL:
@@ -126,108 +126,108 @@ public class ArmImpl extends Arm {
         }
     }
 
-    private double getSpeakerAngleElin() {
-        try {
-            Pose2d speakerPose = Field.getAllianceSpeakerPose().transformBy(new Transform2d(Field.SPEAKER_OPENING_X - Units.inchesToMeters(1.5), 0, new Rotation2d()));
-            Pose2d robotPose = SwerveDrive.getInstance().getPose();
+    // private double getSpeakerAngleElin() {
+    //     try {
+    //         Pose2d speakerPose = Field.getAllianceSpeakerPose().transformBy(new Transform2d(Field.SPEAKER_OPENING_X - Units.inchesToMeters(1.5), 0, new Rotation2d()));
+    //         Pose2d robotPose = SwerveDrive.getInstance().getPose();
 
-            double angleFromSpeakerToRobot = Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX())));
+    //         double angleFromSpeakerToRobot = Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX())));
 
-            // aim at the side of the speaker if youre on the side
-            // if (angleFromSpeakerToRobot > 30) {
-            //     speakerPose = speakerPose.transformBy(new Transform2d(0, Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
-            // }
-            // if (angleFromSpeakerToRobot < 30) {
-            //     speakerPose = speakerPose.transformBy(new Transform2d(0, -Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
-            // }
+    //         // aim at the side of the speaker if youre on the side
+    //         // if (angleFromSpeakerToRobot > 30) {
+    //         //     speakerPose = speakerPose.transformBy(new Transform2d(0, Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+    //         // }
+    //         // if (angleFromSpeakerToRobot < 30) {
+    //         //     speakerPose = speakerPose.transformBy(new Transform2d(0, -Field.SPEAKER_OPENING_WIDTH / 2, new Rotation2d()));
+    //         // }
 
-            double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.LENGTH / 2);
+    //         double distanceToSpeaker = Units.metersToInches(SwerveDrive.getInstance().getPose().minus(speakerPose).getTranslation().getNorm()) - Units.metersToInches(Settings.LENGTH / 2);
 
-            double targetAngle = SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
+    //         double targetAngle = SpeakerAngleElinInterpolation.getAngleInDegrees(distanceToSpeaker);
 
-            if (distanceToSpeaker > 120) {
-                targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.25);
-            }
+    //         if (distanceToSpeaker > 120) {
+    //             targetAngle += (distanceToSpeaker - 120) * (1.34 / 80) * (1.25);
+    //         }
 
-            SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
-            SmartDashboard.putNumber("Angle to speaker", angleFromSpeakerToRobot);
+    //         SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
+    //         SmartDashboard.putNumber("Angle to speaker", angleFromSpeakerToRobot);
 
-            // if the robot is more than 30 degrees off to the side from the perspective of the speaker
-            // this is intended to help with shooting from the sides
-            if (Math.abs(angleFromSpeakerToRobot) > 30) {
-                targetAngle += 2;
-            }
-            return targetAngle;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return Settings.Arm.SUBWOOFER_SHOT_ANGLE.get();
-        }
-    }
+    //         // if the robot is more than 30 degrees off to the side from the perspective of the speaker
+    //         // this is intended to help with shooting from the sides
+    //         if (Math.abs(angleFromSpeakerToRobot) > 30) {
+    //             targetAngle += 2;
+    //         }
+    //         return targetAngle;
+    //     }
+    //     catch (Exception e) {
+    //         e.printStackTrace();
+    //         return Settings.Arm.SUBWOOFER_SHOT_ANGLE.get();
+    //     }
+    // }
 
-    private double getSpeakerAngle() {
-        try {
-            Pose3d speakerPose = new Pose3d(
-                Field.getAllianceSpeakerPose().getX(),
-                Field.getAllianceSpeakerPose().getY(),
-                Field.SPEAKER_MAX_HEIGHT + 0.1,
-                new Rotation3d()
-            );
+    // private double getSpeakerAngle() {
+    //     try {
+    //         Pose3d speakerPose = new Pose3d(
+    //             Field.getAllianceSpeakerPose().getX(),
+    //             Field.getAllianceSpeakerPose().getY(),
+    //             Field.SPEAKER_MAX_HEIGHT + 0.1,
+    //             new Rotation3d()
+    //         );
 
-            Pose2d robotPose = SwerveDrive.getInstance().getPose();
+    //         Pose2d robotPose = SwerveDrive.getInstance().getPose();
 
-            Pose3d armPivotPose = new Pose3d(
-                robotPose.getX() + Settings.DISTANCE_FROM_TOWER_TO_CENTER_OF_ROBOT * robotPose.getRotation().getCos(),
-                robotPose.getY() + Settings.DISTANCE_FROM_TOWER_TO_CENTER_OF_ROBOT * robotPose.getRotation().getSin(),
-                Settings.HEIGHT_TO_ARM_PIVOT,
-                new Rotation3d()
-            );
+    //         Pose3d armPivotPose = new Pose3d(
+    //             robotPose.getX() + Settings.DISTANCE_FROM_TOWER_TO_CENTER_OF_ROBOT * robotPose.getRotation().getCos(),
+    //             robotPose.getY() + Settings.DISTANCE_FROM_TOWER_TO_CENTER_OF_ROBOT * robotPose.getRotation().getSin(),
+    //             Settings.HEIGHT_TO_ARM_PIVOT,
+    //             new Rotation3d()
+    //         );
 
-            Translation3d pivotToSpeaker = speakerPose.minus(armPivotPose).getTranslation();
+    //         Translation3d pivotToSpeaker = speakerPose.minus(armPivotPose).getTranslation();
 
-            double angleFromPivotToSpeaker = Units.radiansToDegrees(
-                Math.atan(
-                    pivotToSpeaker.getZ()
-                    / pivotToSpeaker.toTranslation2d().getNorm()
-                )
-            );
+    //         double angleFromPivotToSpeaker = Units.radiansToDegrees(
+    //             Math.atan(
+    //                 pivotToSpeaker.getZ()
+    //                 / pivotToSpeaker.toTranslation2d().getNorm()
+    //             )
+    //         );
 
-            double angleBetweenPivotToSpeakerAndArm = Units.radiansToDegrees(Math.acos(Settings.Arm.LENGTH / pivotToSpeaker.getNorm()));
+    //         double angleBetweenPivotToSpeakerAndArm = Units.radiansToDegrees(Math.acos(Settings.Arm.LENGTH / pivotToSpeaker.getNorm()));
 
-            double distanceToSpeaker = speakerPose.toPose2d().minus(robotPose).getTranslation().getNorm();
+    //         double distanceToSpeaker = speakerPose.toPose2d().minus(robotPose).getTranslation().getNorm();
 
-            double targetAngle = -(angleBetweenPivotToSpeakerAndArm - angleFromPivotToSpeaker);
+    //         double targetAngle = -(angleBetweenPivotToSpeakerAndArm - angleFromPivotToSpeaker);
 
-            if (distanceToSpeaker < 2.0) {
-                targetAngle += 8.0;
-            }
-            // else if (distanceToSpeaker > 3.0) {
-            //     targetAngle -= 3.0;
-            // }
-            // else if (distanceToSpeaker > 3.5) {
-            //     targetAngle -= 3.7;
-            // }
-            // else if (distanceToSpeaker > 4.0) {
-            //     targetAngle -= 4.0;
-            // }
+    //         if (distanceToSpeaker < 2.0) {
+    //             targetAngle += 8.0;
+    //         }
+    //         // else if (distanceToSpeaker > 3.0) {
+    //         //     targetAngle -= 3.0;
+    //         // }
+    //         // else if (distanceToSpeaker > 3.5) {
+    //         //     targetAngle -= 3.7;
+    //         // }
+    //         // else if (distanceToSpeaker > 4.0) {
+    //         //     targetAngle -= 4.0;
+    //         // }
 
-            // double angleFromSpeakerBaseToRobot = Math.abs(Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX()))));
-            // SmartDashboard.putNumber("Angle to speaker base", angleFromSpeakerBaseToRobot);
+    //         // double angleFromSpeakerBaseToRobot = Math.abs(Units.radiansToDegrees(Math.atan((speakerPose.getY() - robotPose.getY())/(speakerPose.getX() - robotPose.getX()))));
+    //         // SmartDashboard.putNumber("Angle to speaker base", angleFromSpeakerBaseToRobot);
 
-            // // if the robot is more than 30 degrees off to the side from the perspective of the speaker
-            // // this is intended to help with shooting from the sides
-            // if (angleFromSpeakerBaseToRobot > 30) {
-            //     targetAngle += 2;
-            // }
+    //         // // if the robot is more than 30 degrees off to the side from the perspective of the speaker
+    //         // // this is intended to help with shooting from the sides
+    //         // if (angleFromSpeakerBaseToRobot > 30) {
+    //         //     targetAngle += 2;
+    //         // }
 
-            // SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
-            return targetAngle + 2;
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            return Settings.Arm.SUBWOOFER_SHOT_ANGLE.get();
-        }
-    }
+    //         // SmartDashboard.putNumber("Distance to speaker", distanceToSpeaker);
+    //         return targetAngle + 2;
+    //     }
+    //     catch (Exception exception) {
+    //         exception.printStackTrace();
+    //         return Settings.Arm.SUBWOOFER_SHOT_ANGLE.get();
+    //     }
+    // }
 
     // private double getNoteHeightAtSpeakerGivenArmAngle(double armAngle) {
     //     Pose2d robotPose = SwerveDrive.getInstance().getPose();

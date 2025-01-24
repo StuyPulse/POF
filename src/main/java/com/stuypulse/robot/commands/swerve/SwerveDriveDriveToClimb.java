@@ -54,59 +54,59 @@ public class SwerveDriveDriveToClimb extends Command {
             new AnglePIDController(Theta.kP, Theta.kI, Theta.kD));
     }
     
-    private Pose2d getTargetPose() {
-        Pose2d closestTrap = Field.getClosestAllianceTrapPose(swerve.getPose());
-        Translation2d offsetTranslation = new Translation2d(distance, closestTrap.getRotation());
+    // private Pose2d getTargetPose() {
+    //     Pose2d closestTrap = Field.getClosestAllianceTrapPose(swerve.getPose());
+    //     Translation2d offsetTranslation = new Translation2d(distance, closestTrap.getRotation());
         
-        return new Pose2d(closestTrap.getTranslation().plus(offsetTranslation), closestTrap.getRotation());
-    }
+    //     return new Pose2d(closestTrap.getTranslation().plus(offsetTranslation), closestTrap.getRotation());
+    // }
 
-    private boolean shouldSlow() {
-        double toTarget = getTargetPose()
-            .getTranslation()
-            .minus(swerve.getPose().getTranslation())
-            .getNorm();
+    // private boolean shouldSlow() {
+    //     double toTarget = getTargetPose()
+    //         .getTranslation()
+    //         .minus(swerve.getPose().getTranslation())
+    //         .getNorm();
 
-        return toTarget < Units.inchesToMeters(14.0);
-    }
+    //     return toTarget < Units.inchesToMeters(14.0);
+    // }
     
-    @Override
-    public void initialize() {
-        targetPose = getTargetPose();
-    }
+    // @Override
+    // public void initialize() {
+    //     targetPose = getTargetPose();
+    // }
     
-    @Override
-    public void execute() {
-        targetPose2d.setPose(targetPose);
-        controller.update(targetPose, swerve.getPose());
+    // @Override
+    // public void execute() {
+    //     targetPose2d.setPose(targetPose);
+    //     controller.update(targetPose, swerve.getPose());
         
-        double rotation = SLMath.clamp(controller.getOutput().omegaRadiansPerSecond, Motion.MAX_ANGULAR_VELOCITY.get());
-        if (Math.abs(rotation) < Alignment.Theta.ALIGN_OMEGA_DEADBAND.get())
-            rotation = 0;
+    //     double rotation = SLMath.clamp(controller.getOutput().omegaRadiansPerSecond, Motion.MAX_ANGULAR_VELOCITY.get());
+    //     if (Math.abs(rotation) < Alignment.Theta.ALIGN_OMEGA_DEADBAND.get())
+    //         rotation = 0;
         
-        Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)
-            .clamp(2.0);
+    //     Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)
+    //         .clamp(2.0);
         
-        if (shouldSlow())
-            speed = speed.clamp(0.3);
+    //     if (shouldSlow())
+    //         speed = speed.clamp(0.3);
         
-        SmartDashboard.putNumber("Alignment/Translation Target Speed", speed.distance());
+    //     SmartDashboard.putNumber("Alignment/Translation Target Speed", speed.distance());
 
-        swerve.setControl(drive.withVelocityX(speed.x)
-                .withVelocityY(speed.y)
-                .withRotationalRate(rotation)         
-            );
-    }
+    //     swerve.setControl(drive.withVelocityX(speed.x)
+    //             .withVelocityY(speed.y)
+    //             .withRotationalRate(rotation)         
+    //         );
+    // }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+    // @Override
+    // public boolean isFinished() {
+    //     return false;
+    // }
     
-    @Override
-    public void end(boolean interrupted) {
-        Field.clearFieldObject(targetPose2d);
-    }
+    // @Override
+    // public void end(boolean interrupted) {
+    //     Field.clearFieldObject(targetPose2d);
+    // }
 }
 
 

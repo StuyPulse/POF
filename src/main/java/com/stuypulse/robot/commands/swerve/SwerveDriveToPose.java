@@ -31,21 +31,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveToPose extends Command {
     
-     public static SwerveDriveToPose speakerRelative(double angleToSpeaker, double distanceToSpeaker) {
-        MirrorRotation2d angle = MirrorRotation2d.fromBlue(
-            Rotation2d.fromDegrees(SLMath.clamp(
-                angleToSpeaker, 80)));
+//      public static SwerveDriveToPose speakerRelative(double angleToSpeaker, double distanceToSpeaker) {
+//         MirrorRotation2d angle = MirrorRotation2d.fromBlue(
+//             Rotation2d.fromDegrees(SLMath.clamp(
+//                 angleToSpeaker, 80)));
 
-        double distance = SLMath.clamp(distanceToSpeaker, 1, 5);
+//         double distance = SLMath.clamp(distanceToSpeaker, 1, 5);
 
-        return new SwerveDriveToPose(() -> {
-            return new Pose2d(
-                Field.getAllianceSpeakerPose().getTranslation()
-                    .plus(new Translation2d(distance, angle.get())),
-                angle.get());
-            }
-        );
-    }
+//         return new SwerveDriveToPose(() -> {
+//             return new Pose2d(
+//                 Field.getAllianceSpeakerPose().getTranslation()
+//                     .plus(new Translation2d(distance, angle.get())),
+//                 angle.get());
+//             }
+//         );
+//     }
 
     private final SwerveDrive swerve;
 

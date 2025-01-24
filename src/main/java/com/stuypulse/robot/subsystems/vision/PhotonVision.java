@@ -49,7 +49,7 @@ public class PhotonVision extends AprilTagVision {
         poseEstimators = new PhotonPoseEstimator[Cameras.APRILTAG_CAMERAS.length];
         for (int i = 0; i < Cameras.APRILTAG_CAMERAS.length; i++) {
             poseEstimators[i] = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo), 
+                AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape), 
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
                 Cameras.APRILTAG_CAMERAS[i].getLocation().minus(new Pose3d())
                 );

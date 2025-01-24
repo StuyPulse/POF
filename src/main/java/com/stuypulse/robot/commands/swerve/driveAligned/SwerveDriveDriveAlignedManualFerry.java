@@ -5,19 +5,19 @@ import com.stuypulse.stuylib.input.Gamepad;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 
-public class SwerveDriveDriveAlignedManualFerry extends SwerveDriveDriveAligned {
+// public class SwerveDriveDriveAlignedManualFerry extends SwerveDriveDriveAligned {
 
-    public SwerveDriveDriveAlignedManualFerry(Gamepad driver) {
-        super(driver);
-    }
+//     public SwerveDriveDriveAlignedManualFerry(Gamepad driver) {
+//         super(driver);
+//     }
 
-    @Override
-    protected Rotation2d getTargetAngle() {
-        return Field.getManualFerryPosition().minus(Field.getAmpCornerPose()).getAngle();
-    }
+//     @Override
+//     protected Rotation2d getTargetAngle() {
+//         return Field.getManualFerryPosition().minus(Field.getAmpCornerPose()).getAngle();
+//     }
 
-    @Override
-    protected double getDistanceToTarget() {
-        return Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose());
-    }
-}
+//     @Override
+//     protected double getDistanceToTarget() {
+//         return Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose());
+//     }
+// }

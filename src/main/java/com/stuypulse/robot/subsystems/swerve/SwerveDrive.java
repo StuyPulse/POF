@@ -232,23 +232,23 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
         }
     }
 
-    public boolean isAlignedToSpeaker() {
-        Translation2d currentPose = SwerveDrive.getInstance().getPose().getTranslation();
-        Translation2d speakerPose = Field.getAllianceSpeakerPose().getTranslation();
-        // Rotate by 180 because the shooter is on the back of the robot
-        Rotation2d targetAngle = speakerPose.minus(currentPose).getAngle().rotateBy(Rotation2d.fromDegrees(180));
-        return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.THETA_TOLERANCE.get();
-    }
+    // public boolean isAlignedToSpeaker() {
+    //     Translation2d currentPose = SwerveDrive.getInstance().getPose().getTranslation();
+    //     Translation2d speakerPose = Field.getAllianceSpeakerPose().getTranslation();
+    //     // Rotate by 180 because the shooter is on the back of the robot
+    //     Rotation2d targetAngle = speakerPose.minus(currentPose).getAngle().rotateBy(Rotation2d.fromDegrees(180));
+    //     return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.THETA_TOLERANCE.get();
+    // }
 
     public boolean isAlignedToFerry() {
         Rotation2d targetAngle = getPose().getTranslation().minus(Field.getAmpCornerPose()).getAngle();
         return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.THETA_TOLERANCE.get();
     }
 
-    public boolean isAlignedToManualFerry() {
-        Rotation2d targetAngle = Field.getManualFerryPosition().minus(Field.getAmpCornerPose()).getAngle();
-        return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.THETA_TOLERANCE.get();
-    }
+    // public boolean isAlignedToManualFerry() {
+    //     Rotation2d targetAngle = Field.getManualFerryPosition().minus(Field.getAmpCornerPose()).getAngle();
+    //     return Math.abs(getPose().getRotation().minus(targetAngle).getDegrees()) < Settings.Alignment.THETA_TOLERANCE.get();
+    // }
 
     private void updateEstimatorWithVisionData(ArrayList<VisionData> outputs) {
         Pose2d poseSum = new Pose2d();

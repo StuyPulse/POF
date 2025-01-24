@@ -1,55 +1,25 @@
 {
-  "HALProvider": {
-    "Addressable LEDs": {
-      "0": {
-        "serpentine": true
-      }
-    },
-    "Other Devices": {
-      "window": {
-        "visible": false
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Pose": "Field2d",
+      "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Module 0": "Mechanism2d",
       "/SmartDashboard/Module 1": "Mechanism2d",
       "/SmartDashboard/Module 2": "Mechanism2d",
-      "/SmartDashboard/Module 3": "Mechanism2d",
-      "/SmartDashboard/Scheduler": "Scheduler"
+      "/SmartDashboard/Module 3": "Mechanism2d"
     },
     "windows": {
-      "/Pose": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "robotPose": {
-          "width": 0.8679999709129333
-        },
-        "top": 79,
-        "width": 16.541748046875,
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Autonomous": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "width": 16.541748046875,
+        "bottom": 1638,
+        "builtin": "2025 Reefscape",
+        "height": 8.051901817321777,
+        "left": 534,
+        "right": 3466,
+        "top": 291,
+        "width": 17.54825210571289,
         "window": {
           "visible": true
         }
@@ -57,48 +27,16 @@
     }
   },
   "NetworkTables": {
-    "retained": {
-      "SmartDashboard": {
-        "Autonomous": {
-          "open": true
-        },
-        "open": true
-      }
-    },
     "transitory": {
-      "Pose": {
-        "open": true
-      },
       "SmartDashboard": {
-        "Alignment": {
+        "open": true,
+        "testing": {
           "open": true
-        },
-        "Arm": {
-          "open": true
-        },
-        "Autonomous": {
-          "open": true
-        },
-        "open": true
+        }
       }
     }
   },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
-    "DartClient_68954872@1": {
-      "open": true
-    },
-    "Server": {
-      "Publishers": {
-        "open": true
-      },
-      "open": true
-    },
     "visible": true
   }
 }
