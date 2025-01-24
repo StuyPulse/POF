@@ -62,12 +62,6 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
 
     private static final SwerveDrive instance;
 
-    private static final LegacySwerveModuleConstants[] modules = {
-        SwerveDriveConstants.FrontLeft,
-        SwerveDriveConstants.FrontRight,
-        SwerveDriveConstants.BackLeft,
-        SwerveDriveConstants.BackRight
-    };
     static {
         instance = new SwerveDrive(
             SwerveDriveConstants.DrivetrainConstants,
@@ -91,8 +85,9 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
+    private LegacySwerveRequest.ApplyChassisSpeeds drive = new LegacySwerveRequest.ApplyChassisSpeeds();
 
+    
     protected SwerveDrive(LegacySwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, LegacySwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         if (Utils.isSimulation()) {
@@ -110,8 +105,6 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
         field = new Field2d();
         initFieldObject();
         SmartDashboard.putData("Field", field);
-
-        configureAutoBuilder();
     }
 
     /*** PATH FOLLOWING ***/
@@ -203,7 +196,7 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
             pose);
     }
 
-   public void configureAutoBuilder() {
+   /* public void configureAutoBuilder() {
         try{
             AutoBuilder.configure(
                 SwerveDrive.getInstance()::getPose,
@@ -223,7 +216,7 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void initFieldObject() {
         String[] ids = {"Front Left", "Front Right", "Back Left", "Back Right"};

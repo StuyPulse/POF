@@ -62,7 +62,6 @@ import com.stuypulse.robot.subsystems.shooter.Shooter;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.swerve.Telemetry;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
-import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -86,12 +85,14 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
     
     // Subsystem
+
+
+    public final SwerveDrive swerve = SwerveDrive.getInstance();
     public final AprilTagVision vision = AprilTagVision.getInstance();
     
     public final Intake intake = Intake.getInstance();
-    public final Shooter shooter = Shooter.getInstance();
+    // public final Shooter shooter = Shooter.getInstance();
     public final Arm arm = Arm.getInstance();
-    public final SwerveDrive swerve = SwerveDrive.getInstance();
 
     public final LEDController leds = LEDController.getInstance();
 
@@ -112,6 +113,7 @@ public class RobotContainer {
             swerve.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
         }
         swerve.registerTelemetry(logger::telemeterize);
+        //swerve.configureAutoBuilder();
 
         LiveWindow.disableAllTelemetry();
 
@@ -303,7 +305,7 @@ public class RobotContainer {
             delayChooser.addOption(i + " Seconds", i);
         }
         
-        
+        /* 
         // Mobility
         AutonConfig MOBILITY_BLUE = new AutonConfig("Mobility", Mobility::new, "Mobility");
         AutonConfig MOBILITY_RED = new AutonConfig("Mobility", Mobility::new, "Mobility");
@@ -430,7 +432,7 @@ public class RobotContainer {
         //Reroute_Test_Blue.registerBlue(autonChooser);
         //Reroute_Test_Red.registerRed(autonChooser);
 
-        SmartDashboard.putData("Autonomous", autonChooser);
+        SmartDashboard.putData("Autonomous", autonChooser); */
     }
 
     public Command getAutonomousCommand() {
