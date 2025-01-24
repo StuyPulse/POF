@@ -91,7 +91,7 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
+    private LegacySwerveRequest.ApplyChassisSpeeds drive = new LegacySwerveRequest.ApplyChassisSpeeds();
 
     protected SwerveDrive(LegacySwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, LegacySwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
