@@ -5,11 +5,11 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
+import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
+import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
 
@@ -41,7 +41,7 @@ public class SwerveDriveConstants {
     private static final Pigeon2Configuration pigeonConfigs = null;
 
     public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-            .withCANbusName(Settings.Swerve.CAN_BUS_NAME)
+            .withCANBusName(Settings.Swerve.CAN_BUS_NAME)
             .withPigeon2Id(Ports.Gyro.PIGEON2)
             .withPigeon2Configs(pigeonConfigs);
 
@@ -54,7 +54,7 @@ public class SwerveDriveConstants {
             .withDriveMotorGains(driveGains)
             .withSteerMotorClosedLoopOutput(ClosedLoopOutputType.Voltage)
             .withDriveMotorClosedLoopOutput(ClosedLoopOutputType.Voltage)
-            .withSpeedAt12VoltsMps(Settings.Swerve.SPEED_AT_12_VOLTS)
+            .withSpeedAt12Volts(Settings.Swerve.SPEED_AT_12_VOLTS)
             .withSteerInertia(Settings.Swerve.Simulation.TURN_INERTIA)
             .withDriveInertia(Settings.Swerve.Simulation.DRIVE_INERTIA)
             .withSteerFrictionVoltage(Settings.Swerve.Simulation.TURN_FRICTION_VOLTAGE)
@@ -62,8 +62,8 @@ public class SwerveDriveConstants {
             .withFeedbackSource(SteerFeedbackType.FusedCANcoder)
             .withCouplingGearRatio(3.5714285714285716)
             .withDriveMotorInitialConfigs(driveInitialConfigs)
-            .withSteerMotorInitialConfigs(steerInitialConfigs)
-            .withCANcoderInitialConfigs(cancoderInitialConfigs);
+            .withSteerMotorInitialConfigs(steerInitialConfigs);
+            // .withCANcoderInitialConfigs(cancoderInitialConfigs);
 
     public static final SwerveModuleConstants FrontLeft = ConstantCreator.createModuleConstants(
         Ports.Swerve.FrontLeft.TURN, 
@@ -72,8 +72,10 @@ public class SwerveDriveConstants {
         Settings.Swerve.FrontLeft.ABSOLUTE_OFFSET.getRotations(), 
         Settings.Swerve.FrontLeft.MODULE_OFFSET.getX(), 
         Settings.Swerve.FrontLeft.MODULE_OFFSET.getY(), 
-        Settings.Swerve.FrontLeft.DRIVE_INVERTED)
-        .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
+        Settings.Swerve.FrontLeft.DRIVE_INVERTED,
+        Settings.Swerve.Turn.INVERTED,
+        false
+    );
     public static final SwerveModuleConstants FrontRight = ConstantCreator.createModuleConstants(
         Ports.Swerve.FrontRight.TURN, 
         Ports.Swerve.FrontRight.DRIVE, 
@@ -81,8 +83,10 @@ public class SwerveDriveConstants {
         Settings.Swerve.FrontRight.ABSOLUTE_OFFSET.getRotations(), 
         Settings.Swerve.FrontRight.MODULE_OFFSET.getX(), 
         Settings.Swerve.FrontRight.MODULE_OFFSET.getY(), 
-        Settings.Swerve.FrontRight.DRIVE_INVERTED)
-        .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
+        Settings.Swerve.FrontRight.DRIVE_INVERTED,
+        Settings.Swerve.Turn.INVERTED,
+        false
+    );
     public static final SwerveModuleConstants BackLeft = ConstantCreator.createModuleConstants(
         Ports.Swerve.BackLeft.TURN, 
         Ports.Swerve.BackLeft.DRIVE, 
@@ -90,8 +94,10 @@ public class SwerveDriveConstants {
         Settings.Swerve.BackLeft.ABSOLUTE_OFFSET.getRotations(), 
         Settings.Swerve.BackLeft.MODULE_OFFSET.getX(), 
         Settings.Swerve.BackLeft.MODULE_OFFSET.getY(), 
-        Settings.Swerve.BackLeft.DRIVE_INVERTED)
-        .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
+        Settings.Swerve.BackLeft.DRIVE_INVERTED,
+        Settings.Swerve.Turn.INVERTED,
+        false
+    );
     public static final SwerveModuleConstants BackRight = ConstantCreator.createModuleConstants(
         Ports.Swerve.BackRight.TURN, 
         Ports.Swerve.BackRight.DRIVE, 
@@ -99,8 +105,10 @@ public class SwerveDriveConstants {
         Settings.Swerve.BackRight.ABSOLUTE_OFFSET.getRotations(), 
         Settings.Swerve.BackRight.MODULE_OFFSET.getX(), 
         Settings.Swerve.BackRight.MODULE_OFFSET.getY(), 
-        Settings.Swerve.BackRight.DRIVE_INVERTED)
-        .withSteerMotorInverted(Settings.Swerve.Turn.INVERTED);
+        Settings.Swerve.BackRight.DRIVE_INVERTED,
+        Settings.Swerve.Turn.INVERTED,
+        false
+    );
 
     public static final double UpdateOdometryFrequency = 50 /* hz */;
 }

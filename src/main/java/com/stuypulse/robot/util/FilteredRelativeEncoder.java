@@ -1,22 +1,22 @@
 package com.stuypulse.robot.util;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkMax;
 
 public class FilteredRelativeEncoder implements RelativeEncoder {
 
     private final RelativeEncoder encoder;
 
-    private final CANSparkBase motor;
+    private final SparkMax motor;
 
     private double lastValidPosition, lastValidVelocity;
 
-    public FilteredRelativeEncoder(CANSparkBase motor) {
+    public FilteredRelativeEncoder(SparkMax motor) {
         this(motor, motor.getEncoder());
     }
     
-    public FilteredRelativeEncoder(CANSparkBase motor, RelativeEncoder encoder) {
+    public FilteredRelativeEncoder(SparkMax motor, RelativeEncoder encoder) {
         this.encoder = encoder;
         this.motor = motor;
         this.lastValidPosition = 0.0;

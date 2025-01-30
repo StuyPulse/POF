@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.json.simple.parser.ParseException;
+
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
 import com.pathplanner.lib.path.RotationTarget;
+import com.pathplanner.lib.util.FileVersionException;
 import com.stuypulse.robot.constants.Field;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -40,10 +43,8 @@ public class PathUtil {
             for (String path : paths) {
                 try {
                     PathPlannerPath.fromPathFile(path);
-                } catch (RuntimeException e) {
+                } catch (Exception e) {
                     DriverStation.reportError("Path \"" + path + "\" not found. Did you mean \"" + PathUtil.findClosestMatch(PathUtil.getPathFileNames(), path) + "\"?", false);
-
-                    throw e;
                 }
             }
         }
@@ -88,11 +89,11 @@ public class PathUtil {
         return output;
     }
 
-    public static PathPlannerPath load(String name) {
+    public static PathPlannerPath load(String name) throws FileVersionException, IOException, ParseException {
         return PathPlannerPath.fromPathFile(name);
     }
     
-    public static PathPlannerPath loadRed(String name) {
+    public static PathPlannerPath loadRed(String name) throws FileVersionException, IOException, ParseException {
         return flipPath(PathPlannerPath.fromPathFile(name));
     }
     
@@ -130,9 +131,9 @@ public class PathUtil {
         
         GoalEndState newEndState =
             new GoalEndState(
-                path.getGoalEndState().getVelocity(),
-                flipFieldRotation(path.getGoalEndState().getRotation()),
-                path.getGoalEndState().shouldRotateFast());
+                path.getGoalEndState().velocity(),
+                flipFieldRotation(path.getGoalEndState().rotation())
+            );
 
         return PathPlannerPath.fromPathPoints(
             newPathPoints,
