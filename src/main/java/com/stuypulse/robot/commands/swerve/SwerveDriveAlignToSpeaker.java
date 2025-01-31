@@ -1,7 +1,7 @@
 package com.stuypulse.robot.commands.swerve;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Alignment;
@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class SwerveDriveAlignToSpeaker extends Command {
 
     private final SwerveDrive swerve;
-    private final SwerveRequest.FieldCentric drive;
+    private final LegacySwerveRequest.FieldCentric drive;
 
     private final AngleController controller;
     private final IStream angleVelocity;
@@ -32,7 +32,7 @@ public class SwerveDriveAlignToSpeaker extends Command {
     public SwerveDriveAlignToSpeaker() {
         swerve = SwerveDrive.getInstance();
         
-        drive = new SwerveRequest.FieldCentric()
+        drive = new LegacySwerveRequest.FieldCentric()
             .withDeadband(Settings.Swerve.MAX_LINEAR_VELOCITY * Settings.Driver.Drive.DEADBAND.get())
             .withRotationalDeadband(Settings.Swerve.MAX_ANGULAR_VELOCITY * Settings.Driver.Turn.DEADBAND.get())
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 

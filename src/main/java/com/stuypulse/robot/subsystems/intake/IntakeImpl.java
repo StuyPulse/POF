@@ -1,7 +1,9 @@
 package com.stuypulse.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.stuylib.streams.booleans.BStream;
@@ -15,9 +17,9 @@ import com.stuypulse.robot.constants.Ports;
 
 public class IntakeImpl extends Intake {
 
-    private final CANSparkMax funnelMotorLeft;
-    private final CANSparkMax funnelMotorRight;
-    private final CANSparkMax intakeMotor;
+    private final SparkMax funnelMotorLeft;
+    private final SparkMax funnelMotorRight;
+    private final SparkMax intakeMotor;
 
     private final DigitalInput IRSensor;
 
@@ -25,13 +27,14 @@ public class IntakeImpl extends Intake {
 
     public IntakeImpl() {
         super();
-        funnelMotorLeft = new CANSparkMax(Ports.Intake.FUNNEL_LEFT, MotorType.kBrushless);
-        funnelMotorRight = new CANSparkMax(Ports.Intake.FUNNEL_RIGHT, MotorType.kBrushless);        
-        intakeMotor = new CANSparkMax(Ports.Intake.INTAKE_MOTOR, MotorType.kBrushless);
+        funnelMotorLeft = new SparkMax(Ports.Intake.FUNNEL_LEFT, MotorType.kBrushless);
+        funnelMotorLeft.configure(Motors.Intake.LeftFunnel.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        Motors.Intake.LEFT_FUNNEL_MOTOR_CONFIG.configure(funnelMotorLeft);
-        Motors.Intake.RIGHT_FUNNEL_MOTOR_CONFIG.configure(funnelMotorRight);
-        Motors.Intake.INTAKE_MOTOR_CONFIG.configure(intakeMotor);
+        funnelMotorRight = new SparkMax(Ports.Intake.FUNNEL_RIGHT, MotorType.kBrushless);    
+        funnelMotorRight.configure(Motors.Intake.RightFunnel.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        intakeMotor = new SparkMax(Ports.Intake.INTAKE_MOTOR, MotorType.kBrushless);
+        intakeMotor.configure(Motors.Intake.Rollers.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         IRSensor = new DigitalInput(Ports.Intake.IRSensor);
 

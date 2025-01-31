@@ -1,22 +1,23 @@
 package com.stuypulse.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Motors.StatusFrame;
 import com.stuypulse.robot.subsystems.arm.Arm;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
-import com.stuypulse.robot.util.FilteredRelativeEncoder;
 import com.stuypulse.robot.util.ShooterLobFerryInterpolation;
 import com.stuypulse.robot.util.ShooterLowFerryInterpolation;
 import com.stuypulse.robot.util.ShooterSpeeds;
+import com.stuypulse.stuylib.control.Controller;
+import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.network.SmartNumber;
 import com.stuypulse.stuylib.streams.booleans.BStream;
@@ -31,16 +32,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterImpl extends Shooter {
     
-    private final CANSparkMax leftMotor;
-    private final CANSparkMax rightMotor;
-    private final CANSparkMax feederMotor;
+    private final SparkMax leftMotor;
+    private final SparkMax rightMotor;
+    private final SparkMax feederMotor;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
     private final DigitalInput feederBeam;
 
-    private final SparkPIDController leftController;
-    private final SparkPIDController rightController;
+    private final Controller leftController;
+    private final Controller rightController;
 
     private final BStream hasNote;
 
@@ -48,42 +49,31 @@ public class ShooterImpl extends Shooter {
     private final SmartNumber rightTargetRPM;
 
     protected ShooterImpl() {
-        leftMotor = new CANSparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(Ports.Shooter.RIGHT_MOTOR, MotorType.kBrushless);
-        feederMotor = new CANSparkMax(Ports.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+        leftMotor = new SparkMax(Ports.Shooter.LEFT_MOTOR, MotorType.kBrushless);
+        Motors.Shooter.LeftMotor.MOTOR.encoder.apply(Motors.Shooter.LeftMotor.ENCODER);
+        leftMotor.configure(Motors.Shooter.LeftMotor.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        leftEncoder = new FilteredRelativeEncoder(leftMotor);
-        rightEncoder = new FilteredRelativeEncoder(rightMotor);
+        rightMotor = new SparkMax(Ports.Shooter.RIGHT_MOTOR, MotorType.kBrushless);
+        Motors.Shooter.RightMotor.MOTOR.encoder.apply(Motors.Shooter.RightMotor.ENCODER);
+        rightMotor.configure(Motors.Shooter.RightMotor.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        feederMotor = new SparkMax(Ports.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+        feederMotor.configure(Motors.Shooter.Feeder.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        leftEncoder = leftMotor.getEncoder();
+        rightEncoder = rightMotor.getEncoder();
 
         feederBeam = new DigitalInput(Ports.Shooter.RECIEVER_IR);
-        
-        leftEncoder.setVelocityConversionFactor(1.2);
-        rightEncoder.setVelocityConversionFactor(1.0);
-        
-        leftController = leftMotor.getPIDController();
-        rightController = rightMotor.getPIDController();
 
-        leftController.setP(Settings.Shooter.LEFT.PID.kP);
-        leftController.setI(Settings.Shooter.LEFT.PID.kI);
-        leftController.setD(Settings.Shooter.LEFT.PID.kD);
-        leftController.setFF(Settings.Shooter.LEFT.FF.kV);
+        leftController = new MotorFeedforward(Settings.Shooter.LEFT.FF.kS, Settings.Shooter.LEFT.FF.kV, Settings.Shooter.LEFT.FF.kA).velocity()
+            .add(new PIDController(Settings.Shooter.LEFT.PID.kP, Settings.Shooter.LEFT.PID.kI, Settings.Shooter.LEFT.PID.kD));
 
-        rightController.setP(Settings.Shooter.RIGHT.PID.kP);
-        rightController.setI(Settings.Shooter.RIGHT.PID.kI);
-        rightController.setD(Settings.Shooter.RIGHT.PID.kD);
-        rightController.setFF(Settings.Shooter.RIGHT.FF.kV);
+        rightController = new MotorFeedforward(Settings.Shooter.RIGHT.FF.kS, Settings.Shooter.RIGHT.FF.kV, Settings.Shooter.RIGHT.FF.kA).velocity()
+            .add(new PIDController(Settings.Shooter.RIGHT.PID.kP, Settings.Shooter.RIGHT.PID.kI, Settings.Shooter.RIGHT.PID.kD));
         
         hasNote = BStream.create(feederBeam).not()
             .filtered(new BDebounce.Falling(Settings.Shooter.HAS_NOTE_FALLING_DEBOUNCE))
             .filtered(new BDebounce.Rising(Settings.Shooter.HAS_NOTE_RISING_DEBOUNCE));
-
-        Motors.disableStatusFrames(leftMotor, StatusFrame.ANALOG_SENSOR, StatusFrame.ALTERNATE_ENCODER, StatusFrame.ABS_ENCODER_VELOCITY);
-        Motors.disableStatusFrames(rightMotor, StatusFrame.ANALOG_SENSOR, StatusFrame.ALTERNATE_ENCODER, StatusFrame.ABS_ENCODER_VELOCITY);
-        Motors.disableStatusFrames(feederMotor, StatusFrame.ANALOG_SENSOR, StatusFrame.ALTERNATE_ENCODER, StatusFrame.ABS_ENCODER_VELOCITY);
-
-        Motors.Shooter.LEFT_SHOOTER.configure(leftMotor);
-        Motors.Shooter.RIGHT_SHOOTER.configure(rightMotor);
-        Motors.Shooter.FEEDER_MOTOR.configure(feederMotor); 
 
         leftTargetRPM = new SmartNumber("Shooter/Left Target RPM", getSpeakerShotSpeeds().getLeftRPM());
         rightTargetRPM = new SmartNumber("Shooter/Right Target RPM", getSpeakerShotSpeeds().getRightRPM());
@@ -108,14 +98,6 @@ public class ShooterImpl extends Shooter {
         this.rightTargetRPM.set(speeds.getRightRPM());
     }
 
-    private void setLeftShooterRPM(double rpm) {
-        leftController.setReference(rpm, ControlType.kVelocity);
-    }
-    
-    private void setRightShooterRPM(double rpm) {
-        rightController.setReference(rpm, ControlType.kVelocity);
-    }
-
     private void setFeederBasedOnState() {
         switch (getFeederState()) {
             case INTAKING:
@@ -136,7 +118,7 @@ public class ShooterImpl extends Shooter {
         }
     }
 
-    private void setFlywheelsBasedOnState() {
+    private void setFlywheelTargetsBasedOnState() {
         double manualFerryDistance = Units.metersToInches(Field.getManualFerryPosition().getDistance(Field.getAmpCornerPose()));
         switch (getFlywheelState()) {
             case SPEAKER:
@@ -160,20 +142,6 @@ public class ShooterImpl extends Shooter {
             default:
                 setTargetSpeeds(new ShooterSpeeds());
                 break;
-        }
-
-        if (leftTargetRPM.get() == 0) {
-            leftMotor.set(0);
-        }
-        else {
-            setLeftShooterRPM(leftTargetRPM.get());
-        }
-
-        if (rightTargetRPM.get() == 0) {
-            rightMotor.set(0);
-        }
-        else {
-            setRightShooterRPM(rightTargetRPM.get());
         }
     }
 
@@ -225,7 +193,13 @@ public class ShooterImpl extends Shooter {
         super.periodic();
 
         setFeederBasedOnState();
-        setFlywheelsBasedOnState();
+        setFlywheelTargetsBasedOnState();
+
+        leftController.update(leftTargetRPM.get(), getLeftShooterRPM());
+        leftMotor.set(leftController.getOutput());
+
+        rightController.update(rightTargetRPM.get(), getRightShooterRPM());
+        rightMotor.set(rightController.getOutput());
 
         SmartDashboard.putNumber("Shooter/Feeder Speed", feederMotor.get());
 

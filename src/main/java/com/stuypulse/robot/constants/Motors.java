@@ -1,11 +1,11 @@
 package com.stuypulse.robot.constants;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.stuypulse.robot.constants.Motors.TalonSRXConfig.CANSparkConfig;
-import com.revrobotics.CANSparkBase;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 /*-
  * File containing all of the configurations that different motors require.
@@ -18,124 +18,41 @@ import com.revrobotics.CANSparkBase;
  */
 public interface Motors {
 
-    public enum StatusFrame {
-        APPLIED_OUTPUT_FAULTS,
-        MOTOR_VEL_VOLTS_AMPS,
-        MOTOR_POSITION,
-        ANALOG_SENSOR,
-        ALTERNATE_ENCODER,
-        ABS_ENCODER_POSIITION,
-        ABS_ENCODER_VELOCITY
-    }
-
-    public static void disableStatusFrames(CANSparkBase motor, StatusFrame... ids) {
-        final int kDisableStatusFrame = 500;
-
-        for (StatusFrame id : ids) {
-            motor.setPeriodicFramePeriod(PeriodicFrame.fromId(id.ordinal()), kDisableStatusFrame);
-        }
-    }
-
     /** Classes to store all of the values a motor needs */
 
     public interface Arm {
-        CANSparkConfig LEFT_MOTOR = new CANSparkConfig(false, IdleMode.kBrake, 40, 0.35, true); 
-        CANSparkConfig RIGHT_MOTOR = new CANSparkConfig(true, IdleMode.kBrake, 40, 0.35, true); 
+        public interface LeftMotor {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(40).openLoopRampRate(0.35).inverted(false).idleMode(IdleMode.kBrake);
+            EncoderConfig ENCODER = new EncoderConfig().positionConversionFactor(Settings.Arm.Encoder.GEAR_RATIO).velocityConversionFactor(Settings.Arm.Encoder.GEAR_RATIO);
+        }
+        public interface RightMotor {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(40).openLoopRampRate(0.35).inverted(true).idleMode(IdleMode.kBrake);
+        }
     }
 
     public interface Intake {
-        CANSparkConfig LEFT_FUNNEL_MOTOR_CONFIG = new CANSparkConfig(false, IdleMode.kCoast, 60, 0.35, false);
-        CANSparkConfig RIGHT_FUNNEL_MOTOR_CONFIG = new CANSparkConfig(true, IdleMode.kCoast, 60, 0.35, false);
-        CANSparkConfig INTAKE_MOTOR_CONFIG = new CANSparkConfig(true, IdleMode.kCoast, 60, 0.25, false);
+        public interface LeftFunnel {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(60).openLoopRampRate(0.35).inverted(false).idleMode(IdleMode.kCoast);
+        }
+        public interface RightFunnel {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(60).openLoopRampRate(0.35).inverted(true).idleMode(IdleMode.kCoast);
+        }
+        public interface Rollers {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(60).openLoopRampRate(0.25).inverted(true).idleMode(IdleMode.kCoast);
+        }
     }
 
     public interface Shooter {
-        CANSparkConfig LEFT_SHOOTER = new CANSparkConfig(true, IdleMode.kCoast, 40, 0.5, false);
-        CANSparkConfig RIGHT_SHOOTER = new CANSparkConfig(false, IdleMode.kCoast, 40, 0.5, false);
-        CANSparkConfig FEEDER_MOTOR = new CANSparkConfig(true, IdleMode.kBrake, 40, 0.25, false);
-    }
-  
-    /* Configurations */
-    
-    public static class TalonSRXConfig {
-        public final boolean INVERTED;
-        public final NeutralMode NEUTRAL_MODE;
-        public final int PEAK_CURRENT_LIMIT_AMPS;
-        public final double OPEN_LOOP_RAMP_RATE;
-
-        public TalonSRXConfig(
-                boolean inverted,
-                NeutralMode neutralMode,
-                int peakCurrentLimitAmps,
-                double openLoopRampRate) {
-            this.INVERTED = inverted;
-            this.NEUTRAL_MODE = neutralMode;
-            this.PEAK_CURRENT_LIMIT_AMPS = peakCurrentLimitAmps;
-            this.OPEN_LOOP_RAMP_RATE = openLoopRampRate;
+        public interface LeftMotor {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(40).openLoopRampRate(0.5).inverted(true).idleMode(IdleMode.kCoast);
+            EncoderConfig ENCODER = new EncoderConfig().velocityConversionFactor(1.2);
         }
-
-        public TalonSRXConfig(boolean inverted, NeutralMode neutralMode, int peakCurrentLimitAmps) {
-            this(inverted, neutralMode, peakCurrentLimitAmps, 0.0);
+        public interface RightMotor {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(40).openLoopRampRate(0.5).inverted(false).idleMode(IdleMode.kCoast);
+            EncoderConfig ENCODER = new EncoderConfig().velocityConversionFactor(1.0);
         }
-
-    public static void disableStatusFrames(CANSparkBase motor, StatusFrame... ids) {
-        final int kDisableStatusFrame = 500;
-
-        for (StatusFrame id : ids) {
-            motor.setPeriodicFramePeriod(PeriodicFrame.fromId(id.ordinal()), kDisableStatusFrame);
+        public interface Feeder {
+            SparkBaseConfig MOTOR = new SparkMaxConfig().smartCurrentLimit(40).openLoopRampRate(0.25).inverted(false).idleMode(IdleMode.kBrake);
         }
     }
-
-    public static class CANSparkConfig {
-        public final boolean INVERTED;
-        public final IdleMode IDLE_MODE;
-        public final int CURRENT_LIMIT_AMPS;
-        public final double OPEN_LOOP_RAMP_RATE;
-        public final boolean ENABLE_VOLTAGE_COMPENSATION;
-
-        public CANSparkConfig(
-                boolean inverted,
-                IdleMode idleMode,
-                int currentLimitAmps,
-                double openLoopRampRate,
-                boolean enableVoltageCompensation) {
-            this.INVERTED = inverted;
-            this.IDLE_MODE = idleMode;
-            this.CURRENT_LIMIT_AMPS = currentLimitAmps;
-            this.OPEN_LOOP_RAMP_RATE = openLoopRampRate;
-            this.ENABLE_VOLTAGE_COMPENSATION = enableVoltageCompensation;
-        }
-
-        public CANSparkConfig(boolean inverted, IdleMode idleMode, int currentLimitAmps, boolean enableVoltageCompensation) {
-            this(inverted, idleMode, currentLimitAmps, 0.0, enableVoltageCompensation);
-        }
-
-        public CANSparkConfig(boolean inverted, IdleMode idleMode, boolean enableVoltageCompensation) {
-            this(inverted, idleMode, 80, enableVoltageCompensation);
-        }
-
-        public void configure(CANSparkBase motor) {
-            motor.setInverted(INVERTED);
-            motor.setIdleMode(IDLE_MODE);
-            motor.setSmartCurrentLimit(CURRENT_LIMIT_AMPS);
-            motor.setOpenLoopRampRate(OPEN_LOOP_RAMP_RATE);
-            if (ENABLE_VOLTAGE_COMPENSATION) {
-                motor.enableVoltageCompensation(12);
-            }
-            motor.burnFlash();
-        }
-
-        public void configureAsFollower(CANSparkMax motor, CANSparkMax follows) {
-            motor.setInverted(INVERTED);
-            motor.setIdleMode(IDLE_MODE);
-            motor.setSmartCurrentLimit(CURRENT_LIMIT_AMPS);
-            motor.setOpenLoopRampRate(OPEN_LOOP_RAMP_RATE);
-            if (ENABLE_VOLTAGE_COMPENSATION) {
-                motor.enableVoltageCompensation(12);
-            }
-            motor.follow(follows);
-            motor.burnFlash();
-        }
-    }
-}
 }

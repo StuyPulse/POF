@@ -6,10 +6,16 @@ import java.util.function.Supplier;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrain;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -18,7 +24,6 @@ import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swerve.Motion;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
-import com.stuypulse.robot.util.FollowPathPointSpeakerCommand;
 import com.stuypulse.robot.util.vision.VisionData;
 import com.stuypulse.stuylib.math.Vector2D;
 
@@ -28,6 +33,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -42,7 +48,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  * Class that extends the Phoenix SwerveDrivetrain class and implements
  * subsystem so it can be used in command-based projects easily.
  */
-public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
+public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
 
     private static final SwerveDrive instance;
 
@@ -69,9 +75,9 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
-    private SwerveRequest.ApplyChassisSpeeds drive = new SwerveRequest.ApplyChassisSpeeds();
+    private LegacySwerveRequest.RobotCentric drive = new LegacySwerveRequest.RobotCentric();
 
-    protected SwerveDrive(SwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, SwerveModuleConstants... modules) {
+    protected SwerveDrive(LegacySwerveDrivetrainConstants driveTrainConstants, double UpdateOdometryFrequency, LegacySwerveModuleConstants... modules) {
         super(driveTrainConstants, UpdateOdometryFrequency, modules);
         if (Utils.isSimulation()) {
             startSimThread();
@@ -95,43 +101,30 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
     /*** PATH FOLLOWING ***/
 
     public Command followPathCommand(String pathName) {
-        return followPathCommand(PathPlannerPath.fromPathFile(pathName));
+        try {
+            return followPathCommand(PathPlannerPath.fromPathFile(pathName));
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(pathName + " does not exist");
+        }
     }
 
     public Command followPathCommand(PathPlannerPath path) {
-        return new FollowPathHolonomic(
-            path,
-            this::getPose,
-            this::getChassisSpeeds,
-            this::setChassisSpeeds,
-            new HolonomicPathFollowerConfig(
-                Motion.XY,
-                Motion.THETA,
-                4.9,
-                Math.hypot(Settings.Swerve.LENGTH, Settings.Swerve.WIDTH),
-                new ReplanningConfig(true, true)
-            ),
-            () -> false,
-            this
-        );
-    }
-
-    public Command followPathWithSpeakerAlignCommand(PathPlannerPath path) {
-        return new FollowPathPointSpeakerCommand(
-            path, 
-            this::getPose, 
-            this::getChassisSpeeds, 
-            this::setChassisSpeeds, 
-            new PPHolonomicDriveController(
-                Motion.XY, 
-                Motion.THETA, 
-                0.02, 
-                4.9, 
-                Math.hypot(Settings.Swerve.LENGTH, Settings.Swerve.WIDTH)),
-            new ReplanningConfig(false, false),
-            () -> false,
-            this
-        );
+        try {
+            return new FollowPathCommand(
+                path, 
+                this::getPose, 
+                this::getChassisSpeeds,
+                (chassisSpeeds, driveFeedForwards) -> this.setChassisSpeeds(chassisSpeeds),
+                new PPHolonomicDriveController(Motion.XY, Motion.THETA), 
+                RobotConfig.fromGUISettings(), 
+                () -> false,
+                this
+            );
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("RobotConfig.fromGUISettings() threw an error");
+        }
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -144,7 +137,7 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
         SmartDashboard.putNumber("Swerve/Chassis Target Omega", robotSpeeds.omegaRadiansPerSecond);
 
         ChassisSpeeds speeds = new ChassisSpeeds(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond, -robotSpeeds.omegaRadiansPerSecond);
-        setControl(drive.withSpeeds(speeds));
+        setControl(drive.withVelocityX(speeds.vxMetersPerSecond).withVelocityY(speeds.vyMetersPerSecond).withRotationalRate(speeds.omegaRadiansPerSecond));
     }
 
     public void drive(Vector2D velocity, double rotation) {
@@ -199,22 +192,22 @@ public class SwerveDrive extends SwerveDrivetrain implements Subsystem {
     }
 
     public void configureAutoBuilder() {
-        AutoBuilder.configureHolonomic(
-            this::getPose,
-            (Pose2d pose) -> seedFieldRelative(pose),
-            this::getChassisSpeeds,
-            this::setChassisSpeeds,
-            new HolonomicPathFollowerConfig(
-                Settings.Swerve.Motion.XY,
-                Settings.Swerve.Motion.THETA,
-                4.9,
-                Math.hypot(Settings.Swerve.LENGTH, Settings.Swerve.WIDTH),
-                new ReplanningConfig(true, true)),
-            () -> false,
-            instance
-        );
+        try{
+            AutoBuilder.configure(
+                this::getPose,
+                this::setPose,
+                this::getChassisSpeeds,
+                (speeds, feedforwards) -> setChassisSpeeds(speeds),
+                new PPHolonomicDriveController(Motion.XY, Motion.THETA),
+                RobotConfig.fromGUISettings(),
+                () -> false,
+                instance
+            );
 
-        PathPlannerLogging.setLogActivePathCallback((poses) -> getField().getObject("path").setPoses(poses));
+            // PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void initFieldObject() {

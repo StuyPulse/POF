@@ -68,12 +68,14 @@ public class PathUtil {
             chooser.setDefaultOption("Red " + name, auton.apply(loadPathsRed(paths)));
             return this;
         }
-
     }
     
-    /*** PATH LOADING ***/
-
-    public static PathPlannerPath[] loadPathsRed(String... names) {
+    /*** PATH LOADING 
+         * @throws ParseException 
+         * @throws IOException 
+         * @throws FileVersionException ***/
+    
+        public static PathPlannerPath[] loadPathsRed(String... names) {
         PathPlannerPath[] output = new PathPlannerPath[names.length];
         for (int i = 0; i < names.length; i++) {
             output[i] = loadRed(names[i]);
@@ -89,12 +91,22 @@ public class PathUtil {
         return output;
     }
 
-    public static PathPlannerPath load(String name) throws FileVersionException, IOException, ParseException {
-        return PathPlannerPath.fromPathFile(name);
+    public static PathPlannerPath load(String name) {
+        try {
+            return PathPlannerPath.fromPathFile(name);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(name + " does not exist");
+        }
     }
     
-    public static PathPlannerPath loadRed(String name) throws FileVersionException, IOException, ParseException {
-        return flipPath(PathPlannerPath.fromPathFile(name));
+    public static PathPlannerPath loadRed(String name) {
+        try {
+            return flipPath(PathPlannerPath.fromPathFile(name));
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException(name + " does not exist");
+        }
     }
     
     
@@ -118,8 +130,9 @@ public class PathUtil {
         return new PathPoint(
             flipFieldTranslation(point.position), 
             point.rotationTarget == null ? null : new RotationTarget(
-                point.rotationTarget.getPosition(),
-                flipFieldRotation(point.rotationTarget.getTarget())),
+                point.rotationTarget.position(), 
+                point.rotationTarget.rotation()
+                ), 
             point.constraints
         );
     }

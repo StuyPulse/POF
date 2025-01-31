@@ -1,7 +1,7 @@
 package com.stuypulse.robot.constants;
 
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.PIDConstants;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.util.ShooterSpeeds;
 import com.stuypulse.stuylib.network.SmartBoolean;
@@ -196,8 +196,6 @@ public interface Settings {
             SmartNumber kS = new SmartNumber("Swerve/Turn/FF/kS", Robot.isReal() ? 0.30718 : Simulation.TURN_FRICTION_VOLTAGE);
             SmartNumber kV = new SmartNumber("Swerve/Turn/FF/kV", Robot.isReal() ? 1.42659 : 0.0);
             SmartNumber kA = new SmartNumber("Swerve/Turn/FF/kA", Robot.isReal() ? 0.0036513 : 0.0);
-
-            boolean INVERTED = true;
 
             double GEAR_RATIO = (150.0 / 7.0); // 21.4285714286
         }

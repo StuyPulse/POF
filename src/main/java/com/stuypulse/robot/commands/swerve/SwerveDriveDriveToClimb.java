@@ -1,7 +1,7 @@
 package com.stuypulse.robot.commands.swerve;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings.Alignment;
 import com.stuypulse.robot.constants.Settings.Alignment.Rotation;
@@ -25,7 +25,7 @@ public class SwerveDriveDriveToClimb extends Command {
     
     private final SwerveDrive swerve;
 
-    private final SwerveRequest.FieldCentric drive;
+    private final LegacySwerveRequest.FieldCentric drive;
     
     private final HolonomicController controller;
     
@@ -42,7 +42,7 @@ public class SwerveDriveDriveToClimb extends Command {
     public SwerveDriveDriveToClimb(double distance) {
         swerve = SwerveDrive.getInstance();
 
-        drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
+        drive = new LegacySwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
         
         this.distance = distance;
 

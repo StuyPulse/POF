@@ -1,6 +1,12 @@
 package com.stuypulse.robot;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.pathplanner.lib.util.FileVersionException;
 import com.stuypulse.robot.commands.BuzzController;
 import com.stuypulse.robot.commands.arm.ArmToAmp;
 import com.stuypulse.robot.commands.arm.ArmToClimbing;
@@ -107,7 +113,7 @@ public class RobotContainer {
         configureAutons();
 
         if (Utils.isSimulation()) {
-            swerve.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
+            swerve.setPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(0)));
         }
         swerve.registerTelemetry(logger::telemeterize);
 
@@ -116,8 +122,6 @@ public class RobotContainer {
         new Trigger(() -> Intake.getInstance().getState() == Intake.State.ACQUIRING && Intake.getInstance().hasNote()
                     || ((driver.getLeftTriggerPressed() || driver.getRightTriggerPressed()) && (Intake.getInstance().hasNote() || Shooter.getInstance().hasNote())))
             .onTrue(new BuzzController(driver, 1, 1));
-
-        // new VisionDisable();
     }
 
     /****************/
@@ -288,7 +292,10 @@ public class RobotContainer {
 
     /**************/
     /*** AUTONS ***/
-    /**************/
+    /**
+     * @throws ParseException 
+     * @throws IOException 
+     * @throws FileVersionException ************/
 
     public void configureAutons() {
         autonChooser.addOption("Do Nothing", new DoNothingAuton());
