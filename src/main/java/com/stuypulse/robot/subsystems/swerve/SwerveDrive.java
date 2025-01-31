@@ -123,7 +123,7 @@ public class SwerveDrive extends LegacySwerveDrivetrain implements Subsystem {
             );
         }
         catch (Exception e) {
-            throw new IllegalArgumentException("RobotConfig.fromGUISettings() threw an error");
+            throw new IllegalStateException("RobotConfig.fromGUISettings() did not work");
         }
     }
 
